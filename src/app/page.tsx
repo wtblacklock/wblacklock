@@ -141,8 +141,15 @@ export default function Home() {
       {/* Featured Case Studies */}
       {featuredCaseStudies.length > 0 && (
         <section className="pt-12">
-          <div className="mb-12">
+          <div className="flex items-baseline justify-between mb-12">
             <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">Featured Case Studies</h2>
+            <Link
+              href="/projects"
+              className="group flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors"
+            >
+              View all
+              <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">

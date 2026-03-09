@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import type { Project } from "../data/projects";
 
 interface CaseStudyCardProps {
@@ -37,15 +36,9 @@ export function CaseStudyCard({ project, index }: CaseStudyCardProps) {
             </h3>
 
             {/* Description */}
-            <p className="text-base text-black/60 font-light leading-relaxed mb-4">
+            <p className="text-base text-black/60 font-light leading-relaxed">
               {project.description}
             </p>
-
-            {/* Read more link */}
-            <div className="flex items-center gap-2 text-xs font-medium text-black/40 group-hover:text-black transition-colors">
-              <span>View case study</span>
-              <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
-            </div>
           </div>
         </article>
       </Link>
