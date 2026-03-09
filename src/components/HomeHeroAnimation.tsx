@@ -1,15 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import { useBrandAnimation } from '../contexts/BrandAnimationContext'
 
 interface HomeHeroAnimationProps {
   onBrandReveal: () => void
 }
 
 export function HomeHeroAnimation({ onBrandReveal }: HomeHeroAnimationProps) {
+  const { hasAnimationPlayed } = useBrandAnimation()
   const [phase, setPhase] = useState<'name' | 'initials' | 'transition' | 'complete'>('name')
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [transformValues, setTransformValues] = useState({ x: 0, y: 0, scale: 1 })
+  const wtbRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Check for reduced motion preference
@@ -22,6 +26,12 @@ export function HomeHeroAnimation({ onBrandReveal }: HomeHeroAnimationProps) {
   }, [])
 
   useEffect(() => {
+    // If animation has already played, skip it
+    if (hasAnimationPlayed) {
+      setPhase('complete')
+      return
+    }
+
     if (prefersReducedMotion) {
       // Skip animation, go straight to complete
       setPhase('complete')
@@ -31,7 +41,26 @@ export function HomeHeroAnimation({ onBrandReveal }: HomeHeroAnimationProps) {
 
     // Animation timeline
     const timer1 = setTimeout(() => setPhase('initials'), 1200) // Show full name for 1.2s
-    const timer2 = setTimeout(() => setPhase('transition'), 2400) // Emphasize initials for 1.2s
+    const timer2 = setTimeout(() => {
+      // Calculate transform before transition phase
+      if (wtbRef.current) {
+        const heroWTB = wtbRef.current.getBoundingClientRect()
+        const navBrand = document.querySelector('[data-nav-brand]')?.getBoundingClientRect()
+        
+        if (navBrand) {
+          const deltaX = navBrand.left - heroWTB.left
+          const deltaY = navBrand.top - heroWTB.top
+          const scaleRatio = navBrand.width / heroWTB.width
+          
+          setTransformValues({
+            x: deltaX,
+            y: deltaY,
+            scale: scaleRatio
+          })
+        }
+      }
+      setPhase('transition')
+    }, 2400) // Emphasize initials for 1.2s
     const timer3 = setTimeout(() => {
       setPhase('complete')
       onBrandReveal()
@@ -42,7 +71,7 @@ export function HomeHeroAnimation({ onBrandReveal }: HomeHeroAnimationProps) {
       clearTimeout(timer2)
       clearTimeout(timer3)
     }
-  }, [prefersReducedMotion, onBrandReveal])
+  }, [prefersReducedMotion, onBrandReveal, hasAnimationPlayed])
 
   if (prefersReducedMotion || phase === 'complete') {
     return (
@@ -94,6 +123,7 @@ export function HomeHeroAnimation({ onBrandReveal }: HomeHeroAnimationProps) {
           {phase === 'initials' && (
             <motion.div
               key="initials-emphasis"
+              ref={wtbRef}
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 1 }}
@@ -154,12 +184,13 @@ export function HomeHeroAnimation({ onBrandReveal }: HomeHeroAnimationProps) {
           {phase === 'transition' && (
             <motion.div
               key="wtb-transition"
+              ref={wtbRef}
               initial={{ opacity: 1 }}
               animate={{ 
                 opacity: 0,
-                y: -80,
-                x: -60,
-                scale: 0.6
+                x: transformValues.x,
+                y: transformValues.y,
+                scale: transformValues.scale
               }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               className="relative"

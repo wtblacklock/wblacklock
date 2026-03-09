@@ -57,6 +57,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               {showBrand && (
                 <motion.span
                   key="brand"
+                  data-nav-brand
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
