@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from 'next/navigation'
 import { cn } from "../utils/cn"
 import { motion, AnimatePresence } from "motion/react"
+import { useBrandAnimation } from "../contexts/BrandAnimationContext"
 
 export function ClientLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
@@ -12,6 +13,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
+  const { showBrand } = useBrandAnimation()
 
   const isDesktop = windowWidth >= 768
 
@@ -50,18 +52,27 @@ export function ClientLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-white text-black font-sans flex flex-col selection:bg-black selection:text-white">
       <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none pt-6 md:pt-8">
         <div className="max-w-[1850px] mx-auto px-6 flex items-center justify-between pointer-events-auto">
-          <Link href="/" className="hover:opacity-70 transition-opacity">
-            <span
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: 100,
-                fontSize: "2.835rem",
-                letterSpacing: "0.02em",
-                lineHeight: 1,
-              }}
-            >
-              WTB
-            </span>
+          <Link href="/" className="hover:opacity-70 transition-opacity relative inline-block" style={{ minHeight: "2.835rem" }}>
+            <AnimatePresence>
+              {showBrand && (
+                <motion.span
+                  key="brand"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: 100,
+                    fontSize: "2.835rem",
+                    letterSpacing: "0.02em",
+                    lineHeight: 1,
+                  }}
+                >
+                  WTB
+                </motion.span>
+              )}
+            </AnimatePresence>
           </Link>
 
           <div className="flex items-center">

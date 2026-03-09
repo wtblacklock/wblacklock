@@ -1,117 +1,72 @@
 'use client'
 
 import { useState } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "motion/react"
-import { ChevronDown } from "lucide-react"
 import { projects } from "../../data/projects"
 import { ProjectCard } from "../../components/ProjectCard"
 import { CaseStudyCard } from "../../components/CaseStudyCard"
 
 export default function Projects() {
-  const [clientFilter, setClientFilter] = useState("All")
   const [serviceFilter, setServiceFilter] = useState("All")
-  const [showFilters, setShowFilters] = useState(false)
   const [mobileView, setMobileView] = useState<"projects" | "caseStudies">("projects")
 
-  // Separate projects from case studies
   const regularProjects = projects.filter((p) => !p.caseStudy)
   const caseStudies = projects.filter((p) => p.caseStudy)
-
-  const uniqueClients = Array.from(
-    new Map(
-      regularProjects.map((p) => [
-        p.clientName,
-        { clientName: p.clientName, clientType: p.clientType },
-      ])
-    ).values()
-  ).sort((a, b) => a.clientName.localeCompare(b.clientName))
 
   const uniqueServices = Array.from(
     new Set(regularProjects.flatMap((p) => p.services))
   ).sort()
 
   const filteredProjects = regularProjects.filter((project) => {
-    const clientMatch = clientFilter === "All" || project.clientName === clientFilter
-    const serviceMatch = serviceFilter === "All" || project.services.includes(serviceFilter)
-    return clientMatch && serviceMatch
+    return serviceFilter === "All" || project.services.includes(serviceFilter)
   })
 
-  const filtersBlock = (
-    <>
-      <div className="mb-6">
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-black/40 hover:text-black transition-colors focus:outline-none"
-        >
-          {showFilters ? "Hide filters" : "Show filters"}
-          <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${showFilters ? "rotate-180" : ""}`} />
-        </button>
+  // Client directory: all projects (including case studies), stacked in columns
+  const clientDirectory = [...regularProjects, ...caseStudies]
+
+  const clientDirectoryBlock = (
+    <div className="mb-10 pb-8 border-b border-black/10">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-5">
+        {clientDirectory.map((p) => (
+          <Link
+            key={p.id}
+            href={`/projects/${p.id}`}
+            className="group block focus:outline-none"
+          >
+            <p className="font-sans text-sm font-light text-black group-hover:text-black/40 transition-colors duration-200 leading-snug">
+              {p.clientName}
+            </p>
+            <p className="font-sans text-[0.7rem] font-light text-black/40 leading-snug mt-0.5">
+              {p.clientType}
+            </p>
+          </Link>
+        ))}
       </div>
+    </div>
+  )
 
-      {showFilters && (
-        <div className="mb-8 pb-8 border-b border-black/10">
-          <div className="grid grid-cols-2 gap-8 md:gap-12">
-            <div>
-              <div className="grid grid-cols-1 gap-y-3">
-                <button
-                  onClick={() => setClientFilter("All")}
-                  className={`text-left transition-colors duration-200 focus:outline-none ${
-                    clientFilter === "All" ? "text-black" : "text-black/30 hover:text-black/60"
-                  }`}
-                >
-                  <p className="font-sans text-sm font-light leading-snug">All</p>
-                </button>
-                {uniqueClients.map((client) => {
-                  const isActive = clientFilter === client.clientName
-                  return (
-                    <button
-                      key={client.clientName}
-                      onClick={() => setClientFilter(client.clientName)}
-                      className={`text-left transition-colors duration-200 focus:outline-none ${
-                        isActive ? "text-black" : "text-black/30 hover:text-black/60"
-                      }`}
-                    >
-                      <p className="font-sans text-sm font-light leading-snug">
-                        {client.clientName}
-                      </p>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div>
-              <div className="grid grid-cols-1 gap-y-3">
-                <button
-                  onClick={() => setServiceFilter("All")}
-                  className={`text-left transition-colors duration-200 focus:outline-none ${
-                    serviceFilter === "All" ? "text-black" : "text-black/30 hover:text-black/60"
-                  }`}
-                >
-                  <p className="font-sans text-sm font-light leading-snug">All</p>
-                </button>
-                {uniqueServices.map((service) => {
-                  const isActive = serviceFilter === service
-                  return (
-                    <button
-                      key={service}
-                      onClick={() => setServiceFilter(service)}
-                      className={`text-left transition-colors duration-200 focus:outline-none ${
-                        isActive ? "text-black" : "text-black/30 hover:text-black/60"
-                      }`}
-                    >
-                      <p className="font-sans text-sm font-light leading-snug">
-                        {service}
-                      </p>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+  const serviceFilterBlock = (
+    <div className="flex flex-wrap items-center gap-5 md:gap-7 mb-8">
+      {["All", ...uniqueServices].map((service) => (
+        <button
+          key={service}
+          onClick={() => setServiceFilter(service)}
+          className={`relative pb-1 font-sans text-sm font-light transition-colors duration-200 focus:outline-none ${
+            serviceFilter === service ? "text-black" : "text-black/30 hover:text-black/60"
+          }`}
+        >
+          {service}
+          {serviceFilter === service && (
+            <motion.span
+              layoutId="serviceFilterLine"
+              className="absolute bottom-0 left-0 right-0 h-[1px] bg-black"
+              transition={{ type: "spring", stiffness: 400, damping: 35 }}
+            />
+          )}
+        </button>
+      ))}
+    </div>
   )
 
   const projectsGridBlock = (
@@ -179,7 +134,8 @@ export default function Projects() {
       <div className="lg:hidden mb-12">
         {mobileView === "projects" ? (
           <>
-            {filtersBlock}
+            {clientDirectoryBlock}
+            {serviceFilterBlock}
             {projectsGridBlock}
           </>
         ) : (
@@ -194,25 +150,26 @@ export default function Projects() {
       </div>
 
       <div className="flex flex-col lg:flex-row lg:gap-8">
-      {/* Left Column: Projects (75% on desktop) */}
-      <div className="hidden lg:block flex-1 lg:pr-4">
-        {filtersBlock}
-        {projectsGridBlock}
-      </div>
+        {/* Left Column: Projects */}
+        <div className="hidden lg:block flex-1 lg:pr-4">
+          {clientDirectoryBlock}
+          {serviceFilterBlock}
+          {projectsGridBlock}
+        </div>
 
-      {/* Right Column: Case Studies (25% on desktop) */}
-      {caseStudies.length > 0 && (
-        <div className="hidden lg:flex lg:w-1/4 lg:pl-4 lg:flex-col">
-          <h3 className="text-2xl md:text-[2.22rem] font-serif font-extralight tracking-tighter text-black leading-tight mb-3 shrink-0">
-            Case Studies
-          </h3>
-          <div>
-            <div className="pt-[44px]">
-              {caseStudiesBlock}
+        {/* Right Column: Case Studies */}
+        {caseStudies.length > 0 && (
+          <div className="hidden lg:flex lg:w-1/4 lg:pl-4 lg:flex-col">
+            <h3 className="text-2xl md:text-[2.22rem] font-serif font-extralight tracking-tighter text-black leading-tight mb-3 shrink-0">
+              Case Studies
+            </h3>
+            <div>
+              <div className="pt-[44px]">
+                {caseStudiesBlock}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
     </motion.div>
   )
