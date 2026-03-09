@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import type { Project } from "../data/projects";
 
 interface ProjectCardProps {
@@ -12,7 +12,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       <p className="text-[0.6rem] font-mono text-black/30 mb-2">
         [{String(index + 1).padStart(2, "0")}]
       </p>
-      <Link to={`/projects/${project.id}`} className="block focus:outline-none">
+      <Link href={`/projects/${project.id}`} className="block focus:outline-none">
         <div className="mb-3">
           <div className="aspect-[4/5] overflow-hidden bg-neutral-100 rounded-none group-hover:rounded-xl transition-[border-radius] duration-500">
             <img

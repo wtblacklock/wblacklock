@@ -1,19 +1,21 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { ChevronDown } from "lucide-react";
-import { projects } from "../data/projects";
-import { ProjectCard } from "../components/ProjectCard";
-import { CaseStudyCard } from "../components/CaseStudyCard";
+'use client'
 
-export function Work() {
-  const [clientFilter, setClientFilter] = useState("All");
-  const [serviceFilter, setServiceFilter] = useState("All");
-  const [showFilters, setShowFilters] = useState(false);
-  const [mobileView, setMobileView] = useState<"projects" | "caseStudies">("projects");
+import { useState } from "react"
+import { motion, AnimatePresence } from "motion/react"
+import { ChevronDown } from "lucide-react"
+import { projects } from "../../data/projects"
+import { ProjectCard } from "../../components/ProjectCard"
+import { CaseStudyCard } from "../../components/CaseStudyCard"
+
+export default function Projects() {
+  const [clientFilter, setClientFilter] = useState("All")
+  const [serviceFilter, setServiceFilter] = useState("All")
+  const [showFilters, setShowFilters] = useState(false)
+  const [mobileView, setMobileView] = useState<"projects" | "caseStudies">("projects")
 
   // Separate projects from case studies
-  const regularProjects = projects.filter((p) => !p.caseStudy);
-  const caseStudies = projects.filter((p) => p.caseStudy);
+  const regularProjects = projects.filter((p) => !p.caseStudy)
+  const caseStudies = projects.filter((p) => p.caseStudy)
 
   const uniqueClients = Array.from(
     new Map(
@@ -22,17 +24,17 @@ export function Work() {
         { clientName: p.clientName, clientType: p.clientType },
       ])
     ).values()
-  ).sort((a, b) => a.clientName.localeCompare(b.clientName));
+  ).sort((a, b) => a.clientName.localeCompare(b.clientName))
 
   const uniqueServices = Array.from(
     new Set(regularProjects.flatMap((p) => p.services))
-  ).sort();
+  ).sort()
 
   const filteredProjects = regularProjects.filter((project) => {
-    const clientMatch = clientFilter === "All" || project.clientName === clientFilter;
-    const serviceMatch = serviceFilter === "All" || project.services.includes(serviceFilter);
-    return clientMatch && serviceMatch;
-  });
+    const clientMatch = clientFilter === "All" || project.clientName === clientFilter
+    const serviceMatch = serviceFilter === "All" || project.services.includes(serviceFilter)
+    return clientMatch && serviceMatch
+  })
 
   const filtersBlock = (
     <>
@@ -60,7 +62,7 @@ export function Work() {
                   <p className="font-sans text-sm font-light leading-snug">All</p>
                 </button>
                 {uniqueClients.map((client) => {
-                  const isActive = clientFilter === client.clientName;
+                  const isActive = clientFilter === client.clientName
                   return (
                     <button
                       key={client.clientName}
@@ -73,7 +75,7 @@ export function Work() {
                         {client.clientName}
                       </p>
                     </button>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -89,7 +91,7 @@ export function Work() {
                   <p className="font-sans text-sm font-light leading-snug">All</p>
                 </button>
                 {uniqueServices.map((service) => {
-                  const isActive = serviceFilter === service;
+                  const isActive = serviceFilter === service
                   return (
                     <button
                       key={service}
@@ -102,7 +104,7 @@ export function Work() {
                         {service}
                       </p>
                     </button>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -110,7 +112,7 @@ export function Work() {
         </div>
       )}
     </>
-  );
+  )
 
   const projectsGridBlock = (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-12 md:gap-y-16 mt-8">
@@ -122,7 +124,7 @@ export function Work() {
         ))}
       </AnimatePresence>
     </div>
-  );
+  )
 
   const caseStudiesBlock = (
     <div>
@@ -130,7 +132,7 @@ export function Work() {
         <CaseStudyCard key={project.id} project={project} index={index} />
       ))}
     </div>
-  );
+  )
 
   return (
     <motion.div
@@ -213,5 +215,5 @@ export function Work() {
       )}
       </div>
     </motion.div>
-  );
+  )
 }

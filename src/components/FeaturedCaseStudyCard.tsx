@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Project } from "../data/projects";
 
@@ -9,7 +9,7 @@ interface FeaturedCaseStudyCardProps {
 export function FeaturedCaseStudyCard({ project }: FeaturedCaseStudyCardProps) {
   return (
     <Link
-      to={`/projects/${project.id}`}
+      href={`/projects/${project.id}`}
       className="group block focus:outline-none"
     >
       <article className="flex flex-col h-full">

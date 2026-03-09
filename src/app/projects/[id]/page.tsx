@@ -1,25 +1,24 @@
-import { useParams, Link } from "react-router-dom";
-import { motion } from "motion/react";
-import { projects } from "../data/projects";
+'use client'
 
-export function ProjectDetail() {
-  const { id } = useParams<{ id: string }>();
-  const currentIndex = projects.findIndex((p) => p.id === id);
-  const project = projects[currentIndex];
+import { useParams } from 'next/navigation'
+import { notFound } from 'next/navigation'
+import Link from "next/link"
+import { motion } from "motion/react"
+import { projects } from "../../../data/projects"
+
+export default function ProjectDetail() {
+  const params = useParams()
+  const id = params.id as string
+  
+  const currentIndex = projects.findIndex((p) => p.id === id)
+  const project = projects[currentIndex]
 
   if (!project) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <h1 className="text-2xl font-bold uppercase tracking-tight text-black">Project not found</h1>
-        <Link to="/projects" className="text-xs font-bold tracking-widest uppercase text-black/50 hover:text-black transition-colors">
-          Return to projects
-        </Link>
-      </div>
-    );
+    notFound()
   }
 
-  const nextProject = projects[(currentIndex + 1) % projects.length];
-  const moreProjects = projects.filter((p) => p.id !== project.id).slice(0, 3);
+  const nextProject = projects[(currentIndex + 1) % projects.length]
+  const moreProjects = projects.filter((p) => p.id !== project.id).slice(0, 3)
 
   return (
     <motion.div
@@ -30,7 +29,7 @@ export function ProjectDetail() {
     >
       {/* Back link */}
       <Link
-        to="/projects"
+        href="/projects"
         className="text-[0.72rem] font-bold tracking-widest uppercase text-black/40 hover:text-black transition-colors"
       >
         ← Projects
@@ -134,7 +133,7 @@ export function ProjectDetail() {
           {moreProjects.map((p) => (
             <Link
               key={p.id}
-              to={`/projects/${p.id}`}
+              href={`/projects/${p.id}`}
               className="group block focus:outline-none"
             >
               <div className="aspect-[4/5] overflow-hidden bg-neutral-100 mb-3 rounded-none group-hover:rounded-xl transition-[border-radius] duration-500">
@@ -158,12 +157,12 @@ export function ProjectDetail() {
       <div className="mt-20 md:mt-28 pt-10 border-t border-black/10 pb-16">
         <p className="text-[0.65rem] font-bold tracking-widest uppercase text-black/40 mb-6">Next</p>
         <Link
-          to={`/projects/${nextProject.id}`}
+          href={`/projects/${nextProject.id}`}
           className="block text-[2.5rem] md:text-[5rem] lg:text-[7.5rem] font-serif font-extralight tracking-tighter text-black hover:text-black/40 transition-colors leading-[0.9]"
         >
           {nextProject.title} →
         </Link>
       </div>
     </motion.div>
-  );
+  )
 }

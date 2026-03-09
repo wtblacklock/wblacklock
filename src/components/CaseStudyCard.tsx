@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Project } from "../data/projects";
 
@@ -14,7 +14,7 @@ export function CaseStudyCard({ project, index }: CaseStudyCardProps) {
         [{String(index + 1).padStart(2, "0")}]
       </p>
       <Link
-        to={`/projects/${project.id}`}
+        href={`/projects/${project.id}`}
         className="block focus:outline-none"
       >
         <article className="flex flex-col">

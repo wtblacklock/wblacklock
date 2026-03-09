@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
-import { motion } from "motion/react";
+'use client'
+
+import Link from "next/link"
+import { motion } from "motion/react"
 
 const capabilities = [
   "Product design and UX",
@@ -8,9 +10,9 @@ const capabilities = [
   "Design systems and creative workflows",
   "Print and collateral",
   "Creative problem solving",
-];
+]
 
-export function About() {
+export default function About() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -84,7 +86,7 @@ export function About() {
           If you'd like to work together or talk through a project, feel free to reach out.
         </p>
         <Link
-          to="/contact"
+          href="/contact"
           className="inline-flex items-center justify-center h-14 px-10 bg-black text-white text-[0.79rem] font-medium tracking-widest uppercase hover:bg-black/80 transition-colors"
         >
           Contact
@@ -92,5 +94,5 @@ export function About() {
       </section>
 
     </motion.div>
-  );
+  )
 }

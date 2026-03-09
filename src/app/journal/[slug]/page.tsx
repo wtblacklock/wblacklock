@@ -1,22 +1,29 @@
-import { Link, useParams, Navigate } from "react-router-dom";
-import { motion } from "motion/react";
-import { posts } from "../data/posts";
+'use client'
+
+import Link from "next/link"
+import { useParams } from 'next/navigation'
+import { notFound } from 'next/navigation'
+import { motion } from "motion/react"
+import { posts } from "../../../data/posts"
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  });
+  })
 }
 
-export function JournalPost() {
-  const { slug } = useParams();
-  const post = posts.find((p) => p.slug === slug);
+export default function JournalPost() {
+  const params = useParams()
+  const slug = params.slug as string
+  const post = posts.find((p) => p.slug === slug)
 
-  if (!post) return <Navigate to="/journal" replace />;
+  if (!post) {
+    notFound()
+  }
 
-  const paragraphs = post.content.split("\n\n").filter(Boolean);
+  const paragraphs = post.content.split("\n\n").filter(Boolean)
 
   return (
     <motion.div
@@ -26,7 +33,7 @@ export function JournalPost() {
       className="pt-12 md:pt-24"
     >
       <Link
-        to="/journal"
+        href="/journal"
         className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors mb-16"
       >
         ← Back to Journal
@@ -64,12 +71,12 @@ export function JournalPost() {
 
       <div className="mt-24 pt-12 border-t border-black/10">
         <Link
-          to="/journal"
+          href="/journal"
           className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors"
         >
           ← Back to Journal
         </Link>
       </div>
     </motion.div>
-  );
+  )
 }

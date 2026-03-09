@@ -1,5 +1,10 @@
-export default {
-  presets: [],
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
   theme: {
     fontFamily: {
       // Override all font families with Inter only - NO fallbacks
@@ -8,4 +13,5 @@ export default {
       mono: ['Inter'],
     },
   },
+  plugins: [],
 }

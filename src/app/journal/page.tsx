@@ -1,32 +1,34 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "motion/react";
-import { ChevronDown } from "lucide-react";
-import { posts } from "../data/posts";
+'use client'
+
+import { useState } from "react"
+import Link from "next/link"
+import { motion, AnimatePresence } from "motion/react"
+import { ChevronDown } from "lucide-react"
+import { posts } from "../../data/posts"
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  });
+  })
 }
 
-export function Journal() {
-  const [categoryFilter, setCategoryFilter] = useState("All");
-  const [yearFilter, setYearFilter] = useState("All");
-  const [showFilters, setShowFilters] = useState(false);
+export default function Journal() {
+  const [categoryFilter, setCategoryFilter] = useState("All")
+  const [yearFilter, setYearFilter] = useState("All")
+  const [showFilters, setShowFilters] = useState(false)
 
-  const uniqueCategories = Array.from(new Set(posts.map((p) => p.category))).sort();
+  const uniqueCategories = Array.from(new Set(posts.map((p) => p.category))).sort()
   const uniqueYears = Array.from(
     new Set(posts.map((p) => new Date(p.date).getFullYear()))
-  ).sort((a, b) => b - a);
+  ).sort((a, b) => b - a)
 
   const filteredPosts = posts.filter((post) => {
-    const categoryMatch = categoryFilter === "All" || post.category === categoryFilter;
-    const yearMatch = yearFilter === "All" || new Date(post.date).getFullYear().toString() === yearFilter;
-    return categoryMatch && yearMatch;
-  });
+    const categoryMatch = categoryFilter === "All" || post.category === categoryFilter
+    const yearMatch = yearFilter === "All" || new Date(post.date).getFullYear().toString() === yearFilter
+    return categoryMatch && yearMatch
+  })
 
   return (
     <motion.div
@@ -68,7 +70,7 @@ export function Journal() {
                   <p className="font-sans text-sm font-light leading-snug">All</p>
                 </button>
                 {uniqueCategories.map((category) => {
-                  const isActive = categoryFilter === category;
+                  const isActive = categoryFilter === category
                   return (
                     <button
                       key={category}
@@ -81,7 +83,7 @@ export function Journal() {
                         {category}
                       </p>
                     </button>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -98,7 +100,7 @@ export function Journal() {
                   <p className="font-sans text-sm font-light leading-snug">All</p>
                 </button>
                 {uniqueYears.map((year) => {
-                  const isActive = yearFilter === year.toString();
+                  const isActive = yearFilter === year.toString()
                   return (
                     <button
                       key={year}
@@ -111,7 +113,7 @@ export function Journal() {
                         {year}
                       </p>
                     </button>
-                  );
+                  )
                 })}
               </div>
             </div>
@@ -131,7 +133,7 @@ export function Journal() {
               key={post.slug}
             >
               <Link
-                to={`/journal/${post.slug}`}
+                href={`/journal/${post.slug}`}
                 className="group flex items-start gap-6 md:gap-10 py-8 md:py-10 border-b border-black/10 hover:border-black/25 transition-colors focus:outline-none"
               >
                 <span className="text-[0.68rem] font-mono text-black/30 w-6 shrink-0 select-none mt-1">
@@ -165,5 +167,5 @@ export function Journal() {
         </AnimatePresence>
       </motion.div>
     </motion.div>
-  );
+  )
 }

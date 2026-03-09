@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import { projects } from "../data/projects";
-import { motion } from "motion/react";
-import { FeaturedCaseStudyCard } from "../components/FeaturedCaseStudyCard";
+'use client'
 
-export function Home() {
-  const featuredProjects = projects.filter((p) => p.featured).slice(0, 4);
-  const featuredCaseStudies = projects.filter((p) => p.caseStudy).slice(0, 2);
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+import { projects } from "../data/projects"
+import { motion } from "motion/react"
+import { FeaturedCaseStudyCard } from "../components/FeaturedCaseStudyCard"
+
+export default function Home() {
+  const featuredProjects = projects.filter((p) => p.featured).slice(0, 4)
+  const featuredCaseStudies = projects.filter((p) => p.caseStudy).slice(0, 2)
 
   const categories = [
     {
@@ -42,7 +44,7 @@ export function Home() {
         "Automation and tooling",
       ],
     },
-  ];
+  ]
 
   return (
     <motion.div
@@ -94,7 +96,7 @@ export function Home() {
         <div className="flex items-baseline justify-between mb-10">
           <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">Projects</h2>
           <Link
-            to="/projects"
+            href="/projects"
             className="group flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors"
           >
             View all
@@ -106,7 +108,7 @@ export function Home() {
           {featuredProjects.map((project, i) => (
             <Link
               key={project.id}
-              to={`/projects/${project.id}`}
+              href={`/projects/${project.id}`}
               className="group flex items-stretch border-b border-black/10 min-h-[38vh] md:min-h-[44vh]"
             >
               {/* Left meta */}
@@ -158,7 +160,7 @@ export function Home() {
           I'm currently open to new projects.
         </p>
         <Link
-          to="/contact"
+          href="/contact"
           className="inline-flex items-center gap-3 text-lg md:text-xl font-medium text-black hover:text-black/60 transition-colors group"
         >
           Reach out
@@ -166,5 +168,5 @@ export function Home() {
         </Link>
       </section>
     </motion.div>
-  );
+  )
 }

@@ -1,16 +1,18 @@
-import { motion } from "motion/react";
-import React, { useState } from "react";
+'use client'
 
-export function Contact() {
-  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+import { motion } from "motion/react"
+import React, { useState } from "react"
+
+export default function Contact() {
+  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle")
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("submitting");
+    e.preventDefault()
+    setStatus("submitting")
     setTimeout(() => {
-      setStatus("success");
-    }, 1500);
-  };
+      setStatus("success")
+    }, 1500)
+  }
 
   return (
     <motion.div
@@ -111,5 +113,5 @@ export function Contact() {
         </p>
       </div>
     </motion.div>
-  );
+  )
 }

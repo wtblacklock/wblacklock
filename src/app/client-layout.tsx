@@ -1,60 +1,56 @@
-import { useState, useEffect } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+'use client'
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-  return null;
-}
-import { cn } from "../utils/cn";
-import { motion, AnimatePresence } from "motion/react";
+import { useState, useEffect, ReactNode } from "react"
+import Link from "next/link"
+import { usePathname } from 'next/navigation'
+import { cn } from "../utils/cn"
+import { motion, AnimatePresence } from "motion/react"
 
-export function Layout() {
-  const location = useLocation();
-  const isHome = location.pathname === "/";
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+export function ClientLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname()
+  const isHome = pathname === "/"
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
 
-  const isDesktop = windowWidth >= 768;
+  const isDesktop = windowWidth >= 768
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrolled = window.scrollY > 150;
-      setIsScrolled(scrolled);
-      if (scrolled) setMenuOpen(false);
-    };
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+      const scrolled = window.scrollY > 150
+      setIsScrolled(scrolled)
+      if (scrolled) setMenuOpen(false)
+    }
+    window.addEventListener("scroll", handleScroll)
+    handleScroll()
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   useEffect(() => {
-    setMenuOpen(false);
-  }, [location.pathname]);
+    setMenuOpen(false)
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   const navLinks = [
     { href: "/projects", label: "Projects" },
     { href: "/journal", label: "Journal" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
-  ];
+  ]
 
-  const showDesktopNav = isDesktop && (!isScrolled || menuOpen);
+  const showDesktopNav = isDesktop && (!isScrolled || menuOpen)
 
   return (
     <div className="min-h-screen bg-white text-black font-sans flex flex-col selection:bg-black selection:text-white">
       <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none pt-6 md:pt-8">
         <div className="max-w-[1850px] mx-auto px-6 flex items-center justify-between pointer-events-auto">
-          <Link to="/" className="hover:opacity-70 transition-opacity">
+          <Link href="/" className="hover:opacity-70 transition-opacity">
             <span
               style={{
                 fontFamily: "'Inter', sans-serif",
@@ -88,10 +84,10 @@ export function Layout() {
                     {navLinks.map((link) => (
                       <Link
                         key={link.href}
-                        to={link.href}
+                        href={link.href}
                         className={cn(
                           "transition-colors hover:text-black/50",
-                          location.pathname === link.href ? "text-black" : "text-black/70"
+                          pathname === link.href ? "text-black" : "text-black/70"
                         )}
                       >
                         {link.label}
@@ -140,7 +136,7 @@ export function Layout() {
           >
             <div className="max-w-[1850px] w-full mx-auto px-6 pt-6 md:pt-8 flex items-center justify-between shrink-0">
               <Link
-                to="/"
+                href="/"
                 onClick={() => setMenuOpen(false)}
                 style={{ fontFamily: "'Inter', sans-serif", fontWeight: 100, fontSize: "2.835rem", letterSpacing: "0.02em", lineHeight: 1 }}
               >
@@ -158,7 +154,7 @@ export function Layout() {
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
-                  to={link.href}
+                  href={link.href}
                   onClick={() => setMenuOpen(false)}
                   className="text-[3.15rem] md:text-[4.72rem] font-medium tracking-tighter hover:text-black/50 transition-colors"
                 >
@@ -170,9 +166,8 @@ export function Layout() {
         )}
       </AnimatePresence>
 
-      <ScrollToTop />
       <main className="flex-1 w-full max-w-[1850px] mx-auto px-6 pt-32 pb-16 md:pb-32">
-        <Outlet />
+        {children}
       </main>
 
       <footer className="py-16 mt-auto">
@@ -186,5 +181,5 @@ export function Layout() {
         </div>
       </footer>
     </div>
-  );
+  )
 }
