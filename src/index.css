@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@import "tailwindcss";
+
+/* OVERRIDE Tailwind's default theme variables */
+@theme {
+  --font-serif: Inter;
+  --font-sans: Inter;
+  --font-mono: Inter;
+}
+
+/* ABSOLUTE: Force Inter ONLY - nothing else */
+* {
+  font-family: Inter !important;
+}
+
+html, body {
+  font-family: Inter !important;
+}
+
+:root {
+  --font-serif: Inter !important;
+  --font-sans: Inter !important;
+  --font-mono: Inter !important;
+}
+
+/* Override all font utilities */
+.font-serif {
+  font-family: Inter !important;
+}
+
+.font-sans {
+  font-family: Inter !important;
+}
+
+.font-mono {
+  font-family: Inter !important;
+}
+
+/* Font weight overrides */
+.font-extralight {
+  font-weight: 100 !important;
+}
+
+.font-light {
+  font-weight: 200 !important;
+}
+
+.font-normal {
+  font-weight: 400 !important;
+}
+
+.font-medium {
+  font-weight: 500 !important;
+}
+
+.font-bold {
+  font-weight: 700 !important;
+}
+

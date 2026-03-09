@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "designing-with-ai",
+    "title": "Designing with AI: what's changed for me in the last 12 months",
+    "date": "2026-02-18",
+    "category": "Process",
+    "excerpt": "A year in, AI tools have genuinely changed how I work — not by replacing judgment, but by changing where I spend my attention.",
+    "content": "A year ago I was skeptical. Not of the technology, but of whether it would actually change anything meaningful in my day-to-day. Now I can say pretty clearly: it has, but not in the ways I expected.\n\nThe biggest shift isn't speed. It's the elimination of blank-page friction. Starting a project — whether it's a brand brief, a component spec, or a site structure — used to involve a ritual warm-up. Coffee. A few false starts. Staring at an empty document long enough that something would eventually emerge. That warm-up time is mostly gone now. I can externalize the first draft of my thinking quickly, see where it's weak, and respond to something concrete instead of building from nothing.\n\nWhat hasn't changed: taste. Judgment. The ability to know when something is almost right versus actually right. If anything, having a tireless drafting partner makes those distinctions more important — you're reviewing more options and making more decisions, so the quality of your eye has to be there.\n\nI've also noticed that my vocabulary for what I want has improved. When you're prompting for layouts, copy directions, or design rationale, you have to articulate your intent clearly. That discipline carries back into client work and team reviews. You get better at saying what you mean.\n\nThe tools I use most: Claude for thinking and writing, Midjourney for rough moodboarding, Cursor for front-end builds. None of them replaced a person on my team. They filled the space where silence used to live."
+  },
+  {
+    "slug": "case-for-slower-projects",
+    "title": "The case for slower projects",
+    "date": "2026-01-30",
+    "category": "Thinking",
+    "excerpt": "Faster isn't always better. Some of my best client work happened when we deliberately slowed down in the middle.",
+    "content": "There's a project I worked on two years ago that I still think about. A brand system for a growing software company. Six weeks in, with deliverables due, the founder came back and said: 'I think we've been solving the wrong problem.'\n\nMost timelines would have pushed through. The deliverables were largely done. But we stopped. We spent a week just talking — about who the company was actually for, what they were afraid of, what kind of company they wanted to be in five years. We scrapped a significant portion of the work.\n\nThe final system was better by a wide margin. Not just aesthetically — strategically. It held up to scrutiny in ways the original direction wouldn't have.\n\nI've been thinking about this because the trend in design services is relentlessly toward speed. Faster sprints. Quicker turnarounds. AI-assisted everything. And there's real value in that — I use those tools myself. But speed is a means, not an end. If you're moving quickly in the wrong direction, you're just getting lost faster.\n\nThe projects I'm proudest of have had a moment of genuine pause somewhere in the middle. A week where we stepped back from output and spent time with the problem. That pause is almost always where the real insight lives."
+  },
+  {
+    "slug": "notes-on-design-systems",
+    "title": "Notes on design systems: what they are actually for",
+    "date": "2026-01-08",
+    "category": "Systems",
+    "excerpt": "Design systems are not component libraries. They're not Figma files. They're a shared language — and that distinction matters.",
+    "content": "I've built or contributed to a lot of design systems over the years, and I've noticed a consistent misunderstanding about what they're actually for.\n\nA design system is not a component library. It's not a Figma file. It's not a set of color tokens or typography scales, though it includes all of those things. A design system is a shared language — a set of agreed-upon conventions that allows a team to communicate about design without starting every conversation from scratch.\n\nThis framing changes how you approach building one. If it's a library, you optimize for completeness and coverage. If it's a language, you optimize for clarity and adoption. Those are very different problems.\n\nA language that nobody speaks is just an artifact. I've seen beautifully crafted design systems that lived entirely in a Notion doc and a Figma file that almost nobody opened. The system existed — but it had no users. It wasn't solving a communication problem, it was solving a documentation problem nobody had asked for.\n\nThe systems that work are the ones built around real friction points. A team that kept arguing about button states. An engineering team that kept rebuilding the same modal from scratch. A product that had grown 12 different interpretations of 'card.' Those are problems a design system can actually solve — because there's a felt need on the other side.\n\nStart there. Find the friction. Build the minimum language that removes it. Then grow from use, not from planning."
+  },
+  {
+    "slug": "working-in-austin",
+    "title": "On working independently in Austin",
+    "date": "2025-12-15",
+    "category": "Life",
+    "excerpt": "Three years into being fully independent. Some things I've learned about running a solo practice in a city with a lot of noise.",
+    "content": "Austin has become a complicated place to work in design and tech. It's got genuine energy — companies relocating, founders starting things, a real appetite for building — but it's also noisier than it used to be. More conferences. More networking events. More people telling you what the next thing is.\n\nThree years into being fully independent, I've gotten better at filtering that noise. A few things that have helped:\n\nMost opportunities come from past work, not from visibility. I've had years where I was very visible — speaking at things, posting regularly, showing up at events — and years where I was quiet and heads-down. The work I got wasn't obviously correlated with the visibility. The best client relationships have almost always come from referrals from someone I worked with well.\n\nLocal doesn't mean nearby. My best clients over the last few years have been based in New York, San Francisco, and London. 'Working in Austin' mostly means I live here and like it. The actual work is distributed.\n\nHaving a clear point of view matters more than having a broad one. When I tried to position myself as someone who does everything, I got a lot of calls that went nowhere. When I got clearer about what I actually do well — design, build, systems — the right conversations got easier.\n\nStill figuring it out. But those things have held up."
+  },
+  {
+    "slug": "typography-first",
+    "title": "Typography first",
+    "date": "2025-11-22",
+    "category": "Design",
+    "excerpt": "Every project I start now begins with the type. Not the colors, not the layout — the type. Here's why.",
+    "content": "I used to start with color. A palette felt like momentum — you had something to look at, something to react to. Then I started starting with layout, building structure before I had anything to put in it. Both approaches led to the same problem: when the type finally showed up, it either confirmed the direction or killed it, and by that point there was too much sunk cost in everything around it.\n\nNow I start with type. Specifically: the heading, a paragraph, and a label. If I can find a typographic direction that makes those three elements feel right together — the right weights, scale relationships, and spacing — then I have a foundation that everything else can extend from.\n\nThis matters more than ever because so much of design work now involves choosing from existing type systems rather than designing custom ones. How you combine typefaces, how you set scale, how aggressively you use weight and size variation — these choices carry more personality than most people give them credit for.\n\nA site with beautiful imagery and a generic type stack reads as generic. A site with plain imagery and a considered, confident type system reads as considered and confident. Typography is the most direct expression of voice in visual design, and I think we undersell it.\n\nStart with the type. Everything else follows."
+  }
+]

@@ -1,0 +1,103 @@
+[
+  {
+    "id": "fintech-dashboard",
+    "title": "Fintech Dashboard Redesign",
+    "category": "Product",
+    "clientName": "Vanguard Capital",
+    "clientType": "Financial Services",
+    "tagline": "Making complex financial data feel fast, intuitive, and clear for daily users.",
+    "description": "A complete overhaul of a legacy financial dashboard for institutional investors.",
+    "thumbnail": "https://picsum.photos/seed/fintech/1200/800",
+    "images": [
+      "https://picsum.photos/seed/fintech1/1200/800",
+      "https://picsum.photos/seed/fintech2/1200/800"
+    ],
+    "services": ["Product Design", "Design Systems", "User Research"],
+    "featured": true,
+    "caseStudy": true,
+    "content": "The goal was to simplify complex data visualizations and create a more intuitive workflow for daily active users. We established a new design system and component library that accelerated future feature development."
+  },
+  {
+    "id": "ai-writing-assistant",
+    "title": "AI Writing Assistant",
+    "category": "AI Build",
+    "clientName": "Prose AI",
+    "clientType": "AI/SaaS",
+    "tagline": "A distraction-free editor that surfaces AI capabilities exactly when writers need them.",
+    "description": "Interface design for a next-generation AI writing tool focused on long-form content.",
+    "thumbnail": "https://picsum.photos/seed/aiwrite/1200/800",
+    "images": [
+      "https://picsum.photos/seed/aiwrite1/1200/800",
+      "https://picsum.photos/seed/aiwrite2/1200/800"
+    ],
+    "services": ["Product Design", "Prototyping", "Interaction Design"],
+    "featured": true,
+    "caseStudy": true,
+    "content": "Designed a minimal, distraction-free interface that surfaces AI capabilities contextually rather than overwhelming the user with options."
+  },
+  {
+    "id": "global-brand-campaign",
+    "title": "Global Brand Campaign",
+    "category": "Campaign",
+    "clientName": "Luxe Living",
+    "clientType": "Luxury Goods",
+    "tagline": "A cohesive visual identity scaled across print, digital, and out-of-home channels.",
+    "description": "Digital and physical assets for a major rebrand launch.",
+    "thumbnail": "https://picsum.photos/seed/campaign/1200/800",
+    "images": [
+      "https://picsum.photos/seed/campaign1/1200/800",
+      "https://picsum.photos/seed/campaign2/1200/800"
+    ],
+    "services": ["Art Direction", "Visual Design", "Motion Graphics"],
+    "featured": true,
+    "content": "Developed a cohesive visual language that scaled across billboards, social media, and digital advertising, resulting in a 40% increase in brand awareness."
+  },
+  {
+    "id": "ecommerce-platform",
+    "title": "Modern E-commerce Platform",
+    "category": "Website",
+    "clientName": "Stride Fashion",
+    "clientType": "E-Commerce",
+    "tagline": "A headless shopping experience built around large imagery and seamless checkout flows.",
+    "description": "A headless commerce experience for a boutique fashion brand.",
+    "thumbnail": "https://picsum.photos/seed/ecomm/1200/800",
+    "images": [
+      "https://picsum.photos/seed/ecomm1/1200/800"
+    ],
+    "services": ["UX/UI Design", "Frontend Architecture"],
+    "featured": false,
+    "content": "Built a lightning-fast shopping experience prioritizing large imagery and seamless checkout flows."
+  },
+  {
+    "id": "design-system-ops",
+    "title": "Enterprise Design System",
+    "category": "Systems",
+    "clientName": "TechScale Corp",
+    "clientType": "Enterprise Software",
+    "tagline": "A unified component library that cut design-to-development handoff time by sixty percent.",
+    "description": "Establishing design operations and a unified component library for a 500+ person engineering org.",
+    "thumbnail": "https://picsum.photos/seed/system/1200/800",
+    "images": [
+      "https://picsum.photos/seed/system1/1200/800"
+    ],
+    "services": ["Design Systems", "Design Operations", "Documentation"],
+    "featured": false,
+    "content": "Audited existing products to create a unified token system and React component library, reducing design-to-development handoff time by 60%."
+  },
+  {
+    "id": "editorial-magazine",
+    "title": "Quarterly Editorial",
+    "category": "Print",
+    "clientName": "Modern Arts Quarterly",
+    "clientType": "Publishing",
+    "tagline": "A flexible editorial grid built for expressive typography across long-form arts writing.",
+    "description": "Layout and typography for an independent arts and culture magazine.",
+    "thumbnail": "https://picsum.photos/seed/print/1200/800",
+    "images": [
+      "https://picsum.photos/seed/print1/1200/800"
+    ],
+    "services": ["Editorial Design", "Typography", "Print Production"],
+    "featured": false,
+    "content": "Created a flexible grid system that allowed for expressive typography while maintaining readability across long-form articles."
+  }
+]
