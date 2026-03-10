@@ -28,7 +28,8 @@ export default function Projects() {
   const clientDirectory = [...regularProjects, ...caseStudies]
 
   const clientDirectoryBlock = (
-    <div className="mb-10 pb-8 border-b border-black/10">
+    <div>
+      <h4 className="text-xs font-bold tracking-widest uppercase text-black/30 mb-6">Client Name</h4>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-5">
         {clientDirectory.map((p) => (
           <Link
@@ -49,25 +50,28 @@ export default function Projects() {
   )
 
   const serviceFilterBlock = (
-    <div className="flex flex-wrap items-center gap-5 md:gap-7 mb-8">
-      {["All", ...uniqueServices].map((service) => (
-        <button
-          key={service}
-          onClick={() => setServiceFilter(service)}
-          className={`relative pb-1 font-sans text-sm font-light transition-colors duration-200 focus:outline-none ${
-            serviceFilter === service ? "text-black" : "text-black/30 hover:text-black/60"
-          }`}
-        >
-          {service}
-          {serviceFilter === service && (
-            <motion.span
-              layoutId="serviceFilterLine"
-              className="absolute bottom-0 left-0 right-0 h-[1px] bg-black"
-              transition={{ type: "spring", stiffness: 400, damping: 35 }}
-            />
-          )}
-        </button>
-      ))}
+    <div>
+      <h4 className="text-xs font-bold tracking-widest uppercase text-black/30 mb-6">Project Type</h4>
+      <div className="flex flex-wrap items-center gap-5 md:gap-7">
+        {["All", ...uniqueServices].map((service) => (
+          <button
+            key={service}
+            onClick={() => setServiceFilter(service)}
+            className={`relative pb-1 font-sans text-sm font-light transition-colors duration-200 focus:outline-none ${
+              serviceFilter === service ? "text-black" : "text-black/30 hover:text-black/60"
+            }`}
+          >
+            {service}
+            {serviceFilter === service && (
+              <motion.span
+                layoutId="serviceFilterLine"
+                className="absolute bottom-0 left-0 right-0 h-[1px] bg-black"
+                transition={{ type: "spring", stiffness: 400, damping: 35 }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
     </div>
   )
 
@@ -146,10 +150,12 @@ export default function Projects() {
               </button>
             </div>
             {showFilters && (
-              <>
-                {clientDirectoryBlock}
-                {serviceFilterBlock}
-              </>
+              <div className="mb-8 pb-[80px] border-b border-black/10">
+                <div className="grid grid-cols-1 gap-12 md:gap-16">
+                  {clientDirectoryBlock}
+                  {serviceFilterBlock}
+                </div>
+              </div>
             )}
             {projectsGridBlock}
           </>
@@ -177,10 +183,12 @@ export default function Projects() {
             </button>
           </div>
           {showFilters && (
-            <>
-              {clientDirectoryBlock}
-              {serviceFilterBlock}
-            </>
+            <div className="mb-8 pb-[80px] border-b border-black/10">
+              <div className="grid grid-cols-1 gap-12 md:gap-16">
+                {clientDirectoryBlock}
+                {serviceFilterBlock}
+              </div>
+            </div>
           )}
           {projectsGridBlock}
         </div>
