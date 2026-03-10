@@ -26,7 +26,7 @@ export default function Contact() {
         <h1 className="text-[4.16rem] md:text-[8.88rem] font-serif font-extralight tracking-tighter text-black leading-[0.9] mb-8">
           Contact
         </h1>
-        <p className="text-2xl md:text-4xl text-black/60 leading-snug max-w-3xl font-light tracking-tight">
+        <p className="text-2xl md:text-4xl text-black/60 leading-relaxed max-w-3xl font-light tracking-tight">
           If you'd like to work together, talk through a project, or just say hello, feel free to reach out.
         </p>
       </section>
