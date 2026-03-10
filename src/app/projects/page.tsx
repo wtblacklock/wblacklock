@@ -49,12 +49,12 @@ export default function Projects() {
   const serviceFilterBlock = (
     <div>
       <h4 className="text-xs font-bold tracking-widest uppercase text-black/30 mb-6">Project Type</h4>
-      <div className="flex flex-wrap items-center gap-5 md:gap-7">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-7">
         {["All", ...uniqueServices].map((service) => (
           <button
             key={service}
             onClick={() => setServiceFilter(service)}
-            className={`relative pb-1 font-sans text-sm font-light transition-colors duration-200 focus:outline-none ${
+            className={`relative pb-1 font-sans text-sm font-light transition-colors duration-200 focus:outline-none text-left ${
               serviceFilter === service ? "text-black" : "text-black/30 hover:text-black/60"
             }`}
           >
@@ -148,7 +148,7 @@ export default function Projects() {
             </div>
             {showFilters && (
               <div className="mb-8 pb-[80px] border-b border-black/10">
-                <div className="grid grid-cols-1 gap-12 md:gap-16">
+                <div className="grid grid-cols-2 gap-12 md:gap-16">
                   {clientDirectoryBlock}
                   {serviceFilterBlock}
                 </div>
@@ -181,7 +181,7 @@ export default function Projects() {
           </div>
           {showFilters && (
             <div className="mb-8 pb-[80px] border-b border-black/10">
-              <div className="grid grid-cols-1 gap-12 md:gap-16">
+              <div className="grid grid-cols-2 gap-12 md:gap-16">
                 {clientDirectoryBlock}
                 {serviceFilterBlock}
               </div>
