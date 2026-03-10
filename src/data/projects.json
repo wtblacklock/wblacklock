@@ -1,21 +1,29 @@
 [
   {
-    "id": "fintech-dashboard",
-    "title": "Fintech Dashboard Redesign",
-    "category": "Product",
-    "clientName": "Vanguard Capital",
-    "clientType": "Financial Services",
-    "tagline": "Making complex financial data feel fast, intuitive, and clear for daily users.",
-    "description": "A complete overhaul of a legacy financial dashboard for institutional investors.",
-    "thumbnail": "https://picsum.photos/seed/fintech/1200/800",
+    "id": "ibm-garage",
+    "title": "IBM Garage",
+    "category": "Systems",
+    "clientName": "IBM Consulting",
+    "clientType": "Enterprise Consulting",
+    "tagline": "Scaling a global innovation framework across IBM Consulting.",
+    "description": "IBM Garage is a collaborative innovation framework designed to help organizations co-create, prototype, and scale digital solutions. I led the design and operational rollout of a unified ecosystem of tools and resources that helped standardize Garage practices across IBM Consulting worldwide.",
+    "thumbnail": "/images/projects/ibm-garage/thumbnail.jpg",
+    "thumbnailVideo": "/images/projects/ibm-garage/thumbnail.mp4",
     "images": [
-      "https://picsum.photos/seed/fintech1/1200/800",
-      "https://picsum.photos/seed/fintech2/1200/800"
+      "/images/projects/ibm-garage/screen-1.jpg",
+      "/images/projects/ibm-garage/screen-2.jpg",
+      "/images/projects/ibm-garage/screen-3.jpg"
     ],
-    "services": ["Product Design", "Design Systems", "User Research"],
-    "featured": true,
+    "services": [
+      "Design Systems",
+      "Product Design",
+      "UX Research",
+      "Creative Direction",
+      "Program Leadership"
+    ],
     "caseStudy": true,
-    "content": "The goal was to simplify complex data visualizations and create a more intuitive workflow for daily active users. We established a new design system and component library that accelerated future feature development."
+    "featured": true,
+    "content": "A cross-disciplinary design and delivery effort focused on creating consistent tools, frameworks, and learning systems for IBM Garage practitioners worldwide."
   },
   {
     "id": "ai-writing-assistant",
@@ -34,6 +42,23 @@
     "featured": true,
     "caseStudy": true,
     "content": "Designed a minimal, distraction-free interface that surfaces AI capabilities contextually rather than overwhelming the user with options."
+  },
+  {
+    "id": "fintech-dashboard",
+    "title": "Fintech Dashboard Redesign",
+    "category": "Product",
+    "clientName": "Vanguard Capital",
+    "clientType": "Financial Services",
+    "tagline": "Making complex financial data feel fast, intuitive, and clear for daily users.",
+    "description": "A complete overhaul of a legacy financial dashboard for institutional investors.",
+    "thumbnail": "https://picsum.photos/seed/fintech/1200/800",
+    "images": [
+      "https://picsum.photos/seed/fintech1/1200/800",
+      "https://picsum.photos/seed/fintech2/1200/800"
+    ],
+    "services": ["Product Design", "Design Systems", "User Research"],
+    "featured": true,
+    "content": "The goal was to simplify complex data visualizations and create a more intuitive workflow for daily active users. We established a new design system and component library that accelerated future feature development."
   },
   {
     "id": "global-brand-campaign",

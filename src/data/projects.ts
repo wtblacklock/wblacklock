@@ -11,6 +11,7 @@ export interface Project {
   tagline: string;
   description: string;
   thumbnail: string;
+  thumbnailVideo?: string;
   images: string[];
   services: string[];
   featured?: boolean;

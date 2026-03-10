@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation'
 import Link from "next/link"
 import { motion } from "motion/react"
 import { projects } from "../../../data/projects"
+import { getCaseStudy } from "../../../data/caseStudies"
+import { CaseStudyDetail } from "../../../components/CaseStudyDetail"
 
 export default function ProjectDetail() {
   const params = useParams()
@@ -19,6 +21,7 @@ export default function ProjectDetail() {
 
   const nextProject = projects[(currentIndex + 1) % projects.length]
   const moreProjects = projects.filter((p) => p.id !== project.id).slice(0, 3)
+  const caseStudyData = project.caseStudy ? getCaseStudy(project.id) : undefined
 
   return (
     <motion.div
@@ -47,6 +50,18 @@ export default function ProjectDetail() {
           {project.tagline}
         </p>
       </div>
+
+      {/* Hero image */}
+      {(caseStudyData?.hero || project.images[0]) && (
+        <div className="w-full aspect-[16/9] overflow-hidden bg-neutral-100 mb-12 md:mb-16">
+          <img
+            src={caseStudyData?.hero || project.images[0]}
+            alt={project.title}
+            className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+      )}
 
       {/* 3-column content */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 border-t border-black/10 pt-12 md:pt-16">
@@ -100,29 +115,24 @@ export default function ProjectDetail() {
         )}
       </div>
 
-      {/* Project images gallery */}
-      <div className="mt-20 md:mt-28 space-y-6 md:space-y-8">
-        {/* Full width image */}
-        <div className="w-full aspect-[16/9] bg-neutral-100"></div>
-        
-        {/* Two column images */}
-        <div className="grid grid-cols-2 gap-6 md:gap-8">
-          <div className="aspect-[4/5] bg-neutral-100"></div>
-          <div className="aspect-[4/5] bg-neutral-100"></div>
+      {/* Gallery / case study content */}
+      {project.caseStudy && caseStudyData ? (
+        <CaseStudyDetail data={caseStudyData} project={project} />
+      ) : (
+        <div className="mt-20 md:mt-28 space-y-6 md:space-y-8">
+          <div className="w-full aspect-[16/9] bg-neutral-100" />
+          <div className="grid grid-cols-2 gap-6 md:gap-8">
+            <div className="aspect-[4/5] bg-neutral-100" />
+            <div className="aspect-[4/5] bg-neutral-100" />
+          </div>
+          <div className="w-full aspect-[21/9] bg-neutral-100" />
+          <div className="w-full aspect-[16/9] bg-neutral-100" />
+          <div className="grid grid-cols-2 gap-6 md:gap-8">
+            <div className="aspect-square bg-neutral-100" />
+            <div className="aspect-square bg-neutral-100" />
+          </div>
         </div>
-        
-        {/* Full width image */}
-        <div className="w-full aspect-[21/9] bg-neutral-100"></div>
-        
-        {/* Single image */}
-        <div className="w-full aspect-[16/9] bg-neutral-100"></div>
-        
-        {/* Two column images */}
-        <div className="grid grid-cols-2 gap-6 md:gap-8">
-          <div className="aspect-square bg-neutral-100"></div>
-          <div className="aspect-square bg-neutral-100"></div>
-        </div>
-      </div>
+      )}
 
       {/* More work */}
       <div className="mt-24 md:mt-32 pt-12 border-t border-black/10">

@@ -15,12 +15,23 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       <Link href={`/projects/${project.id}`} className="block focus:outline-none">
         <div className="mb-3">
           <div className="aspect-[4/5] overflow-hidden bg-neutral-100 rounded-none group-hover:rounded-xl transition-[border-radius] duration-500">
-            <img
-              src={project.thumbnail}
-              alt={project.title}
-              className="w-full h-full object-cover transition-transform duration-700 scale-[1.03] group-hover:scale-100"
-              referrerPolicy="no-referrer"
-            />
+            {project.thumbnailVideo ? (
+              <video
+                src={project.thumbnailVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover transition-transform duration-700 scale-[1.03] group-hover:scale-100"
+              />
+            ) : (
+              <img
+                src={project.thumbnail}
+                alt={project.title}
+                className="w-full h-full object-cover transition-transform duration-700 scale-[1.03] group-hover:scale-100"
+                referrerPolicy="no-referrer"
+              />
+            )}
           </div>
         </div>
         <div className="pt-1">

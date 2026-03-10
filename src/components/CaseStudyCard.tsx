@@ -19,12 +19,23 @@ export function CaseStudyCard({ project, index }: CaseStudyCardProps) {
         <article className="flex flex-col">
         {/* Image */}
         <div className="aspect-[3/4] overflow-hidden bg-neutral-100 mb-5">
-          <img
-            src={project.thumbnail}
-            alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-700 scale-[1.02] group-hover:scale-100"
-            referrerPolicy="no-referrer"
-          />
+          {project.thumbnailVideo ? (
+            <video
+              src={project.thumbnailVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover transition-transform duration-700 scale-[1.02] group-hover:scale-100"
+            />
+          ) : (
+            <img
+              src={project.thumbnail}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-700 scale-[1.02] group-hover:scale-100"
+              referrerPolicy="no-referrer"
+            />
+          )}
         </div>
 
           {/* Content */}
