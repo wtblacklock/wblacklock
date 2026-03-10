@@ -5,13 +5,10 @@ import { ArrowRight } from "lucide-react"
 import { projects } from "../data/projects"
 import { motion } from "motion/react"
 import { FeaturedCaseStudyCard } from "../components/FeaturedCaseStudyCard"
-import { HomeHeroAnimation } from "../components/HomeHeroAnimation"
-import { useBrandAnimation } from "../contexts/BrandAnimationContext"
 
 export default function Home() {
   const featuredProjects = projects.filter((p) => p.featured).slice(0, 4)
   const featuredCaseStudies = projects.filter((p) => p.caseStudy).slice(0, 2)
-  const { revealBrand } = useBrandAnimation()
 
   const categories = [
     {
@@ -56,8 +53,17 @@ export default function Home() {
       transition={{ duration: 0.5 }}
       className="space-y-24"
     >
-      {/* Hero Section with Animation */}
-      <HomeHeroAnimation onBrandReveal={revealBrand} />
+      {/* Hero Section */}
+      <section className="min-h-[70vh] flex flex-col justify-center pb-12">
+        <div className="max-w-5xl">
+          <h1 className="text-[3.33rem] md:text-[6.66rem] lg:text-[8.88rem] font-serif font-extralight tracking-tighter text-black leading-[0.9] mb-8">
+            Hello.
+          </h1>
+          <p className="text-2xl md:text-4xl text-black/60 leading-snug max-w-4xl font-light tracking-tight">
+            Independent designer helping teams build better products, brands, and creative systems.
+          </p>
+        </div>
+      </section>
 
       {/* What I Do Section */}
       <section className="pt-12">

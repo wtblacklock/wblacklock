@@ -5,7 +5,6 @@ import Link from "next/link"
 import { usePathname } from 'next/navigation'
 import { cn } from "../utils/cn"
 import { motion, AnimatePresence } from "motion/react"
-import { useBrandAnimation } from "../contexts/BrandAnimationContext"
 
 export function ClientLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
@@ -13,7 +12,8 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200)
-  const { showBrand } = useBrandAnimation()
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [brandPhase, setBrandPhase] = useState<'full' | 'initials-fade' | 'condensed'>(isHome ? 'full' : 'condensed')
 
   const isDesktop = windowWidth >= 768
 
@@ -35,6 +35,30 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReducedMotion(mediaQuery.matches)
+
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches)
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
+
+  useEffect(() => {
+    if (!isHome || prefersReducedMotion) {
+      setBrandPhase('condensed')
+      return
+    }
+
+    setBrandPhase('full')
+    const timer1 = setTimeout(() => setBrandPhase('initials-fade'), 800)
+    const timer2 = setTimeout(() => setBrandPhase('condensed'), 1400)
+    return () => {
+      clearTimeout(timer1)
+      clearTimeout(timer2)
+    }
+  }, [isHome, prefersReducedMotion, pathname])
+
+  useEffect(() => {
     setMenuOpen(false)
     window.scrollTo(0, 0)
   }, [pathname])
@@ -52,28 +76,95 @@ export function ClientLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-white text-black font-sans flex flex-col selection:bg-black selection:text-white">
       <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none pt-6 md:pt-8">
         <div className="max-w-[1850px] mx-auto px-6 flex items-center justify-between pointer-events-auto">
-          <Link href="/" className="hover:opacity-70 transition-opacity relative inline-block" style={{ minHeight: "2.835rem" }}>
-            <AnimatePresence>
-              {showBrand && (
-                <motion.span
-                  key="brand"
-                  data-nav-brand
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontWeight: 100,
-                    fontSize: "2.835rem",
-                    letterSpacing: "0.02em",
-                    lineHeight: 1,
-                  }}
-                >
-                  WTB
-                </motion.span>
-              )}
-            </AnimatePresence>
+          <Link href="/" className="hover:opacity-70 transition-opacity relative inline-flex items-start w-[88px]" style={{ minHeight: "2.835rem" }}>
+            <motion.span
+              initial={false}
+              animate={{ opacity: brandPhase === 'condensed' ? 0 : 1, y: brandPhase === 'condensed' ? -6 : 0 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 100,
+                fontSize: "2.835rem",
+                letterSpacing: "0.02em",
+                lineHeight: 1,
+                pointerEvents: 'none',
+              }}
+              className="absolute left-0 top-0 whitespace-nowrap"
+              aria-hidden={brandPhase === 'condensed'}
+            >
+              <motion.span
+                initial={false}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                W
+              </motion.span>
+              <motion.span
+                initial={false}
+                animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }}
+                transition={{ duration: 0.35, delay: 0.05 }}
+              >
+                illiam
+              </motion.span>
+              <motion.span
+                initial={false}
+                animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }}
+                transition={{ duration: 0.35, delay: 0.08 }}
+              >
+                {" "}
+              </motion.span>
+              <motion.span
+                initial={false}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+              >
+                T
+              </motion.span>
+              <motion.span
+                initial={false}
+                animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }}
+                transition={{ duration: 0.35, delay: 0.15 }}
+              >
+                hames
+              </motion.span>
+              <motion.span
+                initial={false}
+                animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }}
+                transition={{ duration: 0.35, delay: 0.18 }}
+              >
+                {" "}
+              </motion.span>
+              <motion.span
+                initial={false}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+              >
+                B
+              </motion.span>
+              <motion.span
+                initial={false}
+                animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }}
+                transition={{ duration: 0.35, delay: 0.25 }}
+              >
+                lacklock
+              </motion.span>
+            </motion.span>
+
+            <motion.span
+              initial={false}
+              animate={{ opacity: brandPhase === 'condensed' ? 1 : 0, y: brandPhase === 'condensed' ? 0 : 6, scale: brandPhase === 'condensed' ? 1 : 0.985 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 100,
+                fontSize: "2.835rem",
+                letterSpacing: "0.02em",
+                lineHeight: 1,
+              }}
+              aria-hidden={brandPhase !== 'condensed'}
+            >
+              WTB
+            </motion.span>
           </Link>
 
           <div className="flex items-center">

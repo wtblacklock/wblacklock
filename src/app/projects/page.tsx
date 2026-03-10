@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "motion/react"
+import { ChevronDown } from "lucide-react"
 import { projects } from "../../data/projects"
 import { ProjectCard } from "../../components/ProjectCard"
 import { CaseStudyCard } from "../../components/CaseStudyCard"
@@ -10,6 +11,7 @@ import { CaseStudyCard } from "../../components/CaseStudyCard"
 export default function Projects() {
   const [serviceFilter, setServiceFilter] = useState("All")
   const [mobileView, setMobileView] = useState<"projects" | "caseStudies">("projects")
+  const [showFilters, setShowFilters] = useState(false)
 
   const regularProjects = projects.filter((p) => !p.caseStudy)
   const caseStudies = projects.filter((p) => p.caseStudy)
@@ -134,8 +136,21 @@ export default function Projects() {
       <div className="lg:hidden mb-12">
         {mobileView === "projects" ? (
           <>
-            {clientDirectoryBlock}
-            {serviceFilterBlock}
+            <div className="mb-6">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-black/40 hover:text-black transition-colors focus:outline-none"
+              >
+                {showFilters ? "Hide filters" : "Show filters"}
+                <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
+              </button>
+            </div>
+            {showFilters && (
+              <>
+                {clientDirectoryBlock}
+                {serviceFilterBlock}
+              </>
+            )}
             {projectsGridBlock}
           </>
         ) : (
@@ -152,8 +167,21 @@ export default function Projects() {
       <div className="flex flex-col lg:flex-row lg:gap-8">
         {/* Left Column: Projects */}
         <div className="hidden lg:block flex-1 lg:pr-4">
-          {clientDirectoryBlock}
-          {serviceFilterBlock}
+          <div className="mb-6">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-black/40 hover:text-black transition-colors focus:outline-none"
+            >
+              {showFilters ? "Hide filters" : "Show filters"}
+              <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
+            </button>
+          </div>
+          {showFilters && (
+            <>
+              {clientDirectoryBlock}
+              {serviceFilterBlock}
+            </>
+          )}
           {projectsGridBlock}
         </div>
 
