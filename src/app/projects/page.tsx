@@ -40,9 +40,6 @@ export default function Projects() {
             <p className="font-sans text-sm font-light text-black group-hover:text-black/40 transition-colors duration-200 leading-snug">
               {p.clientName}
             </p>
-            <p className="font-sans text-[0.7rem] font-light text-black/40 leading-snug mt-0.5">
-              {p.clientType}
-            </p>
           </Link>
         ))}
       </div>
