@@ -34,7 +34,7 @@ export default function Contact() {
       <div className="max-w-2xl space-y-16 md:space-y-20">
         {/* Short message */}
         <p className="text-xl md:text-2xl text-black/70 font-light leading-relaxed">
-          I'm usually working across product design, campaigns, websites, and creative systems. If you think I might be able to help with something you're building, I'd be glad to hear about it.
+          I work across product design, campaigns, websites, and creative systems. If you're building something, I'd be glad to hear about it.
         </p>
 
         {/* Email */}

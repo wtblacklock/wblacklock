@@ -59,7 +59,7 @@ export default function Home() {
           <h1 className="text-[3.33rem] md:text-[6.66rem] lg:text-[8.88rem] font-serif font-extralight tracking-tighter text-black leading-[0.9] mb-8">
             Hello.
           </h1>
-          <p className="text-2xl md:text-4xl text-black/60 leading-snug max-w-4xl font-light tracking-tight">
+          <p className="text-2xl md:text-4xl text-black/60 leading-relaxed max-w-4xl font-light tracking-tight">
             Independent designer helping teams build better products, brands, and creative systems.
           </p>
         </div>
