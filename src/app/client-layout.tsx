@@ -100,7 +100,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
           <TransitionOverlay />
 
           <header className={cn(
-            "fixed top-0 left-0 right-0 z-50 pointer-events-none pt-6 md:pt-8 transition-[transform,background-color] duration-300",
+            "fixed top-0 left-0 right-0 z-50 pointer-events-none pt-6 md:pt-8 border-b-[25px] border-white transition-[transform,background-color] duration-300",
             navHidden && "-translate-y-full",
             showHeaderBg && "bg-white"
           )}>
@@ -164,7 +164,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
             {children}
           </main>
 
-          <footer className="mt-auto bg-white text-black border-t border-black/20">
+          <footer className="mt-auto bg-white text-black">
             <div className="max-w-[1850px] mx-auto px-[49px] py-12 md:py-16">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 py-8 border-y border-black/20">
                 <p className="text-[1.75rem] md:text-[2.1rem] font-semibold tracking-tight">New Business Inquiries</p>
@@ -182,9 +182,18 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               </div>
 
               <div className="py-8 md:py-10 overflow-hidden">
-                <p className="text-[4.8rem] md:text-[11rem] lg:text-[16rem] font-bold tracking-[-0.04em] leading-[0.85] whitespace-nowrap">
-                  WILLIAM BLACKLOCK
-                </p>
+                <motion.div
+                  className="flex w-max whitespace-nowrap"
+                  animate={{ x: ["0%", "-50%"] }}
+                  transition={{ duration: 22, ease: "linear", repeat: Infinity }}
+                >
+                  <span className="text-[4.8rem] md:text-[11rem] lg:text-[16rem] font-bold tracking-[-0.04em] leading-[0.85] pr-20 md:pr-28">
+                    WILLIAM THAMES BLACKLOCK
+                  </span>
+                  <span className="text-[4.8rem] md:text-[11rem] lg:text-[16rem] font-bold tracking-[-0.04em] leading-[0.85] pr-20 md:pr-28" aria-hidden="true">
+                    WILLIAM THAMES BLACKLOCK
+                  </span>
+                </motion.div>
               </div>
             </div>
           </footer>

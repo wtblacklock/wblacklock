@@ -5,7 +5,6 @@ import { TransitionLink as Link } from "../components/TransitionLink"
 import { ArrowRight, ArrowUpRight, Plus, Minus } from "lucide-react"
 import { projects } from "../data/projects"
 import { motion } from "motion/react"
-import { FeaturedCaseStudyCard } from "../components/FeaturedCaseStudyCard"
 
 export default function Home() {
   const featuredProjects = projects.filter((p) => p.featured).slice(0, 4)
@@ -14,7 +13,7 @@ export default function Home() {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [activeExperience, setActiveExperience] = useState("twinb")
   const [activeClientGroup, setActiveClientGroup] = useState("technology-enterprise-saas")
-  const hoveredProject = featuredProjects.find((p) => p.id === hoveredId)
+  const hoveredProject = projects.find((p) => p.id === hoveredId)
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => setCursor({ x: e.clientX, y: e.clientY })
@@ -197,7 +196,7 @@ export default function Home() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
-        className="space-y-24"
+        className="space-y-32 md:space-y-40"
       >
         {/* Hero Section */}
         <section className="min-h-[70vh] flex flex-col justify-center pb-12">
@@ -250,6 +249,48 @@ export default function Home() {
             ))}
           </div>
         </section>
+
+        {/* Featured Case Studies */}
+        {featuredCaseStudies.length > 0 && (
+          <section className="pt-12">
+            <div className="flex items-baseline justify-between mb-10">
+              <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">Featured Case Studies</h2>
+              <Link
+                href="/projects"
+                className="group flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors"
+              >
+                View all
+                <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+
+            <div className="border-t border-black/10">
+              {featuredCaseStudies.map((project) => (
+                <Link
+                  key={project.id}
+                  href={`/projects/${project.id}`}
+                  className="group relative block border-b border-black/10 overflow-hidden"
+                  onMouseEnter={() => setHoveredId(project.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                >
+                  <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] pointer-events-none" />
+
+                  <div className="relative z-10 flex items-center justify-between py-6 md:py-8 gap-6">
+                    <h3 className="text-[2rem] md:text-[3rem] lg:text-[3.5rem] font-serif font-extralight tracking-tight leading-none text-black group-hover:text-white group-hover:translate-x-[25px] transition-[color,transform] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]">
+                      {project.title}
+                    </h3>
+
+                    <div className="md:hidden shrink-0 w-20 h-14 overflow-hidden">
+                      <img src={project.thumbnail} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    </div>
+
+                    <ArrowUpRight className="hidden md:block w-6 h-6 text-black/30 group-hover:text-white group-hover:-translate-x-[25px] transition-[color,transform] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] shrink-0" strokeWidth={1.5} />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* What I Do Section */}
         <section className="pt-12">
@@ -487,28 +528,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Featured Case Studies */}
-        {featuredCaseStudies.length > 0 && (
-          <section className="pt-12">
-            <div className="flex items-baseline justify-between mb-12">
-              <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">Featured Case Studies</h2>
-              <Link
-                href="/projects"
-                className="group flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors"
-              >
-                View all
-                <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
-              {featuredCaseStudies.map((project) => (
-                <FeaturedCaseStudyCard key={project.id} project={project} />
-              ))}
-            </div>
-          </section>
-        )}
 
       </motion.div>
 

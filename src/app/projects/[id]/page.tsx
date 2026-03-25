@@ -32,6 +32,7 @@ export default function ProjectDetail() {
       const scrollY = window.scrollY
       const el = document.getElementById('work-showcase')
       if (el) setPastDesigns(scrollY + 80 >= el.offsetTop)
+
       if (scrollY > lastScrollYRef.current && scrollY > 80) setNavHidden(true)
       else if (scrollY < lastScrollYRef.current) setNavHidden(false)
       lastScrollYRef.current = scrollY
@@ -57,8 +58,8 @@ export default function ProjectDetail() {
   return (
     <>
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
       className="pt-12 md:pt-20"
     >
@@ -99,26 +100,28 @@ export default function ProjectDetail() {
       <AnimatePresence>
         {project.caseStudy && caseStudyData && !pastDesigns && (
           <motion.div
-            className={`sticky z-40 bg-white pt-3 pb-3 -mx-[49px] px-[49px] transition-[top] duration-300 ${navHidden ? 'top-0' : 'top-[68px] md:top-[76px]'}`}
+            className={`fixed left-0 right-0 z-40 bg-white pt-3 pb-3 transition-[top] duration-300 ${navHidden ? 'top-0' : 'top-[93px] md:top-[101px]'}`}
             initial={{ y: '-100%', opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '-100%', opacity: 0 }}
             transition={{ duration: 0.55, ease: [0.65, 0, 0.35, 1] }}
           >
-            <p className="text-[0.65rem] font-bold tracking-widest uppercase text-black/35 mb-3">Sections</p>
-            <div className="flex items-center gap-4">
-              <div className="flex-1">
-                <SectionProgressBar
-                  sectionIds={['overview', ...caseStudyData.sections.map((s) => s.id)]}
-                  sectionHeadings={['Overview', ...caseStudyData.sections.map((s) => s.heading)]}
-                />
+            <div className="max-w-[1850px] mx-auto px-[49px]">
+              <p className="text-[0.65rem] font-bold tracking-widest uppercase text-black/35 mb-3">Sections</p>
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <SectionProgressBar
+                    sectionIds={['overview', ...caseStudyData.sections.map((s) => s.id)]}
+                    sectionHeadings={['Overview', ...caseStudyData.sections.map((s) => s.heading)]}
+                  />
+                </div>
+                <a
+                  href="#work-showcase"
+                  className="shrink-0 h-5 flex items-center text-[0.65rem] font-bold tracking-widest uppercase text-black/30 hover:text-black transition-colors duration-300"
+                >
+                  DESIGNS
+                </a>
               </div>
-              <a
-                href="#work-showcase"
-                className="shrink-0 h-5 flex items-center text-[0.65rem] font-bold tracking-widest uppercase text-black/30 hover:text-black transition-colors duration-300"
-              >
-                DESIGNS
-              </a>
             </div>
           </motion.div>
         )}
