@@ -275,10 +275,14 @@ export default function Home() {
                 >
                   <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] pointer-events-none" />
 
-                  <div className="relative z-10 flex items-center justify-between py-6 md:py-8 gap-6">
+                  <div className="relative z-10 flex md:grid md:grid-cols-[1.35fr_1.5fr_auto] items-center justify-between py-6 md:py-8 gap-6 md:gap-8">
                     <h3 className="text-[2rem] md:text-[3rem] lg:text-[3.5rem] font-serif font-extralight tracking-tight leading-none text-black group-hover:text-white group-hover:translate-x-[25px] transition-[color,transform] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]">
                       {project.title}
                     </h3>
+
+                    <p className="hidden md:block text-base lg:text-xl font-light text-black/60 truncate group-hover:text-white group-hover:translate-x-[12px] transition-[color,transform] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]">
+                      {project.tagline}
+                    </p>
 
                     <div className="md:hidden shrink-0 w-20 h-14 overflow-hidden">
                       <img src={project.thumbnail} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />

@@ -174,9 +174,9 @@ export function ClientLayout({ children }: { children: ReactNode }) {
                 </a>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-10 md:gap-12 py-10 border-b border-black/20">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-10 py-10 border-b border-black/20">
                 <p className="text-[1.75rem] md:text-[2.1rem] font-semibold tracking-tight">About</p>
-                <p className="text-lg md:text-[2rem] font-light leading-[1.3] max-w-5xl">
+                <p className="md:col-span-2 text-lg md:text-[2rem] font-light leading-[1.3] max-w-5xl">
                   William Blacklock is a designer helping ambitious teams turn strategy into clear, high-impact work across product, brand, and intelligent creative systems.
                 </p>
               </div>
