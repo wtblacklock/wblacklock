@@ -18,7 +18,7 @@ export default function Contact() {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
       className="space-y-16 md:space-y-24 pt-12 md:pt-24"
     >
       {/* Hero */}

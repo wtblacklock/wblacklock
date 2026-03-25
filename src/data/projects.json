@@ -2,7 +2,7 @@
   {
     "id": "ibm-garage",
     "title": "IBM Garage",
-    "category": "Systems",
+    "category": "Systems Management",
     "clientName": "IBM Consulting",
     "clientType": "Enterprise Consulting",
     "tagline": "Scaling a global innovation framework across IBM Consulting.",
@@ -11,8 +11,8 @@
     "thumbnailVideo": "/images/projects/ibm-garage/thumbnail.mp4",
     "images": [
       "/images/projects/ibm-garage/screen-1.jpg",
-      "/images/projects/ibm-garage/screen-2.jpg",
-      "/images/projects/ibm-garage/screen-3.jpg"
+      "/images/projects/ibm-garage/control_cetner_amimate.mp4",
+      "/images/projects/ibm-garage/ibm_squad.jpg"
     ],
     "services": [
       "Design Systems",

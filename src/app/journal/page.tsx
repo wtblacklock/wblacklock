@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from "react"
-import Link from "next/link"
+import { TransitionLink as Link } from "../../components/TransitionLink"
 import { motion, AnimatePresence } from "motion/react"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, ArrowRight } from "lucide-react"
 import { posts } from "../../data/posts"
 
 function formatDate(dateStr: string) {
@@ -34,7 +34,7 @@ export default function Journal() {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
       className="space-y-16 md:space-y-24 pt-12"
     >
       <header className="max-w-7xl">
@@ -158,9 +158,7 @@ export default function Journal() {
                   </span>
                 </div>
 
-                <span className="text-black/20 group-hover:text-black group-hover:translate-x-1 transition-all duration-300 shrink-0 text-base select-none mt-1">
-                  →
-                </span>
+                <ArrowRight className="w-4 h-4 text-black/20 group-hover:text-black group-hover:translate-x-1 transition-all duration-300 shrink-0 mt-1" strokeWidth={1.5} />
               </Link>
             </motion.div>
           ))}

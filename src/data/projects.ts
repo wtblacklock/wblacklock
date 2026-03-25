@@ -1,6 +1,6 @@
 import projectsData from './projects.json';
 
-export type ProjectCategory = 'Product' | 'Campaign' | 'Website' | 'Print' | 'Systems' | 'AI Build';
+export type ProjectCategory = 'Product' | 'Campaign' | 'Website' | 'Print' | 'Systems' | 'Systems Management' | 'AI Build';
 
 export interface Project {
   id: string;

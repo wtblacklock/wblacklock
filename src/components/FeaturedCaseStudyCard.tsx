@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TransitionLink as Link } from "./TransitionLink";
 import { ArrowRight } from "lucide-react";
 import type { Project } from "../data/projects";
 

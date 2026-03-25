@@ -1,6 +1,6 @@
 'use client'
 
-import Link from "next/link"
+import { TransitionLink as Link } from "../../components/TransitionLink"
 import { motion } from "motion/react"
 
 const capabilities = [
@@ -17,7 +17,7 @@ export default function About() {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
       className="space-y-24 pt-12 md:pt-24"
     >
 

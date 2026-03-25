@@ -1,5 +1,6 @@
 import type { CaseStudyData } from '../data/caseStudies'
 import type { Project } from '../data/projects'
+import { WorkShowcase } from './WorkShowcase'
 
 interface CaseStudyDetailProps {
   data: CaseStudyData
@@ -11,9 +12,18 @@ export function CaseStudyDetail({ data, project }: CaseStudyDetailProps) {
     <div className="mt-20 md:mt-28">
 
       {/* Sections */}
-      <div className="space-y-20 md:space-y-28">
-        {data.sections.map((section) => (
-          <div key={section.id}>
+      <div>
+        {data.sections.map((section, index) => {
+          const prev = index > 0 ? data.sections[index - 1] : null
+          const marginClass = index === 0
+            ? ''
+            : (section.id === 'concept-testing' || section.id === 'execution')
+              ? 'mt-40 md:mt-52'
+              : prev?.image && section.image
+                ? 'mt-40 md:mt-52'
+                : 'mt-28 md:mt-36'
+          return (
+          <div key={section.id} id={section.id} className={marginClass}>
 
             {/* Full-width section image */}
             {section.image && (
@@ -40,7 +50,7 @@ export function CaseStudyDetail({ data, project }: CaseStudyDetailProps) {
               <div className="md:col-span-9 space-y-6">
 
                 {section.paragraphs?.map((p, i) => (
-                  <p key={i} className="text-base md:text-lg text-black/70 font-light leading-relaxed">
+                  <p key={i} className={`font-light leading-relaxed ${section.id === 'impact' ? 'text-xl md:text-[1.6rem] text-black/70' : 'text-base md:text-lg text-black/70'}`}>
                     {p}
                   </p>
                 ))}
@@ -85,7 +95,7 @@ export function CaseStudyDetail({ data, project }: CaseStudyDetailProps) {
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mt-4">
                     {section.metrics.map((metric) => (
                       <div key={metric.label} className="border-t border-black/10 pt-5">
-                        <p className="text-3xl md:text-4xl font-serif font-extralight tracking-tight text-black mb-1.5">
+                        <p className="text-5xl md:text-6xl font-serif font-extralight tracking-tight text-black mb-1.5">
                           {metric.value}
                         </p>
                         <p className="text-xs font-light text-black/45 leading-snug">{metric.label}</p>
@@ -95,13 +105,13 @@ export function CaseStudyDetail({ data, project }: CaseStudyDetailProps) {
                 )}
 
                 {section.quotes && (
-                  <div className="space-y-10 mt-4">
+                  <div className="flex flex-col gap-3 mt-4">
                     {section.quotes.map((quote, i) => (
-                      <div key={i} className="border-t border-black/10 pt-6">
-                        <p className="text-xl md:text-2xl font-serif font-extralight text-black/80 leading-snug tracking-tight mb-4">
+                      <div key={i} className="px-8 py-8" style={{ backgroundColor: '#0043CE' }}>
+                        <p className="text-xl md:text-2xl font-serif font-extralight text-white leading-snug tracking-tight mb-4">
                           &ldquo;{quote.text}&rdquo;
                         </p>
-                        <p className="text-[0.65rem] font-bold tracking-widest uppercase text-black/35">
+                        <p className="text-[0.65rem] font-bold tracking-widest uppercase text-white/60">
                           — {quote.attribution}
                         </p>
                       </div>
@@ -114,7 +124,7 @@ export function CaseStudyDetail({ data, project }: CaseStudyDetailProps) {
                     {section.tools.map((tool) => (
                       <span
                         key={tool}
-                        className="text-xs font-light text-black/55 border border-black/12 px-3 py-1.5"
+                        className="text-lg font-light text-black/55 border border-black/12 px-4 py-2"
                       >
                         {tool}
                       </span>
@@ -125,8 +135,12 @@ export function CaseStudyDetail({ data, project }: CaseStudyDetailProps) {
               </div>
             </div>
           </div>
-        ))}
+          )
+        })}
       </div>
+
+      {/* Work Showcase — IBM Garage only */}
+      {data.projectId === 'ibm-garage' && <WorkShowcase />}
     </div>
   )
 }

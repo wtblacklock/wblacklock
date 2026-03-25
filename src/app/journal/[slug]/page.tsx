@@ -1,9 +1,10 @@
 'use client'
 
-import Link from "next/link"
+import { TransitionLink as Link } from "../../../components/TransitionLink"
 import { useParams } from 'next/navigation'
 import { notFound } from 'next/navigation'
 import { motion } from "motion/react"
+import { ArrowLeft } from "lucide-react"
 import { posts } from "../../../data/posts"
 
 function formatDate(dateStr: string) {
@@ -29,14 +30,14 @@ export default function JournalPost() {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
       className="pt-12 md:pt-24"
     >
       <Link
         href="/journal"
         className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors mb-16"
       >
-        ← Back to Journal
+        <ArrowLeft className="w-3 h-3" strokeWidth={2} /> Back to Journal
       </Link>
 
       <article className="max-w-2xl">
@@ -74,7 +75,7 @@ export default function JournalPost() {
           href="/journal"
           className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors"
         >
-          ← Back to Journal
+          <ArrowLeft className="w-3 h-3" strokeWidth={2} /> Back to Journal
         </Link>
       </div>
     </motion.div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react"
-import Link from "next/link"
+import { TransitionLink as Link } from "../../components/TransitionLink"
 import { motion, AnimatePresence } from "motion/react"
 import { ChevronDown } from "lucide-react"
 import { projects } from "../../data/projects"
@@ -96,7 +96,7 @@ export default function Projects() {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
       className="w-full lg:pt-[90px]"
     >
       <div className="lg:hidden mb-8">

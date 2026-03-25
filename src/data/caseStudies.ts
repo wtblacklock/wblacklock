@@ -82,7 +82,6 @@ const ibmGarage: CaseStudyData = {
     {
       id: 'users',
       heading: 'Understanding the Users',
-      image: '/images/projects/ibm-garage/screen-1.jpg',
       paragraphs: [
         'A one-size-fits-all approach would not work. Different practitioners interacted with Garage in very different ways.',
         'Through research and design thinking workshops, we identified five primary personas:',
@@ -146,7 +145,7 @@ const ibmGarage: CaseStudyData = {
     {
       id: 'execution',
       heading: 'Execution with Enterprise Design Thinking',
-      image: '/images/projects/ibm-garage/playbook-ui.jpg',
+      image: '/images/projects/ibm-garage/ebr_garage.jpg',
       paragraphs: [
         'Once the tools were prioritized, we organized the work using Experience-based Roadmaps, which broke long-term experiences into near-term outcomes.',
         'Each tool followed the same delivery structure:',
@@ -166,6 +165,7 @@ const ibmGarage: CaseStudyData = {
     {
       id: 'tools',
       heading: 'Tools and Platforms',
+      image: '/images/projects/ibm-garage/ibm_resources.jpg',
       tools: [
         'Sketch',
         'Adobe Illustrator',
@@ -189,7 +189,6 @@ const ibmGarage: CaseStudyData = {
     {
       id: 'outcomes',
       heading: 'Outcomes',
-      image: '/images/projects/ibm-garage/screen-4.jpg',
       paragraphs: [
         'Within four months of launch, the ecosystem saw strong adoption across IBM Consulting.',
       ],

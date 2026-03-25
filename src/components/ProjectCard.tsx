@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TransitionLink as Link } from "./TransitionLink";
 import type { Project } from "../data/projects";
 
 interface ProjectCardProps {
