@@ -9,8 +9,6 @@ import { TransitionProvider } from "../context/TransitionContext"
 import { TransitionOverlay } from "../components/TransitionOverlay"
 import { TransitionLink } from "../components/TransitionLink"
 
-const NAV_WIDTH = 420
-
 export function ClientLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const isHome = pathname === "/"
@@ -20,9 +18,18 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const [brandPhase, setBrandPhase] = useState<'full' | 'initials-fade' | 'condensed'>(isHome ? 'full' : 'condensed')
   const [showBackToTop, setShowBackToTop] = useState(false)
+  const [navWidth, setNavWidth] = useState(420)
   const lastScrollY = useRef(0)
 
   const showHeaderBg = isScrolled && !navHidden
+
+  // Responsive nav panel width
+  useEffect(() => {
+    const update = () => setNavWidth(window.innerWidth < 768 ? Math.round(window.innerWidth * 0.82) : 420)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,86 +92,91 @@ export function ClientLayout({ children }: { children: ReactNode }) {
     { href: "/contact", label: "Contact" },
   ]
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
   const ease = [0.65, 0, 0.35, 1] as const
   const duration = 0.55
+  const slideX = menuOpen ? -navWidth : 0
 
   return (
     <TransitionProvider>
-      {/* Outer clip container — prevents horizontal scrollbar during animation */}
+      {/* Outer clip container */}
       <div className="relative overflow-x-hidden">
+
+        {/* Header — fixed to viewport, translates independently with page */}
+        <motion.header
+          className={cn(
+            "fixed top-0 left-0 z-50 pointer-events-none pt-6 md:pt-8 border-b-[25px] border-transparent transition-[background-color] duration-300",
+            navHidden && "-translate-y-full",
+            showHeaderBg && "bg-white"
+          )}
+          style={{ width: '100vw' }}
+          animate={{ x: slideX }}
+          transition={{ duration, ease }}
+        >
+          <div className="max-w-[1850px] mx-auto px-[49px] flex items-center justify-between pointer-events-auto">
+            <TransitionLink href="/" className="hover:opacity-70 transition-opacity relative inline-flex items-start w-[88px]" style={{ minHeight: "2.835rem" }}>
+              <motion.span
+                initial={false}
+                animate={{ opacity: brandPhase === 'condensed' ? 0 : 1, y: brandPhase === 'condensed' ? -6 : 0 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 100,
+                  fontSize: "2.835rem",
+                  letterSpacing: "0.02em",
+                  lineHeight: 1,
+                  pointerEvents: 'none',
+                }}
+                className="absolute left-0 top-0 whitespace-nowrap"
+                aria-hidden={brandPhase === 'condensed'}
+              >
+                <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>W</motion.span>
+                <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.05 }}>illiam</motion.span>
+                <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.08 }}>{" "}</motion.span>
+                <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.1 }}>T</motion.span>
+                <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.15 }}>hames</motion.span>
+                <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.18 }}>{" "}</motion.span>
+                <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.2 }}>B</motion.span>
+                <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.25 }}>lacklock</motion.span>
+              </motion.span>
+
+              <motion.span
+                initial={false}
+                animate={{ opacity: brandPhase === 'condensed' ? 1 : 0, y: brandPhase === 'condensed' ? 0 : 6, scale: brandPhase === 'condensed' ? 1 : 0.985 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 100,
+                  fontSize: "2.835rem",
+                  letterSpacing: "0.02em",
+                  lineHeight: 1,
+                }}
+                aria-hidden={brandPhase !== 'condensed'}
+              >
+                WTB
+              </motion.span>
+            </TransitionLink>
+
+            <div className="flex items-center">
+              <button
+                onClick={() => setMenuOpen(true)}
+                className="flex items-center justify-center w-10 h-10 focus:outline-none hover:opacity-60 transition-opacity"
+                aria-label="Open navigation"
+              >
+                <Menu className="w-5 h-5" strokeWidth={1.5} />
+              </button>
+            </div>
+          </div>
+        </motion.header>
 
         {/* Page content — slides left when nav opens */}
         <motion.div
           className="min-h-screen bg-white text-black font-sans flex flex-col selection:bg-black/15 selection:text-black"
-          animate={{ x: menuOpen ? -NAV_WIDTH : 0 }}
+          animate={{ x: slideX }}
           transition={{ duration, ease }}
         >
           <TransitionOverlay />
-
-          <header className={cn(
-            "fixed top-0 left-0 right-0 z-50 pointer-events-none pt-6 md:pt-8 border-b-[25px] border-white transition-[transform,background-color] duration-300",
-            navHidden && "-translate-y-full",
-            showHeaderBg && "bg-white"
-          )}>
-            <div className="max-w-[1850px] mx-auto px-[49px] flex items-center justify-between pointer-events-auto">
-              <TransitionLink href="/" className="hover:opacity-70 transition-opacity relative inline-flex items-start w-[88px]" style={{ minHeight: "2.835rem" }}>
-                <motion.span
-                  initial={false}
-                  animate={{ opacity: brandPhase === 'condensed' ? 0 : 1, y: brandPhase === 'condensed' ? -6 : 0 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontWeight: 100,
-                    fontSize: "2.835rem",
-                    letterSpacing: "0.02em",
-                    lineHeight: 1,
-                    pointerEvents: 'none',
-                  }}
-                  className="absolute left-0 top-0 whitespace-nowrap"
-                  aria-hidden={brandPhase === 'condensed'}
-                >
-                  <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>W</motion.span>
-                  <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.05 }}>illiam</motion.span>
-                  <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.08 }}>{" "}</motion.span>
-                  <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.1 }}>T</motion.span>
-                  <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.15 }}>hames</motion.span>
-                  <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.18 }}>{" "}</motion.span>
-                  <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.2 }}>B</motion.span>
-                  <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.25 }}>lacklock</motion.span>
-                </motion.span>
-
-                <motion.span
-                  initial={false}
-                  animate={{ opacity: brandPhase === 'condensed' ? 1 : 0, y: brandPhase === 'condensed' ? 0 : 6, scale: brandPhase === 'condensed' ? 1 : 0.985 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  style={{
-                    fontFamily: "'Inter', sans-serif",
-                    fontWeight: 100,
-                    fontSize: "2.835rem",
-                    letterSpacing: "0.02em",
-                    lineHeight: 1,
-                  }}
-                  aria-hidden={brandPhase !== 'condensed'}
-                >
-                  WTB
-                </motion.span>
-              </TransitionLink>
-
-              <div className="flex items-center">
-                <button
-                  onClick={() => setMenuOpen(true)}
-                  className="flex items-center justify-center w-10 h-10 focus:outline-none hover:opacity-60 transition-opacity"
-                  aria-label="Open navigation"
-                >
-                  <Menu className="w-5 h-5" strokeWidth={1.5} />
-                </button>
-              </div>
-            </div>
-          </header>
 
           <main className="flex-1 w-full max-w-[1850px] mx-auto px-[49px] pt-32 pb-16 md:pb-32">
             {children}
@@ -205,19 +217,34 @@ export function ClientLayout({ children }: { children: ReactNode }) {
           </footer>
         </motion.div>
 
-        {/* Nav panel — slides in from right, outside the page wrapper */}
+        {/* Dim overlay on pushed page — signals it's inactive */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              initial={{ x: NAV_WIDTH }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-[55] bg-black/20"
+              style={{ right: navWidth }}
+              onClick={() => setMenuOpen(false)}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Nav panel — slides in from right */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ x: navWidth }}
               animate={{ x: 0 }}
-              exit={{ x: NAV_WIDTH }}
+              exit={{ x: navWidth }}
               transition={{ duration, ease }}
               className="fixed top-0 right-0 h-screen bg-white z-[60] flex flex-col pt-6 md:pt-8 pb-12"
-              style={{ width: NAV_WIDTH }}
+              style={{ width: navWidth, boxShadow: '-8px 0 32px rgba(0,0,0,0.08)' }}
             >
               {/* Top bar: logo + close */}
-              <div className="px-12 flex items-center justify-between shrink-0 mb-4">
+              <div className="px-10 md:px-12 flex items-center justify-between shrink-0 mb-4">
                 <TransitionLink
                   href="/"
                   onClick={() => setMenuOpen(false)}
@@ -235,33 +262,19 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               </div>
 
               {/* Nav links */}
-              <div className="flex-1 flex flex-col justify-center px-12 gap-6">
+              <div className="flex-1 flex flex-col justify-center px-10 md:px-12 gap-4 md:gap-6">
                 {navLinks.map((link) => (
                   <TransitionLink
                     key={link.href}
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="text-[3.15rem] font-medium tracking-tighter hover:text-black/50 transition-colors leading-none"
+                    className="text-[2.5rem] md:text-[3.15rem] font-medium tracking-tighter hover:text-black/50 transition-colors leading-none"
                   >
                     {link.label}
                   </TransitionLink>
                 ))}
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Backdrop — clicking outside closes nav */}
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-[55]"
-              onClick={() => setMenuOpen(false)}
-            />
           )}
         </AnimatePresence>
 
@@ -274,10 +287,10 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.3 }}
               onClick={scrollToTop}
-              className="fixed bottom-8 right-8 z-40 flex items-center justify-center w-10 h-10 rounded-full border border-black/20 hover:border-black/40 hover:bg-black/5 transition-colors group focus:outline-none focus:ring-2 focus:ring-black/20"
+              className="fixed bottom-8 right-8 z-40 flex items-center justify-center w-10 h-10 rounded-full border border-black/20 hover:border-black/40 hover:bg-black/5 transition-colors group focus:outline-none"
               aria-label="Back to top"
             >
-              <ArrowUp className="w-4 h-4 stroke-current group-hover:opacity-70 transition-opacity" strokeWidth={2} />
+              <ArrowUp className="w-4 h-4 group-hover:opacity-70 transition-opacity" strokeWidth={2} />
             </motion.button>
           )}
         </AnimatePresence>
