@@ -496,7 +496,7 @@ export default function Home() {
         </section>
 
         {/* About */}
-        <section className="pt-16 md:pt-20">
+        <section id="about" className="pt-16 md:pt-20">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">About</p>
@@ -525,6 +525,29 @@ export default function Home() {
                   <ArrowUpRight className="w-4 h-4" strokeWidth={1.8} />
                 </span>
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact */}
+        <section id="contact" className="pt-16 md:pt-20 pb-8 md:pb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start">
+            <div>
+              <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">Contact</p>
+            </div>
+            <div className="space-y-8 md:space-y-10">
+              <h2 className="w-full md:w-[85%] text-[2.2rem] md:text-[3.4rem] lg:text-[4rem] font-sans font-bold tracking-tight leading-[1.08] text-black">
+                Let&rsquo;s work together on something worth making.
+              </h2>
+              <a
+                href="mailto:hello@williamblacklock.com"
+                className="inline-flex items-center gap-3 pl-6 pr-3 h-12 rounded-full border border-black/30 text-base font-medium text-black hover:border-black/60 transition-colors"
+              >
+                hello@williamblacklock.com
+                <span className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center">
+                  <ArrowUpRight className="w-4 h-4" strokeWidth={1.8} />
+                </span>
+              </a>
             </div>
           </div>
         </section>

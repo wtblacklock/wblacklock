@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, ReactNode } from "react"
 import { Menu, X, ArrowUp } from "lucide-react"
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { cn } from "../utils/cn"
 import { motion, AnimatePresence } from "motion/react"
 import { TransitionProvider } from "../context/TransitionContext"
@@ -11,6 +11,7 @@ import { TransitionLink } from "../components/TransitionLink"
 
 export function ClientLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
   const isHome = pathname === "/"
   const [isScrolled, setIsScrolled] = useState(false)
   const [navHidden, setNavHidden] = useState(false)
@@ -23,7 +24,6 @@ export function ClientLayout({ children }: { children: ReactNode }) {
 
   const showHeaderBg = isScrolled && !navHidden
 
-  // Responsive nav panel width
   useEffect(() => {
     const update = () => setNavWidth(window.innerWidth < 768 ? Math.round(window.innerWidth * 0.82) : 420)
     update()
@@ -38,12 +38,8 @@ export function ClientLayout({ children }: { children: ReactNode }) {
       setIsScrolled(scrolled)
       setShowBackToTop(scrollY > 300)
       if (scrolled) setMenuOpen(false)
-
-      if (scrollY > lastScrollY.current && scrollY > 80) {
-        setNavHidden(true)
-      } else if (scrollY < lastScrollY.current) {
-        setNavHidden(false)
-      }
+      if (scrollY > lastScrollY.current && scrollY > 80) setNavHidden(true)
+      else if (scrollY < lastScrollY.current) setNavHidden(false)
       lastScrollY.current = scrollY
     }
     window.addEventListener("scroll", handleScroll)
@@ -60,17 +56,11 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    if (!isHome || prefersReducedMotion) {
-      setBrandPhase('condensed')
-      return
-    }
+    if (!isHome || prefersReducedMotion) { setBrandPhase('condensed'); return }
     setBrandPhase('full')
     const timer1 = setTimeout(() => setBrandPhase('initials-fade'), 800)
     const timer2 = setTimeout(() => setBrandPhase('condensed'), 1400)
-    return () => {
-      clearTimeout(timer1)
-      clearTimeout(timer2)
-    }
+    return () => { clearTimeout(timer1); clearTimeout(timer2) }
   }, [isHome, prefersReducedMotion, pathname])
 
   useEffect(() => {
@@ -78,110 +68,100 @@ export function ClientLayout({ children }: { children: ReactNode }) {
     window.scrollTo(0, 0)
   }, [pathname])
 
-  // Lock body scroll when menu is open
   useEffect(() => {
     if (menuOpen) document.body.style.overflow = 'hidden'
     else document.body.style.overflow = ''
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
-  const navLinks = [
-    { href: "/projects", label: "Projects" },
-    { href: "/journal", label: "Journal" },
-    { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
-  ]
-
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+
+  const scrollToSection = (id: string) => {
+    setMenuOpen(false)
+    if (isHome) {
+      setTimeout(() => {
+        const el = document.getElementById(id)
+        if (el) window.scrollTo({ top: el.offsetTop - 120, behavior: 'smooth' })
+      }, 400)
+    } else {
+      router.push(`/#${id}`)
+    }
+  }
+
+  const navLinks: { label: string; type: 'page' | 'section'; href: string }[] = [
+    { label: "Projects", type: 'page', href: "/projects" },
+    { label: "Journal",  type: 'page', href: "/journal" },
+    { label: "About",    type: 'section', href: "about" },
+    { label: "Contact",  type: 'section', href: "contact" },
+  ]
 
   const ease = [0.65, 0, 0.35, 1] as const
   const duration = 0.55
-  const slideX = menuOpen ? -navWidth : 0
 
   return (
     <TransitionProvider>
-      {/* Outer clip container */}
-      <div className="relative overflow-x-hidden">
+      {/* Outer — black background always present, shows behind scaled page */}
+      <div className="relative overflow-x-hidden bg-black min-h-screen">
 
-        {/* Header — fixed to viewport, translates independently with page */}
-        <motion.header
-          className={cn(
-            "fixed top-0 left-0 z-50 pointer-events-none pt-6 md:pt-8 border-b-[25px] border-transparent transition-colors duration-300",
-            showHeaderBg && "bg-white"
-          )}
-          style={{ width: '100vw' }}
-          animate={{
-            x: slideX,
-            y: navHidden ? '-100%' : '0%',
-          }}
-          transition={{
-            x: { duration, ease },
-            y: { duration: 0.3, ease: [0.65, 0, 0.35, 1] },
-          }}
-        >
-          <div className="max-w-[1850px] mx-auto px-[49px] flex items-center justify-between pointer-events-auto">
-            <TransitionLink href="/" className="hover:opacity-70 transition-opacity relative inline-flex items-start w-[88px]" style={{ minHeight: "2.835rem" }}>
-              <motion.span
-                initial={false}
-                animate={{ opacity: brandPhase === 'condensed' ? 0 : 1, y: brandPhase === 'condensed' ? -6 : 0 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontWeight: 100,
-                  fontSize: "2.835rem",
-                  letterSpacing: "0.02em",
-                  lineHeight: 1,
-                  pointerEvents: 'none',
-                }}
-                className="absolute left-0 top-0 whitespace-nowrap"
-                aria-hidden={brandPhase === 'condensed'}
-              >
-                <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>W</motion.span>
-                <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.05 }}>illiam</motion.span>
-                <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.08 }}>{" "}</motion.span>
-                <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.1 }}>T</motion.span>
-                <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.15 }}>hames</motion.span>
-                <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.18 }}>{" "}</motion.span>
-                <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.2 }}>B</motion.span>
-                <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.25 }}>lacklock</motion.span>
-              </motion.span>
-
-              <motion.span
-                initial={false}
-                animate={{ opacity: brandPhase === 'condensed' ? 1 : 0, y: brandPhase === 'condensed' ? 0 : 6, scale: brandPhase === 'condensed' ? 1 : 0.985 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontWeight: 100,
-                  fontSize: "2.835rem",
-                  letterSpacing: "0.02em",
-                  lineHeight: 1,
-                }}
-                aria-hidden={brandPhase !== 'condensed'}
-              >
-                WTB
-              </motion.span>
-            </TransitionLink>
-
-            <div className="flex items-center">
-              <button
-                onClick={() => setMenuOpen(true)}
-                className="flex items-center justify-center w-10 h-10 focus:outline-none hover:opacity-60 transition-opacity"
-                aria-label="Open navigation"
-              >
-                <Menu className="w-5 h-5" strokeWidth={1.5} />
-              </button>
-            </div>
-          </div>
-        </motion.header>
-
-        {/* Page content — slides left when nav opens */}
+        {/* Page content — scales down to float over black when nav opens */}
         <motion.div
           className="min-h-screen bg-white text-black font-sans flex flex-col selection:bg-black/15 selection:text-black"
-          animate={{ x: slideX }}
+          animate={{
+            scale: menuOpen ? 0.84 : 1,
+            borderRadius: menuOpen ? '12px' : '0px',
+          }}
           transition={{ duration, ease }}
+          style={{ transformOrigin: 'center top' }}
         >
           <TransitionOverlay />
+
+          {/* Header — plain element inside page wrapper; CSS transform handles hide/show without FM conflict */}
+          <header className={cn(
+            "fixed top-0 left-0 right-0 z-50 pointer-events-none pt-6 md:pt-8 border-b-[25px] border-transparent transition-[transform,background-color] duration-300",
+            navHidden && "-translate-y-full",
+            showHeaderBg && "bg-white"
+          )}>
+            <div className="max-w-[1850px] mx-auto px-[49px] flex items-center justify-between pointer-events-auto">
+              <TransitionLink href="/" className="hover:opacity-70 transition-opacity relative inline-flex items-start w-[88px]" style={{ minHeight: "2.835rem" }}>
+                <motion.span
+                  initial={false}
+                  animate={{ opacity: brandPhase === 'condensed' ? 0 : 1, y: brandPhase === 'condensed' ? -6 : 0 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ fontFamily: "'Inter', sans-serif", fontWeight: 100, fontSize: "2.835rem", letterSpacing: "0.02em", lineHeight: 1, pointerEvents: 'none' }}
+                  className="absolute left-0 top-0 whitespace-nowrap"
+                  aria-hidden={brandPhase === 'condensed'}
+                >
+                  <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>W</motion.span>
+                  <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.05 }}>illiam</motion.span>
+                  <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.08 }}>{" "}</motion.span>
+                  <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.1 }}>T</motion.span>
+                  <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.15 }}>hames</motion.span>
+                  <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.18 }}>{" "}</motion.span>
+                  <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.2 }}>B</motion.span>
+                  <motion.span initial={false} animate={{ opacity: brandPhase === 'initials-fade' ? 0.08 : 1 }} transition={{ duration: 0.35, delay: 0.25 }}>lacklock</motion.span>
+                </motion.span>
+                <motion.span
+                  initial={false}
+                  animate={{ opacity: brandPhase === 'condensed' ? 1 : 0, y: brandPhase === 'condensed' ? 0 : 6, scale: brandPhase === 'condensed' ? 1 : 0.985 }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ fontFamily: "'Inter', sans-serif", fontWeight: 100, fontSize: "2.835rem", letterSpacing: "0.02em", lineHeight: 1 }}
+                  aria-hidden={brandPhase !== 'condensed'}
+                >
+                  WTB
+                </motion.span>
+              </TransitionLink>
+
+              <div className="flex items-center">
+                <button
+                  onClick={() => setMenuOpen(true)}
+                  className="flex items-center justify-center w-10 h-10 focus:outline-none hover:opacity-60 transition-opacity"
+                  aria-label="Open navigation"
+                >
+                  <Menu className="w-5 h-5" strokeWidth={1.5} />
+                </button>
+              </div>
+            </div>
+          </header>
 
           <main className="flex-1 w-full max-w-[1850px] mx-auto px-[49px] pt-32 pb-16 md:pb-32">
             {children}
@@ -196,33 +176,27 @@ export function ClientLayout({ children }: { children: ReactNode }) {
                   hello@williamblacklock.com
                 </a>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-10 py-10 border-b border-black/20">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-10 border-b border-black/20">
                 <p className="text-[1.75rem] md:text-[2.1rem] font-semibold tracking-tight">About</p>
                 <p className="md:col-span-2 text-lg md:text-[2rem] font-light leading-[1.3] max-w-5xl">
                   William Blacklock is a designer helping ambitious teams turn strategy into clear, high-impact work across product, brand, and intelligent creative systems.
                 </p>
               </div>
-
               <div className="py-8 md:py-10 overflow-hidden">
                 <motion.div
                   className="flex w-max whitespace-nowrap"
                   animate={{ x: ["0%", "-50%"] }}
                   transition={{ duration: 22, ease: "linear", repeat: Infinity }}
                 >
-                  <span className="text-[4.8rem] md:text-[11rem] lg:text-[16rem] font-bold tracking-[-0.04em] leading-[0.85] pr-20 md:pr-28">
-                    WILLIAM THAMES BLACKLOCK
-                  </span>
-                  <span className="text-[4.8rem] md:text-[11rem] lg:text-[16rem] font-bold tracking-[-0.04em] leading-[0.85] pr-20 md:pr-28" aria-hidden="true">
-                    WILLIAM THAMES BLACKLOCK
-                  </span>
+                  <span className="text-[4.8rem] md:text-[11rem] lg:text-[16rem] font-bold tracking-[-0.04em] leading-[0.85] pr-20 md:pr-28">WILLIAM THAMES BLACKLOCK</span>
+                  <span className="text-[4.8rem] md:text-[11rem] lg:text-[16rem] font-bold tracking-[-0.04em] leading-[0.85] pr-20 md:pr-28" aria-hidden="true">WILLIAM THAMES BLACKLOCK</span>
                 </motion.div>
               </div>
             </div>
           </footer>
         </motion.div>
 
-        {/* Dim overlay on pushed page — signals it's inactive */}
+        {/* Dim overlay — click to close */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
@@ -230,8 +204,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-[55] bg-black/20"
-              style={{ right: navWidth }}
+              className="fixed inset-0 z-[55]"
               onClick={() => setMenuOpen(false)}
             />
           )}
@@ -246,9 +219,9 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               exit={{ x: navWidth }}
               transition={{ duration, ease }}
               className="fixed top-0 right-0 h-screen bg-white z-[60] flex flex-col pb-12"
-              style={{ width: navWidth, boxShadow: '-8px 0 40px rgba(0,0,0,0.10)' }}
+              style={{ width: navWidth }}
             >
-              {/* X button — floats at the left boundary, aligned with header menu button */}
+              {/* X button at left boundary */}
               <button
                 onClick={() => setMenuOpen(false)}
                 className="absolute top-6 md:top-8 left-0 -translate-x-1/2 w-10 h-10 rounded-full bg-white border border-black/15 flex items-center justify-center hover:border-black/40 transition-colors focus:outline-none"
@@ -257,24 +230,34 @@ export function ClientLayout({ children }: { children: ReactNode }) {
                 <X className="w-4 h-4" strokeWidth={1.5} />
               </button>
 
-              {/* Nav links — vertically centered */}
+              {/* Nav links */}
               <div className="flex-1 flex flex-col justify-center px-10 md:px-14 gap-3 md:gap-5">
-                {navLinks.map((link) => (
-                  <TransitionLink
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="text-[2.5rem] md:text-[3.15rem] font-medium tracking-tighter hover:text-black/40 transition-colors leading-none"
-                  >
-                    {link.label}
-                  </TransitionLink>
-                ))}
+                {navLinks.map((link) =>
+                  link.type === 'section' ? (
+                    <button
+                      key={link.href}
+                      onClick={() => scrollToSection(link.href)}
+                      className="text-left text-[2.5rem] md:text-[3.15rem] font-medium tracking-tighter hover:text-black/40 transition-colors leading-none focus:outline-none"
+                    >
+                      {link.label}
+                    </button>
+                  ) : (
+                    <TransitionLink
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="text-[2.5rem] md:text-[3.15rem] font-medium tracking-tighter hover:text-black/40 transition-colors leading-none"
+                    >
+                      {link.label}
+                    </TransitionLink>
+                  )
+                )}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Back to top button */}
+        {/* Back to top */}
         <AnimatePresence>
           {showBackToTop && (
             <motion.button
@@ -283,10 +266,10 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.3 }}
               onClick={scrollToTop}
-              className="fixed bottom-8 right-8 z-40 flex items-center justify-center w-10 h-10 rounded-full border border-black/20 hover:border-black/40 hover:bg-black/5 transition-colors group focus:outline-none"
+              className="fixed bottom-8 right-8 z-40 flex items-center justify-center w-10 h-10 rounded-full border border-white/20 text-white hover:border-white/50 transition-colors focus:outline-none"
               aria-label="Back to top"
             >
-              <ArrowUp className="w-4 h-4 group-hover:opacity-70 transition-opacity" strokeWidth={2} />
+              <ArrowUp className="w-4 h-4" strokeWidth={2} />
             </motion.button>
           )}
         </AnimatePresence>
