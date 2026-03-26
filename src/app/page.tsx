@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { TransitionLink as Link } from "../components/TransitionLink"
 import { ArrowUpRight, Plus, Minus } from "lucide-react"
 import { projects } from "../data/projects"
-import { motion } from "motion/react"
+import { motion, AnimatePresence } from "motion/react"
 
 export default function Home() {
   const featuredProjects = projects.filter((p) => p.featured).slice(0, 4)
@@ -120,21 +120,21 @@ export default function Home() {
       title: "Technology / Enterprise / SaaS",
       clients: [
         "IBM Garage / IBM Consulting",
-        "Umbel (MVP Index merger)",
-        "Lodestone Social Media (platform and app work)",
+        "Umbel",
+        "Lodestone Social Media",
       ],
     },
     {
       id: "sports-entertainment",
       title: "Sports & Entertainment",
       clients: [
-        "MLBAM (Major League Baseball Advanced Media)",
+        "MLBAM",
         "NFL",
         "NCAA",
         "Premier Soccer League",
-        "Professional Bull Riders (PBR)",
-        "Jacksonville Jaguars (social activation)",
-        "Miss Universe (IMG)",
+        "Professional Bull Riders",
+        "Jacksonville Jaguars",
+        "Miss Universe",
       ],
     },
     {
@@ -156,9 +156,9 @@ export default function Home() {
       id: "events-associations",
       title: "Events / Associations",
       clients: [
-        "Austin Advertising Federation (Austin ADDYs)",
-        "University of Texas (McCombs School of Business gala invitations)",
-        "Turn2Live (entertainment discovery platform)",
+        "Austin Advertising Federation",
+        "University of Texas",
+        "Turn2Live",
       ],
     },
   ]
@@ -211,7 +211,7 @@ export default function Home() {
         </section>
 
         {/* Work — list */}
-        <section id="work" className="pt-12">
+        <section id="work" className="pt-20 md:pt-28">
           <div className="flex items-baseline justify-between mb-10">
             <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">Projects</h2>
           </div>
@@ -245,7 +245,7 @@ export default function Home() {
 
         {/* Featured Case Studies */}
         {featuredCaseStudies.length > 0 && (
-          <section id="case-studies" className="pt-12">
+          <section id="case-studies" className="pt-20 md:pt-28">
             <div className="flex items-baseline justify-between mb-10">
               <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">Featured Case Studies</h2>
             </div>
@@ -283,7 +283,7 @@ export default function Home() {
         )}
 
         {/* What I Do Section */}
-        <section id="services" className="pt-12">
+        <section id="services" className="pt-20 md:pt-28">
           <div className="flex items-end justify-between mb-12">
             <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">What I Do</h2>
           </div>
@@ -331,7 +331,7 @@ export default function Home() {
         </section>
 
         {/* My Experience */}
-        <section id="experience" className="pt-16 md:pt-20">
+        <section id="experience" className="pt-24 md:pt-32">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-10 md:mb-12">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">My experience</p>
@@ -361,38 +361,48 @@ export default function Home() {
                     </span>
                   </button>
 
-                  {isOpen && (
-                    <div className="pb-10 md:pb-12">
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-8 mb-8">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <span className="inline-flex items-center px-4 h-8 rounded-full border border-black/20 text-xs md:text-sm text-black/60 font-medium w-fit">
-                            {experience.role}
-                          </span>
-                          {experience.companyType && (
-                            <span className="inline-flex items-center px-4 h-8 rounded-full border border-black/20 text-xs md:text-sm text-black/60 font-medium w-fit">
-                              {experience.companyType}
-                            </span>
-                          )}
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: [0.65, 0, 0.35, 1] }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <div className="pb-10 md:pb-12">
+                          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-8 mb-8">
+                            <div className="flex flex-wrap items-center gap-3">
+                              <span className="inline-flex items-center px-4 h-8 rounded-full border border-black/20 text-xs md:text-sm text-black/60 font-medium w-fit">
+                                {experience.role}
+                              </span>
+                              {experience.companyType && (
+                                <span className="inline-flex items-center px-4 h-8 rounded-full border border-black/20 text-xs md:text-sm text-black/60 font-medium w-fit">
+                                  {experience.companyType}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm md:text-base text-black/60 font-light">{experience.period}</p>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+                            <p className="text-xl md:text-[2rem] font-light tracking-tight text-black/85 leading-[1.2]">
+                              {experience.summary}
+                            </p>
+
+                            <ul className="space-y-4 md:space-y-5">
+                              {experience.details.map((item) => (
+                                <li key={item} className="text-base md:text-[1.35rem] text-black/80 font-light leading-[1.35] flex gap-3">
+                                  <span className="text-black/40">-</span>
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
-                        <p className="text-sm md:text-base text-black/60 font-light">{experience.period}</p>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
-                        <p className="text-xl md:text-[2rem] font-light tracking-tight text-black/85 leading-[1.2]">
-                          {experience.summary}
-                        </p>
-
-                        <ul className="space-y-4 md:space-y-5">
-                          {experience.details.map((item) => (
-                            <li key={item} className="text-base md:text-[1.35rem] text-black/80 font-light leading-[1.35] flex gap-3">
-                              <span className="text-black/40">-</span>
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               )
             })}
@@ -400,7 +410,7 @@ export default function Home() {
         </section>
 
         {/* Clients I've worked with */}
-        <section id="clients" className="pt-16 md:pt-20">
+        <section id="clients" className="pt-24 md:pt-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 md:gap-16 lg:gap-20 items-start">
             <div className="space-y-8 md:space-y-10 lg:sticky lg:top-28">
               <div>
@@ -443,15 +453,25 @@ export default function Home() {
                       </div>
                     </button>
 
-                    {isOpen && (
-                      <ul className="pb-8 md:pb-10 pl-11 md:pl-12 space-y-2.5 md:space-y-3">
-                        {group.clients.map((client) => (
-                          <li key={client} className="text-lg md:text-xl text-black/65 font-light leading-[1.35]">
-                            {client}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.4, ease: [0.65, 0, 0.35, 1] }}
+                          style={{ overflow: 'hidden' }}
+                        >
+                          <ul className="pb-8 md:pb-10 pl-11 md:pl-12 space-y-2.5 md:space-y-3">
+                            {group.clients.map((client) => (
+                              <li key={client} className="text-lg md:text-xl text-black/65 font-light leading-[1.35]">
+                                {client}
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 )
               })}
@@ -460,29 +480,30 @@ export default function Home() {
         </section>
 
         {/* Awards & Recognition */}
-        <section id="recognition" className="pt-16 md:pt-20">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start mb-12 md:mb-14">
+        <section id="recognition" className="pt-24 md:pt-32">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">Awards &amp; recognition</p>
             </div>
-            <h2 className="w-full md:w-[85%] text-[2.2rem] md:text-[3.4rem] lg:text-[4rem] font-sans font-bold tracking-tight leading-[1.08] text-black">
-              Creative leadership that directly drove agency-wide recognition and growth.
-            </h2>
-          </div>
-
-          <div className="border-t border-black/10">
-            {awards.map((award) => (
-              <div key={`${award.source}-${award.recognition}`} className="grid grid-cols-1 md:grid-cols-[1.6fr_2.6fr_0.9fr] gap-4 md:gap-6 items-start py-6 md:py-8 border-b border-black/10">
-                <p className="text-lg md:text-2xl font-light text-black/85 leading-[1.2]">{award.organization}</p>
-                <p className="text-lg md:text-2xl font-light text-black/85 leading-[1.2]">{award.recognition}</p>
-                <p className="text-lg md:text-2xl font-light text-black/70 leading-[1.2] md:text-left">{award.year}</p>
+            <div>
+              <h2 className="w-full md:w-[85%] text-[2.2rem] md:text-[3.4rem] lg:text-[4rem] font-sans font-bold tracking-tight leading-[1.08] text-black mb-12 md:mb-14">
+                Creative leadership that directly drove agency-wide recognition and growth.
+              </h2>
+              <div className="border-t border-black/10">
+                {awards.map((award) => (
+                  <div key={`${award.source}-${award.recognition}`} className="grid grid-cols-1 md:grid-cols-[1.6fr_2.6fr_0.9fr] gap-4 md:gap-6 items-start py-6 md:py-8 border-b border-black/10">
+                    <p className="text-lg md:text-2xl font-light text-black/85 leading-[1.2]">{award.organization}</p>
+                    <p className="text-lg md:text-2xl font-light text-black/85 leading-[1.2]">{award.recognition}</p>
+                    <p className="text-lg md:text-2xl font-light text-black/70 leading-[1.2] md:text-left">{award.year}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </section>
 
         {/* About */}
-        <section id="about" className="pt-16 md:pt-20">
+        <section id="about" className="pt-24 md:pt-32">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">About</p>
@@ -516,7 +537,7 @@ export default function Home() {
         </section>
 
         {/* Contact */}
-        <section id="contact" className="pt-16 md:pt-20 pb-8 md:pb-16">
+        <section id="contact" className="pt-24 md:pt-32 pb-8 md:pb-16">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">Contact</p>

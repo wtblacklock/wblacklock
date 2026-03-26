@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, ReactNode } from "react"
-import { Menu, X, ArrowUp } from "lucide-react"
+import { Menu, X, ArrowUp, Linkedin } from "lucide-react"
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from "../utils/cn"
 import { motion, AnimatePresence } from "motion/react"
@@ -70,7 +70,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
       const id = hash.slice(1)
       setTimeout(() => {
         const el = document.getElementById(id)
-        if (el) window.scrollTo({ top: el.offsetTop - 60, behavior: 'smooth' })
+        if (el) window.scrollTo({ top: el.offsetTop - 40, behavior: 'smooth' })
         else window.scrollTo(0, 0)
       }, 150)
     } else {
@@ -91,7 +91,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
     if (isHome) {
       setTimeout(() => {
         const el = document.getElementById(id)
-        if (el) window.scrollTo({ top: el.offsetTop - 60, behavior: 'smooth' })
+        if (el) window.scrollTo({ top: el.offsetTop - 40, behavior: 'smooth' })
       }, 400)
     } else {
       router.push(`/#${id}`)
@@ -183,18 +183,25 @@ export function ClientLayout({ children }: { children: ReactNode }) {
 
           <footer className="mt-auto bg-white text-black">
             <div className="max-w-[1850px] mx-auto px-[49px] py-12 md:py-16">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 py-8 border-y border-black/20">
-                <p className="text-[1.75rem] md:text-[2.1rem] font-semibold tracking-tight">New Business Inquiries</p>
-                <p className="text-base md:text-xl font-medium">Email</p>
-                <a href="mailto:hello@williamblacklock.com" className="text-base md:text-xl font-medium hover:opacity-70 transition-opacity break-all">
-                  hello@williamblacklock.com
-                </a>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-10 border-b border-black/20">
-                <p className="text-[1.75rem] md:text-[2.1rem] font-semibold tracking-tight">About</p>
-                <p className="md:col-span-2 text-lg md:text-[2rem] font-light leading-[1.3] max-w-5xl">
-                  William Blacklock is a designer helping ambitious teams turn strategy into clear, high-impact work across product, brand, and intelligent creative systems.
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 border-y border-black/20">
+                <p className="text-[1.75rem] md:text-[2.1rem] font-semibold tracking-tight py-8 md:py-10">About</p>
+                <div className="md:col-span-2 py-8 md:py-10 md:pl-10 space-y-6">
+                  <p className="text-lg md:text-[2rem] font-light leading-[1.3] max-w-5xl">
+                    William Blacklock is a designer helping ambitious teams turn strategy into clear, high-impact work across product, brand, and intelligent creative systems.
+                  </p>
+                  <a
+                    href="https://www.linkedin.com/in/williamblacklock"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 pl-5 pr-3 h-11 rounded-full border border-black/30 text-sm font-medium text-black hover:border-black/60 transition-colors"
+                  >
+                    <Linkedin className="w-4 h-4" strokeWidth={1.5} />
+                    LinkedIn
+                    <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center">
+                      <ArrowUp className="w-3 h-3 rotate-45" strokeWidth={2} />
+                    </span>
+                  </a>
+                </div>
               </div>
               <div className="py-8 md:py-10 overflow-hidden">
                 <motion.div
