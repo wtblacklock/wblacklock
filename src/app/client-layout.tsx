@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, ReactNode } from "react"
-import { Menu, X, ArrowUp, Linkedin } from "lucide-react"
+import { Menu, X, ArrowUp } from "lucide-react"
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from "../utils/cn"
 import { motion, AnimatePresence } from "motion/react"
@@ -190,12 +190,11 @@ export function ClientLayout({ children }: { children: ReactNode }) {
                     William Blacklock is a designer helping ambitious teams turn strategy into clear, high-impact work across product, brand, and intelligent creative systems.
                   </p>
                   <a
-                    href="https://www.linkedin.com/in/williamblacklock"
+                    href="https://www.linkedin.com/in/william-blacklock/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 pl-5 pr-3 h-11 rounded-full border border-black/30 text-sm font-medium text-black hover:border-black/60 transition-colors"
+                    className="inline-flex items-center gap-3 pl-6 pr-3 h-11 rounded-full border border-black/30 text-sm font-medium text-black hover:border-black/60 transition-colors"
                   >
-                    <Linkedin className="w-4 h-4" strokeWidth={1.5} />
                     LinkedIn
                     <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center">
                       <ArrowUp className="w-3 h-3 rotate-45" strokeWidth={2} />
