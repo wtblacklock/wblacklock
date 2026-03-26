@@ -245,35 +245,26 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               animate={{ x: 0 }}
               exit={{ x: navWidth }}
               transition={{ duration, ease }}
-              className="fixed top-0 right-0 h-screen bg-white z-[60] flex flex-col pt-6 md:pt-8 pb-12"
-              style={{ width: navWidth, boxShadow: '-8px 0 32px rgba(0,0,0,0.08)' }}
+              className="fixed top-0 right-0 h-screen bg-white z-[60] flex flex-col pb-12"
+              style={{ width: navWidth, boxShadow: '-8px 0 40px rgba(0,0,0,0.10)' }}
             >
-              {/* Top bar: logo + close */}
-              <div className="px-10 md:px-12 flex items-center justify-between shrink-0 mb-4">
-                <TransitionLink
-                  href="/"
-                  onClick={() => setMenuOpen(false)}
-                  style={{ fontFamily: "'Inter', sans-serif", fontWeight: 100, fontSize: "2.835rem", letterSpacing: "0.02em", lineHeight: 1 }}
-                >
-                  WTB
-                </TransitionLink>
-                <button
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-center w-10 h-10 focus:outline-none hover:opacity-60 transition-opacity"
-                  aria-label="Close navigation"
-                >
-                  <X className="w-5 h-5" strokeWidth={1.5} />
-                </button>
-              </div>
+              {/* X button — floats at the left boundary, aligned with header menu button */}
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="absolute top-6 md:top-8 left-0 -translate-x-1/2 w-10 h-10 rounded-full bg-white border border-black/15 flex items-center justify-center hover:border-black/40 transition-colors focus:outline-none"
+                aria-label="Close navigation"
+              >
+                <X className="w-4 h-4" strokeWidth={1.5} />
+              </button>
 
-              {/* Nav links */}
-              <div className="flex-1 flex flex-col justify-center px-10 md:px-12 gap-4 md:gap-6">
+              {/* Nav links — vertically centered */}
+              <div className="flex-1 flex flex-col justify-center px-10 md:px-14 gap-3 md:gap-5">
                 {navLinks.map((link) => (
                   <TransitionLink
                     key={link.href}
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="text-[2.5rem] md:text-[3.15rem] font-medium tracking-tighter hover:text-black/50 transition-colors leading-none"
+                    className="text-[2.5rem] md:text-[3.15rem] font-medium tracking-tighter hover:text-black/40 transition-colors leading-none"
                   >
                     {link.label}
                   </TransitionLink>
