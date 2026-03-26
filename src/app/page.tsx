@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { TransitionLink as Link } from "../components/TransitionLink"
-import { ArrowRight, ArrowUpRight, Plus, Minus } from "lucide-react"
+import { ArrowUpRight, Plus, Minus } from "lucide-react"
 import { projects } from "../data/projects"
 import { motion } from "motion/react"
 
@@ -214,20 +214,13 @@ export default function Home() {
         <section id="work" className="pt-12">
           <div className="flex items-baseline justify-between mb-10">
             <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">Projects</h2>
-            <Link
-              href="/projects"
-              className="group flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors"
-            >
-              View all
-              <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
-            </Link>
           </div>
 
           <div className="border-t border-black/10">
             {featuredProjects.map((project) => (
               <Link
                 key={project.id}
-                href={`/projects/${project.id}`}
+                href={project.caseStudy ? `/projects/${project.id}#work-showcase` : `/projects/${project.id}`}
                 className="group relative block border-b border-black/10 overflow-hidden"
                 onMouseEnter={() => setHoveredId(project.id)}
                 onMouseLeave={() => setHoveredId(null)}
@@ -252,16 +245,9 @@ export default function Home() {
 
         {/* Featured Case Studies */}
         {featuredCaseStudies.length > 0 && (
-          <section className="pt-12">
+          <section id="case-studies" className="pt-12">
             <div className="flex items-baseline justify-between mb-10">
               <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">Featured Case Studies</h2>
-              <Link
-                href="/projects"
-                className="group flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-widest text-black/40 hover:text-black transition-colors"
-              >
-                View all
-                <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
-              </Link>
             </div>
 
             <div className="border-t border-black/10">
@@ -297,7 +283,7 @@ export default function Home() {
         )}
 
         {/* What I Do Section */}
-        <section className="pt-12">
+        <section id="services" className="pt-12">
           <div className="flex items-end justify-between mb-12">
             <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">What I Do</h2>
           </div>
@@ -345,7 +331,7 @@ export default function Home() {
         </section>
 
         {/* My Experience */}
-        <section className="pt-16 md:pt-20">
+        <section id="experience" className="pt-16 md:pt-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-10 md:mb-12">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">My experience</p>
@@ -414,7 +400,7 @@ export default function Home() {
         </section>
 
         {/* Clients I've worked with */}
-        <section className="pt-16 md:pt-20">
+        <section id="clients" className="pt-16 md:pt-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 md:gap-16 lg:gap-20 items-start">
             <div className="space-y-8 md:space-y-10 lg:sticky lg:top-28">
               <div>
@@ -474,7 +460,7 @@ export default function Home() {
         </section>
 
         {/* Awards & Recognition */}
-        <section className="pt-16 md:pt-20">
+        <section id="recognition" className="pt-16 md:pt-20">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start mb-12 md:mb-14">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">Awards &amp; recognition</p>

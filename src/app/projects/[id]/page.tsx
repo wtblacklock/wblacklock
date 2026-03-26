@@ -51,6 +51,7 @@ export default function ProjectDetail() {
 
   const nextProject = projects[(currentIndex + 1) % projects.length]
   const moreProjects = projects.filter((p) => p.id !== project.id).slice(0, 3)
+  const otherCaseStudies = projects.filter((p) => p.caseStudy && p.id !== project.id)
   const caseStudyData = project.caseStudy ? getCaseStudy(project.id) : undefined
 
   const moreHoveredProject = moreProjects.find(p => p.id === moreHoveredId)
@@ -198,6 +199,37 @@ export default function ProjectDetail() {
       {/* Gallery / case study content */}
       {project.caseStudy && caseStudyData && (
         <CaseStudyDetail data={caseStudyData} project={project} />
+      )}
+
+      {/* Other case studies */}
+      {project.caseStudy && otherCaseStudies.length > 0 && (
+        <div className="mt-24 md:mt-32">
+          <div className="flex items-baseline justify-between mb-0">
+            <h3 className="text-[0.65rem] font-bold tracking-widest uppercase text-black/40 mb-0">Other case studies</h3>
+          </div>
+          <div className="border-t border-black/10">
+            {otherCaseStudies.map((p) => (
+              <Link
+                key={p.id}
+                href={`/projects/${p.id}`}
+                className="group relative block border-b border-black/10 overflow-hidden"
+                onMouseEnter={() => setMoreHoveredId(p.id)}
+                onMouseLeave={() => setMoreHoveredId(null)}
+              >
+                <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] pointer-events-none" />
+                <div className="relative z-10 flex items-center justify-between py-6 md:py-8 gap-6">
+                  <h4 className="text-[2rem] md:text-[3rem] lg:text-[3.5rem] font-serif font-extralight tracking-tight leading-none text-black group-hover:text-white group-hover:translate-x-[25px] transition-[color,transform] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]">
+                    {p.title}
+                  </h4>
+                  <div className="md:hidden shrink-0 w-20 h-14 overflow-hidden">
+                    <img src={p.thumbnail} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  </div>
+                  <ArrowUpRight className="hidden md:block w-6 h-6 text-black/30 group-hover:text-white group-hover:-translate-x-[25px] transition-[color,transform] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] shrink-0" strokeWidth={1.5} />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
       )}
 
       {/* More work */}

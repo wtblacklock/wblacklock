@@ -20,6 +20,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   const [brandPhase, setBrandPhase] = useState<'full' | 'initials-fade' | 'condensed'>(isHome ? 'full' : 'condensed')
   const [showBackToTop, setShowBackToTop] = useState(false)
   const [navWidth, setNavWidth] = useState(420)
+  const [scaleOrigin, setScaleOrigin] = useState('center top')
   const lastScrollY = useRef(0)
 
   const showHeaderBg = isScrolled && !navHidden
@@ -37,7 +38,6 @@ export function ClientLayout({ children }: { children: ReactNode }) {
       const scrolled = scrollY > 150
       setIsScrolled(scrolled)
       setShowBackToTop(scrollY > 300)
-      if (scrolled) setMenuOpen(false)
       if (scrollY > lastScrollY.current && scrollY > 80) setNavHidden(true)
       else if (scrollY < lastScrollY.current) setNavHidden(false)
       lastScrollY.current = scrollY
@@ -65,23 +65,33 @@ export function ClientLayout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setMenuOpen(false)
-    window.scrollTo(0, 0)
+    const hash = window.location.hash
+    if (hash) {
+      const id = hash.slice(1)
+      setTimeout(() => {
+        const el = document.getElementById(id)
+        if (el) window.scrollTo({ top: el.offsetTop - 60, behavior: 'smooth' })
+        else window.scrollTo(0, 0)
+      }, 150)
+    } else {
+      window.scrollTo(0, 0)
+    }
   }, [pathname])
 
-  useEffect(() => {
-    if (menuOpen) document.body.style.overflow = 'hidden'
-    else document.body.style.overflow = ''
-    return () => { document.body.style.overflow = '' }
-  }, [menuOpen])
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+
+  const openMenu = () => {
+    setScaleOrigin(`center ${window.scrollY + window.innerHeight / 2}px`)
+    setMenuOpen(true)
+  }
 
   const scrollToSection = (id: string) => {
     setMenuOpen(false)
     if (isHome) {
       setTimeout(() => {
         const el = document.getElementById(id)
-        if (el) window.scrollTo({ top: el.offsetTop - 120, behavior: 'smooth' })
+        if (el) window.scrollTo({ top: el.offsetTop - 60, behavior: 'smooth' })
       }, 400)
     } else {
       router.push(`/#${id}`)
@@ -89,9 +99,14 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   }
 
   const navLinks: { label: string; type: 'page' | 'section'; href: string }[] = [
-    { label: "Projects", type: 'section', href: "work" },
-    { label: "About",    type: 'section', href: "about" },
-    { label: "Contact",  type: 'section', href: "contact" },
+    { label: "Projects",     type: 'section', href: "work" },
+    { label: "Case Studies", type: 'section', href: "case-studies" },
+    { label: "Services",     type: 'section', href: "services" },
+    { label: "Experience", type: 'section', href: "experience" },
+    { label: "Clients",    type: 'section', href: "clients" },
+    { label: "Recognition",type: 'section', href: "recognition" },
+    { label: "About",      type: 'section', href: "about" },
+    { label: "Contact",    type: 'section', href: "contact" },
   ]
 
   const ease = [0.65, 0, 0.35, 1] as const
@@ -110,7 +125,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
             borderRadius: menuOpen ? '12px' : '0px',
           }}
           transition={{ duration, ease }}
-          style={{ transformOrigin: 'center top' }}
+          style={{ transformOrigin: scaleOrigin }}
         >
           <TransitionOverlay />
 
@@ -152,7 +167,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
 
               <div className="flex items-center">
                 <button
-                  onClick={() => setMenuOpen(true)}
+                  onClick={openMenu}
                   className="flex items-center justify-center w-10 h-10 focus:outline-none hover:opacity-60 transition-opacity"
                   aria-label="Open navigation"
                 >
@@ -220,17 +235,16 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               className="fixed top-0 right-0 h-screen bg-black z-[60] flex flex-col pb-12"
               style={{ width: navWidth }}
             >
-              {/* X button at left boundary */}
-              <button
-                onClick={() => setMenuOpen(false)}
-                className="absolute top-6 md:top-8 left-0 -translate-x-1/2 w-10 h-10 rounded-full bg-black border border-white/20 flex items-center justify-center hover:border-white/50 transition-colors focus:outline-none"
-                aria-label="Close navigation"
-              >
-                <X className="w-4 h-4 text-white" strokeWidth={1.5} />
-              </button>
-
               {/* Nav links */}
-              <div className="flex-1 flex flex-col justify-center px-10 md:px-14 gap-3 md:gap-5">
+              <div className="relative flex-1 flex flex-col justify-center px-10 md:px-14 gap-3 md:gap-5">
+                {/* X button centered with nav text block */}
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-[46px] h-[46px] rounded-full bg-black border border-white/20 flex items-center justify-center hover:border-white/50 transition-colors focus:outline-none"
+                  aria-label="Close navigation"
+                >
+                  <X className="w-4 h-4 text-white" strokeWidth={1.5} />
+                </button>
                 {navLinks.map((link) =>
                   link.type === 'section' ? (
                     <button
