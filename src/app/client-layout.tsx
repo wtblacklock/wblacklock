@@ -106,13 +106,18 @@ export function ClientLayout({ children }: { children: ReactNode }) {
         {/* Header — fixed to viewport, translates independently with page */}
         <motion.header
           className={cn(
-            "fixed top-0 left-0 z-50 pointer-events-none pt-6 md:pt-8 border-b-[25px] border-transparent transition-[background-color] duration-300",
-            navHidden && "-translate-y-full",
+            "fixed top-0 left-0 z-50 pointer-events-none pt-6 md:pt-8 border-b-[25px] border-transparent transition-colors duration-300",
             showHeaderBg && "bg-white"
           )}
           style={{ width: '100vw' }}
-          animate={{ x: slideX }}
-          transition={{ duration, ease }}
+          animate={{
+            x: slideX,
+            y: navHidden ? '-100%' : '0%',
+          }}
+          transition={{
+            x: { duration, ease },
+            y: { duration: 0.3, ease: [0.65, 0, 0.35, 1] },
+          }}
         >
           <div className="max-w-[1850px] mx-auto px-[49px] flex items-center justify-between pointer-events-auto">
             <TransitionLink href="/" className="hover:opacity-70 transition-opacity relative inline-flex items-start w-[88px]" style={{ minHeight: "2.835rem" }}>
