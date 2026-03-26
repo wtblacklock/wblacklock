@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, ReactNode } from "react"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ArrowUp } from "lucide-react"
 import { usePathname } from 'next/navigation'
 import { cn } from "../utils/cn"
 import { motion, AnimatePresence } from "motion/react"
@@ -19,6 +19,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
   const [brandPhase, setBrandPhase] = useState<'full' | 'initials-fade' | 'condensed'>(isHome ? 'full' : 'condensed')
+  const [showBackToTop, setShowBackToTop] = useState(false)
   const lastScrollY = useRef(0)
 
   const showHeaderBg = isScrolled && !navHidden
@@ -28,6 +29,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
       const scrollY = window.scrollY
       const scrolled = scrollY > 150
       setIsScrolled(scrolled)
+      setShowBackToTop(scrollY > 300)
       if (scrolled) setMenuOpen(false)
 
       if (scrollY > lastScrollY.current && scrollY > 80) {
@@ -82,6 +84,10 @@ export function ClientLayout({ children }: { children: ReactNode }) {
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ]
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   const ease = [0.65, 0, 0.35, 1] as const
   const duration = 0.55
@@ -256,6 +262,23 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               className="fixed inset-0 z-[55]"
               onClick={() => setMenuOpen(false)}
             />
+          )}
+        </AnimatePresence>
+
+        {/* Back to top button */}
+        <AnimatePresence>
+          {showBackToTop && (
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.3 }}
+              onClick={scrollToTop}
+              className="fixed bottom-8 right-8 z-40 flex items-center justify-center w-10 h-10 rounded-full border border-black/20 hover:border-black/40 hover:bg-black/5 transition-colors group focus:outline-none focus:ring-2 focus:ring-black/20"
+              aria-label="Back to top"
+            >
+              <ArrowUp className="w-4 h-4 stroke-current group-hover:opacity-70 transition-opacity" strokeWidth={2} />
+            </motion.button>
           )}
         </AnimatePresence>
 

@@ -349,7 +349,6 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start mb-10 md:mb-12">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">My experience</p>
-              <p className="text-[2rem] md:text-[2.5rem] font-serif font-extralight tracking-tight text-black leading-none">Experience</p>
             </div>
             <h2 className="text-[2.2rem] md:text-[3.6rem] lg:text-[4.2rem] font-sans font-bold tracking-tight leading-[1.08] text-black">
               Work experience spanning 15+ years of creativity, imagination, and passion.
@@ -420,7 +419,6 @@ export default function Home() {
             <div className="space-y-8 md:space-y-10 lg:sticky lg:top-28">
               <div>
                 <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">Clients I&apos;ve worked with</p>
-                <p className="text-[2rem] md:text-[2.5rem] font-serif font-extralight tracking-tight text-black leading-none mb-8">Clients</p>
                 <h2 className="w-full md:w-[85%] text-[2.2rem] md:text-[3.4rem] lg:text-[3.9rem] font-sans font-bold tracking-tight leading-[1.08] text-black">
                   A decade building brand identities for global tech leaders and influential local businesses.
                 </h2>
@@ -480,7 +478,6 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start mb-12 md:mb-14">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">Awards &amp; recognition</p>
-              <p className="text-[2rem] md:text-[2.5rem] font-serif font-extralight tracking-tight text-black leading-none">Recognition</p>
             </div>
             <h2 className="w-full md:w-[85%] text-[2.2rem] md:text-[3.4rem] lg:text-[4rem] font-sans font-bold tracking-tight leading-[1.08] text-black">
               Creative leadership that directly drove agency-wide recognition and growth.
@@ -503,7 +500,6 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start">
             <div>
               <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">About</p>
-              <p className="text-[2rem] md:text-[2.5rem] font-serif font-extralight tracking-tight text-black leading-none">Story</p>
             </div>
 
             <div className="space-y-8 md:space-y-10">
