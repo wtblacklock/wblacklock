@@ -211,7 +211,7 @@ export default function Home() {
         </section>
 
         {/* Work — list */}
-        <section className="pt-12">
+        <section id="work" className="pt-12">
           <div className="flex items-baseline justify-between mb-10">
             <h2 className="text-xs font-bold tracking-widest uppercase text-black/50">Projects</h2>
             <Link

@@ -89,8 +89,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   }
 
   const navLinks: { label: string; type: 'page' | 'section'; href: string }[] = [
-    { label: "Projects", type: 'page', href: "/projects" },
-    { label: "Journal",  type: 'page', href: "/journal" },
+    { label: "Projects", type: 'section', href: "work" },
     { label: "About",    type: 'section', href: "about" },
     { label: "Contact",  type: 'section', href: "contact" },
   ]
@@ -218,16 +217,16 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               animate={{ x: 0 }}
               exit={{ x: navWidth }}
               transition={{ duration, ease }}
-              className="fixed top-0 right-0 h-screen bg-white z-[60] flex flex-col pb-12"
+              className="fixed top-0 right-0 h-screen bg-black z-[60] flex flex-col pb-12"
               style={{ width: navWidth }}
             >
               {/* X button at left boundary */}
               <button
                 onClick={() => setMenuOpen(false)}
-                className="absolute top-6 md:top-8 left-0 -translate-x-1/2 w-10 h-10 rounded-full bg-white border border-black/15 flex items-center justify-center hover:border-black/40 transition-colors focus:outline-none"
+                className="absolute top-6 md:top-8 left-0 -translate-x-1/2 w-10 h-10 rounded-full bg-black border border-white/20 flex items-center justify-center hover:border-white/50 transition-colors focus:outline-none"
                 aria-label="Close navigation"
               >
-                <X className="w-4 h-4" strokeWidth={1.5} />
+                <X className="w-4 h-4 text-white" strokeWidth={1.5} />
               </button>
 
               {/* Nav links */}
@@ -237,7 +236,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
                     <button
                       key={link.href}
                       onClick={() => scrollToSection(link.href)}
-                      className="text-left text-[2.5rem] md:text-[3.15rem] font-medium tracking-tighter hover:text-black/40 transition-colors leading-none focus:outline-none"
+                      className="text-left text-[2.5rem] md:text-[3.15rem] font-medium tracking-tighter text-white hover:text-white/40 transition-colors leading-none focus:outline-none"
                     >
                       {link.label}
                     </button>
@@ -246,7 +245,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
                       key={link.href}
                       href={link.href}
                       onClick={() => setMenuOpen(false)}
-                      className="text-[2.5rem] md:text-[3.15rem] font-medium tracking-tighter hover:text-black/40 transition-colors leading-none"
+                      className="text-[2.5rem] md:text-[3.15rem] font-medium tracking-tighter text-white hover:text-white/40 transition-colors leading-none"
                     >
                       {link.label}
                     </TransitionLink>
