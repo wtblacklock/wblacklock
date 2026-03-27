@@ -1,6 +1,8 @@
 import type { CaseStudyData } from '../data/caseStudies'
 import type { Project } from '../data/projects'
 import { WorkShowcase } from './WorkShowcase'
+import { InstagramFeed } from './InstagramFeed'
+import { VideoWithSound } from './VideoWithSound'
 
 interface CaseStudyDetailProps {
   data: CaseStudyData
@@ -33,6 +35,38 @@ export function CaseStudyDetail({ data, project }: CaseStudyDetailProps) {
                   alt={section.heading}
                   className="w-full h-full object-cover"
                 />
+              </div>
+            )}
+
+            {/* Full-width autoplay video above section content */}
+            {section.video && (
+              <div className="mb-12 md:mb-16">
+                <VideoWithSound src={section.video} />
+              </div>
+            )}
+
+            {/* Side-by-side image grid above section content */}
+            {section.imageGrid && (
+              <div className={`grid gap-3 md:gap-4 mb-12 md:mb-16 ${section.imageGrid.length === 1 ? 'grid-cols-1' : section.imageGrid.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                {section.imageGrid.map((src, i) => (
+                  <div key={i} className="w-full aspect-[4/3] overflow-hidden bg-neutral-100">
+                    <img src={src} alt={`${section.heading} ${i + 1}`} className="w-full h-full object-cover" />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Multi-video grid above section content */}
+            {section.videoGrid && (
+              <div className={`grid gap-3 md:gap-4 mb-12 md:mb-16 ${section.videoGrid.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                {section.videoGrid.map((src, i) => (
+                  <VideoWithSound
+                    key={i}
+                    src={src}
+                    containerClassName="w-full aspect-[9/16]"
+                    videoClassName="w-full h-full object-cover"
+                  />
+                ))}
               </div>
             )}
 
@@ -131,6 +165,29 @@ export function CaseStudyDetail({ data, project }: CaseStudyDetailProps) {
                     ))}
                   </div>
                 )}
+
+                {section.gallery && section.id !== 'instagram' && (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mt-2">
+                    {section.gallery.map((item, i) => (
+                      <div key={i} className="overflow-hidden bg-neutral-100">
+                        <div className="aspect-square overflow-hidden">
+                          <img
+                            src={item.src}
+                            alt={item.caption || ''}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        {item.caption && (
+                          <p className="text-[0.65rem] font-light text-black/40 mt-2 leading-snug tracking-wide">
+                            {item.caption}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {section.id === 'instagram' && <InstagramFeed />}
 
               </div>
             </div>

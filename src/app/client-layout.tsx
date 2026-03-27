@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, ReactNode } from "react"
-import { Menu, X, ArrowUp } from "lucide-react"
+import { Menu, X, ArrowUp, ArrowDown } from "lucide-react"
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from "../utils/cn"
 import { motion, AnimatePresence } from "motion/react"
@@ -86,6 +86,12 @@ export function ClientLayout({ children }: { children: ReactNode }) {
     setMenuOpen(true)
   }
 
+  const scrollToContact = () => {
+    const el = document.getElementById('footer')
+    if (el) window.scrollTo({ top: el.offsetTop, behavior: 'smooth' })
+    else window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+  }
+
   const scrollToSection = (id: string) => {
     setMenuOpen(false)
     if (isHome) {
@@ -106,7 +112,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
     { label: "Clients",    type: 'section', href: "clients" },
     { label: "Recognition",type: 'section', href: "recognition" },
     { label: "About",      type: 'section', href: "about" },
-    { label: "Contact",    type: 'section', href: "contact" },
+    { label: "Contact",    type: 'section', href: "footer" },
   ]
 
   const ease = [0.65, 0, 0.35, 1] as const
@@ -165,7 +171,18 @@ export function ClientLayout({ children }: { children: ReactNode }) {
                 </motion.span>
               </TransitionLink>
 
-              <div className="flex items-center">
+              <div className="flex items-center gap-4">
+                {isHome && (
+                  <button
+                    onClick={scrollToContact}
+                    className="hidden md:inline-flex items-center gap-3 pl-6 pr-3 h-11 rounded-full border border-black/30 text-sm font-medium text-black hover:border-black/60 transition-colors focus:outline-none"
+                  >
+                    Connect with me
+                    <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center">
+                      <ArrowDown className="w-3 h-3" strokeWidth={2} />
+                    </span>
+                  </button>
+                )}
                 <button
                   onClick={openMenu}
                   className="flex items-center justify-center w-10 h-10 focus:outline-none hover:opacity-60 transition-opacity"
@@ -181,10 +198,10 @@ export function ClientLayout({ children }: { children: ReactNode }) {
             {children}
           </main>
 
-          <footer className="mt-auto bg-white text-black">
+          <footer id="footer" className="mt-auto bg-white text-black">
             <div className="max-w-[1850px] mx-auto px-[49px] py-12 md:py-16">
               <div className="grid grid-cols-1 md:grid-cols-3 border-y border-black/20">
-                <p className="text-[1.75rem] md:text-[2.1rem] font-semibold tracking-tight py-8 md:py-10">About</p>
+                <p className="text-[1.75rem] md:text-[2.1rem] font-semibold tracking-tight py-8 md:py-10">Connect</p>
                 <div className="md:col-span-2 py-8 md:py-10 md:pl-10 space-y-6">
                   <p className="text-lg md:text-[2rem] font-light leading-[1.3] max-w-5xl">
                     William Blacklock is a designer helping ambitious teams turn strategy into clear, high-impact work across product, brand, and intelligent creative systems.
@@ -196,6 +213,20 @@ export function ClientLayout({ children }: { children: ReactNode }) {
                     className="inline-flex items-center gap-3 pl-6 pr-3 h-11 rounded-full border border-black/30 text-sm font-medium text-black hover:border-black/60 transition-colors"
                   >
                     LinkedIn
+                    <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center">
+                      <ArrowUp className="w-3 h-3 rotate-45" strokeWidth={2} />
+                    </span>
+                  </a>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 border-b border-black/20">
+                <p className="text-[1.75rem] md:text-[2.1rem] font-semibold tracking-tight py-8 md:py-10">New Business Inquiries</p>
+                <div className="md:col-span-2 py-8 md:py-10 md:pl-10 flex items-center">
+                  <a
+                    href="mailto:wtblacklock@gmail.com"
+                    className="inline-flex items-center gap-3 pl-6 pr-3 h-11 rounded-full border border-black/30 text-sm font-medium text-black hover:border-black/60 transition-colors"
+                  >
+                    wtblacklock@gmail.com
                     <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center">
                       <ArrowUp className="w-3 h-3 rotate-45" strokeWidth={2} />
                     </span>
@@ -285,7 +316,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.3 }}
               onClick={scrollToTop}
-              className="fixed bottom-8 right-8 z-40 flex items-center justify-center w-10 h-10 rounded-full border border-white/20 text-white hover:border-white/50 transition-colors focus:outline-none"
+              className="fixed bottom-8 right-8 z-40 flex items-center justify-center w-10 h-10 rounded-full bg-black text-white border border-black hover:bg-white hover:text-black hover:border-black transition-colors focus:outline-none"
               aria-label="Back to top"
             >
               <ArrowUp className="w-4 h-4" strokeWidth={2} />

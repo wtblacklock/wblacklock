@@ -5,14 +5,16 @@ import { TransitionLink as Link } from "../components/TransitionLink"
 import { ArrowUpRight, Plus, Minus } from "lucide-react"
 import { projects } from "../data/projects"
 import { motion, AnimatePresence } from "motion/react"
+import { PingPongVideo } from "../components/PingPongVideo"
 
 export default function Home() {
   const featuredProjects = projects.filter((p) => p.featured).slice(0, 4)
   const featuredCaseStudies = projects.filter((p) => p.caseStudy).slice(0, 2)
   const [cursor, setCursor] = useState({ x: 0, y: 0 })
   const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const [hoveredClient, setHoveredClient] = useState<{ name: string; description: string } | null>(null)
   const [activeExperience, setActiveExperience] = useState("twinb")
-  const [activeClientGroup, setActiveClientGroup] = useState("technology-enterprise-saas")
+  const [activeClientGroup, setActiveClientGroup] = useState("technology-saas")
   const hoveredProject = projects.find((p) => p.id === hoveredId)
 
   useEffect(() => {
@@ -116,49 +118,58 @@ export default function Home() {
 
   const clientGroups = [
     {
-      id: "technology-enterprise-saas",
-      title: "Technology / Enterprise / SaaS",
+      id: "technology-saas",
+      title: "Technology, SaaS & Business Services",
       clients: [
-        "IBM Garage / IBM Consulting",
-        "Umbel",
-        "Lodestone Social Media",
+        { name: "IBM (Consulting, Garage, Z & LinuxONE)", description: "Design Lead & Program Manager. Scaled global frameworks; 73 NPS." },
+        { name: "Rackspace", description: "High-volume app design, blog management, and major conference branding/collateral." },
+        { name: "Clover Educational Consulting Group", description: "Full Agency of Record execution — Branding, Messaging, Site, Collateral." },
+        { name: "Frank.ai", description: "Strategic Lead Magnets and conversion-optimized assets." },
+        { name: "Umbel", description: "Creative & Acquisition Services Director." },
+        { name: "MVP Index", description: "Creative Director; full brand repositioning and design system overhaul." },
+        { name: "SolarWinds / Eloqua / Toshiba / Sony", description: "Creative strategy, digital/print marketing, and app design." },
+        { name: "Azora", description: "STR compliance software development and address identification systems." },
       ],
     },
     {
       id: "sports-entertainment",
-      title: "Sports & Entertainment",
+      title: "Sports, Media & Entertainment",
       clients: [
-        "MLBAM",
-        "NFL",
-        "NCAA",
-        "Premier Soccer League",
-        "Professional Bull Riders",
-        "Jacksonville Jaguars",
-        "Miss Universe",
+        { name: "Orlando Magic (NBA)", description: "Fan engagement and in-arena digital activations." },
+        { name: "Miami Heat (NBA)", description: "Social activation platforms and digital fan engagement." },
+        { name: "Tampa Bay Lightning (NHL)", description: "In-arena fan engagement and omnichannel brand impressions." },
+        { name: "Denver Nuggets (NBA)", description: "Multi-channel digital activation and arena engagement." },
+        { name: "Jacksonville Jaguars (NFL)", description: "Social fan activation, jumbotron integration, and points-based gamification." },
+        { name: "NFL, MLB, & MLBAM", description: "Omnichannel engagement platforms and stadium-wide brand activations." },
+        { name: "NCAA", description: "In-stadium engagement and arena activations for National Championships." },
+        { name: "NHL", description: "League-wide fan data visualization and engagement tools." },
+        { name: "Houston Texans (NFL)", description: "Fan monetization and digital engagement strategies." },
+        { name: "OKC Thunder (NBA)", description: "Arena activations and digital fan engagement." },
+        { name: "Fox Sports / BTN", description: "Broadcast-integrated social engagement and creative strategy." },
+        { name: "Professional Bull Riders (PBR)", description: "Social engagement and activation tools." },
+        { name: "Premier Soccer League", description: "Managed brand impressions and global engagement." },
+        { name: "Miss Universe (IMG)", description: "Global omnichannel engagement products." },
       ],
     },
     {
-      id: "consumer-products-cpg",
-      title: "Consumer Products / CPG",
-      clients: ["Beast Putty"],
-    },
-    {
-      id: "nonprofit-education",
-      title: "Nonprofit / Education",
-      clients: ["Mainspring Schools", "Hill Country Ride for AIDS"],
-    },
-    {
-      id: "healthcare-clinic",
-      title: "Healthcare / Clinic",
-      clients: ["Allergy & Asthma Care of Waco"],
-    },
-    {
-      id: "events-associations",
-      title: "Events / Associations",
+      id: "consumer-brands",
+      title: "Consumer Brands, Retail & Real Estate",
       clients: [
-        "Austin Advertising Federation",
-        "University of Texas",
-        "Turn2Live",
+        { name: "Chili's Grill & Bar", description: "Designed the Chili's Pepper x St. Jude Children's Research Hospital partnership identity." },
+        { name: "Heelys", description: "National advertising campaigns and full website execution." },
+        { name: "Wilshire Homes", description: "Executive Art Direction; photography shoots, interactive sites, and online advertising." },
+        { name: "Bacardi / Zaxby's Chicken / C Spire Wireless", description: "Integrated marketing and social activation." },
+      ],
+    },
+    {
+      id: "nonprofit-healthcare-education",
+      title: "Nonprofit, Healthcare & Higher Education",
+      clients: [
+        { name: "University of Texas (McCombs School)", description: "Gala branding and HOF induction suites." },
+        { name: "Mainspring Schools", description: "3 years of Annual Reports, concept to print." },
+        { name: "Hill Country Ride for AIDS (HCRA)", description: "Award-winning promotional design — ADDYs Special Judges Award." },
+        { name: "Allergy & Asthma Care of Waco", description: "AI-driven multi-channel patient engagement." },
+        { name: "The Paralympics-PBS / Austin Neuropsychology", description: "Platform integration and site IA." },
       ],
     },
   ]
@@ -198,15 +209,27 @@ export default function Home() {
         transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
         className="space-y-32 md:space-y-40"
       >
-        {/* Hero Section */}
-        <section className="min-h-[70vh] flex flex-col justify-center pb-12">
-          <div className="max-w-5xl">
-            <h1 className="text-[3.33rem] md:text-[6.66rem] lg:text-[8.88rem] font-serif font-extralight tracking-tighter text-black leading-[0.9] mb-8">
-              Hello.
+        {/* Hero Section — full-bleed, breaks out of main padding, sits behind nav */}
+        <section className="relative h-screen -mt-32 -mx-[49px] flex flex-col overflow-hidden">
+          {/* Centered ping-pong video — height-contained, 120% size, shifted left 80px */}
+          <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+            <div style={{ height: '110%', transform: 'translateX(-40px) translateY(-20px)' }}>
+              <PingPongVideo src="/images/wtb_spin.mp4" className="h-full" fit="contain-height" />
+            </div>
+          </div>
+
+          {/* Name — absolutely centered in the full section */}
+          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none px-[49px]" style={{ marginTop: '-60px' }}>
+            <h1 className="w-full max-w-full text-center text-[clamp(1.2rem,4.6vw,5.3rem)] font-extralight leading-[0.92] text-black uppercase whitespace-nowrap" style={{ letterSpacing: '0.04em' }}>
+              William Thames Blacklock
             </h1>
-            <p className="text-2xl md:text-4xl text-black/60 leading-relaxed max-w-4xl font-light tracking-tight">
-              Independent designer helping teams build better products, brands, and creative systems.
-            </p>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 flex justify-between items-end px-[49px] pb-8 md:pb-10">
+            <span className="text-[0.6rem] md:text-[0.7rem] tracking-[0.25em] uppercase text-black/50 font-medium">Based in Austin, TX</span>
+            <span className="text-[0.6rem] md:text-[0.7rem] tracking-[0.25em] uppercase text-black/50 font-medium">Design • AI • Systems</span>
+            <span className="text-[0.6rem] md:text-[0.7rem] tracking-[0.25em] uppercase text-black/50 font-medium">15+ Years Experience</span>
           </div>
         </section>
 
@@ -462,10 +485,17 @@ export default function Home() {
                           transition={{ duration: 0.4, ease: [0.65, 0, 0.35, 1] }}
                           style={{ overflow: 'hidden' }}
                         >
-                          <ul className="pb-8 md:pb-10 pl-11 md:pl-12 space-y-2.5 md:space-y-3">
+                          <ul className="pb-4 md:pb-6 pl-11 md:pl-12">
                             {group.clients.map((client) => (
-                              <li key={client} className="text-lg md:text-xl text-black/65 font-light leading-[1.35]">
-                                {client}
+                              <li
+                                key={client.name}
+                                className="py-2 cursor-default"
+                                onMouseEnter={() => setHoveredClient(client)}
+                                onMouseLeave={() => setHoveredClient(null)}
+                              >
+                                <span className="text-lg md:text-xl font-light text-black/65 leading-snug">
+                                  {client.name}
+                                </span>
                               </li>
                             ))}
                           </ul>
@@ -504,60 +534,79 @@ export default function Home() {
 
         {/* About */}
         <section id="about" className="pt-24 md:pt-32">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start">
-            <div>
-              <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">About</p>
+          <div className="max-w-[700px] mx-auto text-left space-y-10 md:space-y-12">
+            <div className="relative w-[150%] -ml-[25%] overflow-hidden border-b border-black/10">
+              <PingPongVideo src="/images/wtb_figure.mp4" className="w-full" />
             </div>
+            <h2 className="text-[2.2rem] md:text-[3.4rem] lg:text-[4rem] font-sans font-bold tracking-tight leading-[1.08] text-black">
+              I&rsquo;m a designer, creative operator, and absolute systems nerd based in the heart of Austin, Texas.
+            </h2>
 
-            <div className="space-y-8 md:space-y-10">
-              <h2 className="w-full md:w-[85%] text-[2.2rem] md:text-[3.4rem] lg:text-[4rem] font-sans font-bold tracking-tight leading-[1.08] text-black">
-                Since the beginning, creating has been the constant thread across product, brand, and digital work.
-              </h2>
+            <div className="space-y-6 text-lg md:text-2xl text-black/70 leading-relaxed font-light text-left">
+              <p>
+                For over 15 years, I&rsquo;ve been building at the intersection of high-level strategy and deep-focus execution. If you&rsquo;re looking for a designer who just wants to make &ldquo;pretty brand guidelines&rdquo; to sit on a shelf, I&rsquo;m probably not your guy.
+              </p>
+              <p>
+                I&rsquo;m a user-first designer who believes that empathy is the only real shortcut to quality. I don&rsquo;t just design for screens; I design for the person on the other side of them.
+              </p>
 
-              <div className="max-w-4xl space-y-6 text-lg md:text-2xl text-black/70 leading-relaxed font-light">
-                <p>
-                  I work at the intersection of strategy and execution, helping teams turn ideas into clear experiences, stronger identities, and systems that scale.
+              <h3 className="pt-6 text-[1.6rem] md:text-[2.2rem] font-sans font-bold tracking-tight leading-[1.15] text-black">
+                Design is Only as Good as the Sales it Drives
+              </h3>
+              <p>
+                Out here in Texas, we don&rsquo;t much care for fluff. I&rsquo;ve built my career on a simple, stubborn conviction: If design doesn&rsquo;t drive sales, it isn&rsquo;t doing its job. But &ldquo;driving sales&rdquo; isn&rsquo;t about tricking people; it&rsquo;s about a deep, empathetic understanding of what a user actually needs.
+              </p>
+              <p>
+                Whether I&rsquo;m lead-managing a global innovation framework for IBM Garage or crafting an annual report for Mainspring Schools, I start by getting into the head of the human using the product.
+              </p>
+              <p>
+                I&rsquo;ve spent a decade and a half dual-wielding my skillsets. On one hand, I&rsquo;m a Right-Brained creator&mdash;passionate about UI/UX, visual storytelling, and high-end art direction. On the other, I&rsquo;m a Left-Brained analytical operator. I&rsquo;m a Certified Scrum Master who lives for Agile roadmaps, KPI tracking, and conversion metrics. I want the work to look incredible, but I want the NPS score and the business value to look even better.
+              </p>
+
+              <h3 className="pt-6 text-[1.6rem] md:text-[2.2rem] font-sans font-bold tracking-tight leading-[1.15] text-black">
+                Pushing the Limits with AI
+              </h3>
+              <p>
+                I&rsquo;ve always been an explorer, and right now, the frontier is AI. I don&rsquo;t just use AI; I experiment with it to see where it breaks. I&rsquo;m obsessed with pushing the limits of prompt engineering and content automation to shorten the distance between a wild idea and a live, high-performing product.
+              </p>
+              <p>
+                For a project like Beast Putty, I used generative AI to catapult a campaign from zero to 34,000 views in 21 days. I&rsquo;m constantly looking for ways to blend old-school craft with new-school tech to help teams move at &ldquo;startup speed&rdquo; without losing the human touch.
+              </p>
+
+              <h3 className="pt-6 text-[1.6rem] md:text-[2.2rem] font-sans font-bold tracking-tight leading-[1.15] text-black">
+                The Soul of a Maker (and a Huge Otaku)
+              </h3>
+              <p>
+                When I&rsquo;m not in a Figma file or a JIRA backlog, I am likely deep in a rabbit hole of anime. I&rsquo;m a massive fan&mdash;so much so that I&rsquo;ve got a podcast dedicated to it. That same passion I have for world-building, character arcs, and the &ldquo;why&rdquo; behind a story is exactly what I bring to my design work.
+              </p>
+              <p>
+                I think the best products are like the best anime: they have heart, they have purpose, and they make you feel something.
+              </p>
+              <p>
+                As the great Dieter Rams said:
+              </p>
+              <blockquote className="pt-4 md:pt-6 md:w-[560px] md:self-end md:translate-x-1/2 text-left">
+                <p className="font-serif font-extralight text-[2rem] md:text-[3.1rem] leading-[1.02] tracking-tight text-black/90 italic">
+                  &ldquo;Good design is as little design as possible.&rdquo;
                 </p>
-                <p>
-                  Over the years, that has meant leading design direction, building campaigns, shaping digital products, and creating workflows that keep momentum high without sacrificing quality.
+                <p className="mt-3 text-[0.72rem] tracking-[0.14em] uppercase text-black/60">
+                  Dieter Rams
                 </p>
-              </div>
+              </blockquote>
+              <p>
+                I live by that. I want to strip away the noise and get to the core of the problem. No ego, no agency fluff&mdash;just quality work that solves real problems for real people.
+              </p>
 
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-3 pl-6 pr-3 h-12 rounded-full border border-black/30 text-base font-medium text-black hover:border-black/60 transition-colors"
-              >
-                Read full story
-                <span className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center">
-                  <ArrowUpRight className="w-4 h-4" strokeWidth={1.8} />
-                </span>
-              </Link>
+              <h3 className="pt-6 text-[1.6rem] md:text-[2.2rem] font-sans font-bold tracking-tight leading-[1.15] text-black">
+                Life in the Hill Country
+              </h3>
+              <p>
+                When the screens finally go dark, you&rsquo;ll find me soaking up the Texas sun. I love hiking the Hill Country, slow-cooking a meal for the family, or heading out for some saltwater fishing (because freshwater fish just don&rsquo;t have that same grit). If I&rsquo;m not near the coast, I&rsquo;m probably on a tennis court or recording the next episode of the pod.
+              </p>
             </div>
           </div>
         </section>
 
-        {/* Contact */}
-        <section id="contact" className="pt-24 md:pt-32 pb-8 md:pb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-10 md:gap-14 lg:gap-20 items-start">
-            <div>
-              <p className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">Contact</p>
-            </div>
-            <div className="space-y-8 md:space-y-10">
-              <h2 className="w-full md:w-[85%] text-[2.2rem] md:text-[3.4rem] lg:text-[4rem] font-sans font-bold tracking-tight leading-[1.08] text-black">
-                Let&rsquo;s work together on something worth making.
-              </h2>
-              <a
-                href="mailto:hello@williamblacklock.com"
-                className="inline-flex items-center gap-3 pl-6 pr-3 h-12 rounded-full border border-black/30 text-base font-medium text-black hover:border-black/60 transition-colors"
-              >
-                hello@williamblacklock.com
-                <span className="w-7 h-7 rounded-full bg-black text-white flex items-center justify-center">
-                  <ArrowUpRight className="w-4 h-4" strokeWidth={1.8} />
-                </span>
-              </a>
-            </div>
-          </div>
-        </section>
 
       </motion.div>
 
@@ -579,14 +628,45 @@ export default function Home() {
         }}
       >
         {hoveredProject && (
-          <img
-            src={hoveredProject.thumbnail}
-            alt=""
-            className="w-full h-full object-cover"
-            referrerPolicy="no-referrer"
-          />
+          hoveredProject.thumbnailVideo ? (
+            <video
+              key={hoveredProject.id}
+              src={hoveredProject.thumbnailVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <img
+              src={hoveredProject.thumbnail}
+              alt=""
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+          )
         )}
       </motion.div>
+
+      {/* Client description tooltip — desktop only */}
+      <AnimatePresence>
+        {hoveredClient && (
+          <motion.div
+            key={hoveredClient.name}
+            className="fixed pointer-events-none z-50 hidden md:block"
+            style={{ left: cursor.x + 16, top: cursor.y + 18 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.12 }}
+          >
+            <p className="text-xl md:text-2xl font-extralight tracking-tight text-white bg-black px-4 py-2 max-w-xs leading-snug">
+              {hoveredClient.description}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

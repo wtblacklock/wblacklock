@@ -9,8 +9,11 @@ import { ArrowDown, ArrowUpRight } from "lucide-react"
 import { projects } from "../../../data/projects"
 import { getCaseStudy } from "../../../data/caseStudies"
 import { CaseStudyDetail } from "../../../components/CaseStudyDetail"
+import { ExecutionDetail } from "../../../components/ExecutionDetail"
 import { PingPongVideo } from "../../../components/PingPongVideo"
 import { SectionProgressBar } from "../../../components/SectionProgressBar"
+import { getProjectExecutions } from "../../../data/projectExecutions"
+import { VideoWithSound } from "../../../components/VideoWithSound"
 
 export default function ProjectDetail() {
   const params = useParams()
@@ -53,6 +56,7 @@ export default function ProjectDetail() {
   const moreProjects = projects.filter((p) => p.id !== project.id).slice(0, 3)
   const otherCaseStudies = projects.filter((p) => p.caseStudy && p.id !== project.id)
   const caseStudyData = project.caseStudy ? getCaseStudy(project.id) : undefined
+  const executionData = project.executions ? getProjectExecutions(project.id) : undefined
 
   const moreHoveredProject = moreProjects.find(p => p.id === moreHoveredId)
 
@@ -78,8 +82,8 @@ export default function ProjectDetail() {
           </p>
         </div>
 
-        {/* Jump to work — case study only, desktop */}
-        {project.caseStudy && caseStudyData && (
+        {/* Jump to designs — case study projects with designs */}
+        {project.caseStudy && caseStudyData?.hasDesigns && (
           <div className="hidden md:flex md:col-span-1 md:items-end">
             <a
               href="#work-showcase"
@@ -95,6 +99,8 @@ export default function ProjectDetail() {
             </a>
           </div>
         )}
+
+
       </div>
 
       {/* Section progress bar — sticky on scroll, animates out when past designs */}
@@ -116,29 +122,34 @@ export default function ProjectDetail() {
                     sectionHeadings={['Overview', ...caseStudyData.sections.map((s) => s.heading)]}
                   />
                 </div>
-                <a
-                  href="#work-showcase"
-                  className="shrink-0 h-5 flex items-center text-[0.65rem] font-bold tracking-widest uppercase text-black/30 hover:text-black transition-colors duration-300"
-                >
-                  DESIGNS
-                </a>
+                {caseStudyData.hasDesigns && (
+                  <a
+                    href="#work-showcase"
+                    className="shrink-0 h-5 flex items-center text-[0.65rem] font-bold tracking-widest uppercase text-black/30 hover:text-black transition-colors duration-300"
+                  >
+                    DESIGNS
+                  </a>
+                )}
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Hero image */}
-      {(caseStudyData?.hero || project.images[0]) && (
-        <div className="w-full aspect-[16/9] overflow-hidden bg-neutral-100 mb-12 md:mb-16">
-          <img
-            src={caseStudyData?.hero || project.images[0]}
-            alt={project.title}
-            className="w-full h-full object-cover"
-            referrerPolicy="no-referrer"
-          />
-        </div>
-      )}
+      {/* Hero image or video */}
+      {(caseStudyData?.hero || project.images[0]) && (() => {
+        const heroSrc = caseStudyData?.hero || project.images[0]
+        const isVideo = heroSrc.match(/\.(mp4|mov|webm)$/i)
+        return isVideo ? (
+          <div className="mb-12 md:mb-16">
+            <VideoWithSound src={heroSrc} />
+          </div>
+        ) : (
+          <div className="w-full aspect-[16/9] overflow-hidden bg-neutral-100 mb-12 md:mb-16">
+            <img src={heroSrc} alt={project.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+          </div>
+        )
+      })()}
 
       {/* 2-column content */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 pt-12 md:pt-16 pb-12 md:pb-16">
@@ -176,8 +187,8 @@ export default function ProjectDetail() {
         </div>
       </div>
 
-      {/* Full-width side-by-side images */}
-      {project.images.length > 1 && (
+      {/* Full-width side-by-side images — non-execution, non-case-study projects only */}
+      {!project.executions && !project.caseStudy && project.images.length > 1 && (
         <div className="grid grid-cols-2 gap-4 md:gap-6 mt-12 md:mt-16">
           {project.images.slice(1).map((src, i) => (
             <div key={i} className="overflow-hidden aspect-[4/3] bg-neutral-100">
@@ -196,6 +207,11 @@ export default function ProjectDetail() {
         </div>
       )}
 
+      {/* Execution sections */}
+      {project.executions && executionData && (
+        <ExecutionDetail data={executionData} project={project} navHidden={navHidden} />
+      )}
+
       {/* Gallery / case study content */}
       {project.caseStudy && caseStudyData && (
         <CaseStudyDetail data={caseStudyData} project={project} />
@@ -204,7 +220,7 @@ export default function ProjectDetail() {
       {/* Other case studies */}
       {project.caseStudy && otherCaseStudies.length > 0 && (
         <div className="mt-24 md:mt-32">
-          <div className="flex items-baseline justify-between mb-0">
+          <div className="flex items-baseline justify-between mb-10">
             <h3 className="text-[0.65rem] font-bold tracking-widest uppercase text-black/40 mb-0">Other case studies</h3>
           </div>
           <div className="border-t border-black/10">
@@ -234,7 +250,7 @@ export default function ProjectDetail() {
 
       {/* More work */}
       <div className="mt-24 md:mt-32">
-        <div className="flex items-baseline justify-between mb-0">
+        <div className="flex items-baseline justify-between mb-10">
           <h3 className="text-[0.65rem] font-bold tracking-widest uppercase text-black/40 mb-0">More work</h3>
         </div>
         <div className="border-t border-black/10">
@@ -281,12 +297,11 @@ export default function ProjectDetail() {
       }}
     >
       {moreHoveredProject && (
-        <img
-          src={moreHoveredProject.thumbnail}
-          alt=""
-          className="w-full h-full object-cover"
-          referrerPolicy="no-referrer"
-        />
+        moreHoveredProject.thumbnailVideo ? (
+          <video src={moreHoveredProject.thumbnailVideo} autoPlay muted loop playsInline className="w-full h-full object-cover" />
+        ) : (
+          <img src={moreHoveredProject.thumbnail} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+        )
       )}
     </motion.div>
     </>

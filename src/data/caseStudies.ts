@@ -13,10 +13,18 @@ export interface Persona {
   description: string
 }
 
+export interface GalleryItem {
+  src: string
+  caption?: string
+}
+
 export interface CaseStudySection {
   id: string
   heading: string
   image?: string           // full-width image rendered above the section row
+  imageGrid?: string[]     // 2- or 3-up grid rendered above the section row
+  video?: string           // full-width autoplaying video rendered above the section row
+  videoGrid?: string[]     // 2- or 3-up grid of autoplaying videos rendered above the section row
   paragraphs?: string[]
   highlight?: string       // pull-quote / leadership quote
   list?: string[]
@@ -25,17 +33,20 @@ export interface CaseStudySection {
   metrics?: Metric[]
   quotes?: Quote[]
   tools?: string[]
+  gallery?: GalleryItem[]  // static image grid, e.g. Instagram feed
 }
 
 export interface CaseStudyData {
   projectId: string
   hero?: string
+  hasDesigns?: boolean
   sections: CaseStudySection[]
 }
 
 const ibmGarage: CaseStudyData = {
   projectId: 'ibm-garage',
-  hero: '/images/projects/ibm-garage/hero.jpg',
+  hero: '/images/case-study/ibm-garage/hero.jpg',
+  hasDesigns: true,
   sections: [
     {
       id: 'context',
@@ -131,7 +142,7 @@ const ibmGarage: CaseStudyData = {
     {
       id: 'concept-testing',
       heading: 'Rapid Concept Testing',
-      image: '/images/projects/ibm-garage/sharp-sticks.jpg',
+      image: '/images/case-study/ibm-garage/sharp-sticks.jpg',
       paragraphs: [
         'We used a rapid evaluation method we called "sharp sticks." These were intentionally low-fidelity concept artifacts used to quickly test ideas with practitioners in the field.',
         'Instead of building full products, we created simple concept cards representing potential tools and presented them during global Garage bootcamps. Participants ranked the concepts by importance and provided direct feedback.',
@@ -145,7 +156,7 @@ const ibmGarage: CaseStudyData = {
     {
       id: 'execution',
       heading: 'Execution with Enterprise Design Thinking',
-      image: '/images/projects/ibm-garage/ebr_garage.jpg',
+      image: '/images/case-study/ibm-garage/ebr_garage.jpg',
       paragraphs: [
         'Once the tools were prioritized, we organized the work using Experience-based Roadmaps, which broke long-term experiences into near-term outcomes.',
         'Each tool followed the same delivery structure:',
@@ -165,7 +176,7 @@ const ibmGarage: CaseStudyData = {
     {
       id: 'tools',
       heading: 'Tools and Platforms',
-      image: '/images/projects/ibm-garage/ibm_resources.jpg',
+      image: '/images/case-study/ibm-garage/ibm_resources.jpg',
       tools: [
         'Sketch',
         'Adobe Illustrator',
@@ -247,7 +258,171 @@ const ibmGarage: CaseStudyData = {
   ],
 }
 
-export const caseStudies: CaseStudyData[] = [ibmGarage]
+const beastPutty: CaseStudyData = {
+  projectId: 'addiction-campaign',
+  hero: '/images/case-study/beast-putty/Kill-It.mov',
+  sections: [
+    {
+      id: 'challenge',
+      heading: 'Challenge',
+      image: '/images/case-study/beast-putty/beast-calm.jpg',
+      paragraphs: [
+        "Beast Putty's YouTube ads were underperforming and failing to capture leads. The brand had a compelling product but lacked a cohesive visual identity across platforms, and existing content was not connecting with the target audience.",
+        "The business needed to go from near-zero digital presence to a fully integrated campaign across social, print, video, and online channels — fast.",
+      ],
+    },
+    {
+      id: 'solution',
+      heading: 'Solution',
+      paragraphs: [
+        'I built a multi-channel integrated campaign anchored around a clear brand vibe: playful, addictive, tactile. Every touchpoint was designed to drive attention, build brand recall, and convert curiosity into action.',
+      ],
+      list: [
+        'Print advertising and in-store collateral',
+        'Social media ads and content calendar',
+        'Product and environmental photography',
+        'AI-generated animation for YouTube Shorts',
+        'Landing page and conversion flow design',
+        'Logo animation and motion identity',
+      ],
+    },
+    {
+      id: 'print',
+      heading: 'Print & Collateral',
+      imageGrid: [
+        '/images/case-study/beast-putty/beast-flyer.jpg',
+        '/images/case-study/beast-putty/beast-pole.jpg',
+      ],
+      paragraphs: [
+        "I designed print collateral to communicate the brand's tactile product experience in a flat medium — bold type, high-contrast imagery, and a minimal layout that reads fast in physical spaces.",
+      ],
+      list: [
+        'Event flyers and trade show materials',
+        'Pole cards and out-of-home placements',
+        'In-store point-of-purchase signage',
+      ],
+    },
+    {
+      id: 'product-shots',
+      heading: 'Product & Environmental Photography',
+      imageGrid: [
+        '/images/case-study/beast-putty/1up_product.jpg',
+        '/images/case-study/beast-putty/3up_products.jpg',
+        '/images/case-study/beast-putty/4up_products.jpg',
+      ],
+      paragraphs: [
+        'I shot the product photography to capture what makes Beast Putty distinct — the color-changing properties that are impossible to describe in words and have to be seen. The goal was gritty and tactile, not polished or clinical.',
+        'Shots were staged to show the putty mid-transformation — stretched, pulled, compressed — in environments that matched the raw energy of the campaign rather than a clean studio setup.',
+      ],
+      list: [
+        'Color-shift product documentation across SKUs',
+        'Environmental and lifestyle setups to show texture and transformation',
+        'Multi-SKU lineup to show the full color range side by side',
+      ],
+    },
+    {
+      id: 'ai-animation',
+      heading: 'AI Animation & Video',
+      videoGrid: [
+        '/images/case-study/beast-putty/beast_blood_hands.MP4',
+        '/images/case-study/beast-putty/beast_tacos.MP4',
+        '/images/case-study/beast-putty/beast_icy_hands.MP4',
+      ],
+      paragraphs: [
+        'Using Kling.ai and Veo 2, I produced AI-animated short-form video content purpose-built for YouTube Shorts. ChatGPT assisted with scripting and concept iteration at speed.',
+        'The production workflow combined AI image generation (MidJourney, Stable Diffusion), AI video (Kling.ai, Veo 2), and post-production editing (CapCut, After Effects) to create a high-volume content pipeline without a traditional production team.',
+      ],
+      list: [
+        'YouTube Shorts scripted, produced, and published in rapid cycles',
+        'AI-generated character and product animation',
+        'Logo animation and brand motion identity',
+        'A/B creative testing across video formats',
+      ],
+    },
+    {
+      id: 'landing-page',
+      heading: 'Landing Page & Website',
+      image: '/images/case-study/beast-putty/beast-lp.jpg',
+      paragraphs: [
+        'I designed a focused landing page to capture leads from paid advertising and convert organic traffic from YouTube and social. The UI prioritized speed, clarity, and a single call-to-action.',
+      ],
+      list: [
+        'Mobile-first conversion landing page',
+        'Shopify and Etsy product page optimization',
+        'Email capture and lead flow design',
+      ],
+    },
+    {
+      id: 'social',
+      heading: 'Social Media',
+      paragraphs: [
+        'I built a full social content system around Instagram and YouTube — including a content calendar, editorial templates, and a posting cadence designed to build consistent reach over time.',
+        'Ad creative was tested across formats — static, carousel, and video — to identify highest-converting combinations.',
+      ],
+      list: [
+        'Instagram content calendar and publishing system',
+        'Paid ad creative for Meta and YouTube',
+        'Template system for consistent organic posts',
+        'Campaign performance tracking and iteration',
+      ],
+    },
+    {
+      id: 'instagram',
+      heading: 'Instagram Feed',
+      gallery: [
+        { src: '/images/case-study/beast-putty/1up_product.jpg', caption: 'Product hero' },
+        { src: '/images/case-study/beast-putty/beast-calm.jpg', caption: 'Calm mode — lifestyle' },
+        { src: '/images/case-study/beast-putty/beast-pole.jpg', caption: 'Pole card OOH' },
+      ],
+    },
+    {
+      id: 'tools',
+      heading: 'Tools & Platforms',
+      tools: [
+        'Figma',
+        'Cursor',
+        'Adobe Illustrator',
+        'Adobe Photoshop',
+        'After Effects',
+        'Canva',
+        'CapCut',
+        'MidJourney',
+        'Veo 2',
+        'Kling.ai',
+        'ChatGPT',
+        'Stable Diffusion',
+        'Shopify',
+        'Etsy',
+        'Google Analytics',
+        'Heap Analytics',
+        'Adobe InDesign',
+      ],
+    },
+    {
+      id: 'results',
+      heading: 'Results',
+      paragraphs: [
+        'Within 21 days of launch, the campaign drove significant growth across every tracked metric.',
+      ],
+      metrics: [
+        { value: '+999%', label: 'Increase in watch time vs previous period' },
+        { value: '34,310', label: 'Views in first 21 days' },
+        { value: '22', label: 'New subscribers — first month' },
+        { value: '88.6 hrs', label: 'Total watch time' },
+      ],
+    },
+    {
+      id: 'reflection',
+      heading: 'Reflection',
+      paragraphs: [
+        'Beast Putty showed what becomes possible when brand strategy, design, and AI tooling are tightly integrated from the start. The speed of the AI production pipeline allowed me to test creative directions in days rather than weeks — and the data came back fast enough to course-correct in real time.',
+        'For early-stage consumer brands, the combination of a clear vibe, multi-channel presence, and rapid content iteration outperforms any single polished campaign.',
+      ],
+    },
+  ],
+}
+
+export const caseStudies: CaseStudyData[] = [ibmGarage, beastPutty]
 
 export function getCaseStudy(projectId: string): CaseStudyData | undefined {
   return caseStudies.find((cs) => cs.projectId === projectId)

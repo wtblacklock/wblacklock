@@ -137,7 +137,7 @@ export default function Projects() {
       <div className="lg:hidden mb-12">
         {mobileView === "projects" ? (
           <>
-            <div className="mb-6">
+            <div className="mb-10">
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-black/40 hover:text-black transition-colors focus:outline-none"
@@ -170,7 +170,7 @@ export default function Projects() {
       <div className="flex flex-col lg:flex-row lg:gap-8">
         {/* Left Column: Projects */}
         <div className="hidden lg:block flex-1 lg:pr-4">
-          <div className="mb-6">
+          <div className="mb-10">
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-black/40 hover:text-black transition-colors focus:outline-none"

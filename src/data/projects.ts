@@ -16,6 +16,7 @@ export interface Project {
   services: string[];
   featured?: boolean;
   caseStudy?: boolean;
+  executions?: boolean;
   content?: string;
 }
 
