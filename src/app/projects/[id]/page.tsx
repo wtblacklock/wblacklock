@@ -184,6 +184,18 @@ export default function ProjectDetail() {
               ))}
             </ul>
           </div>
+          {project.tools && project.tools.length > 0 && (
+            <div>
+              <h3 className="text-[0.65rem] font-bold tracking-widest uppercase text-black/40 mb-3">
+                Tools
+              </h3>
+              <ul className="space-y-1.5">
+                {project.tools.map((t) => (
+                  <li key={t} className="text-base font-light text-black/70">{t}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 

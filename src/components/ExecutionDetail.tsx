@@ -3,10 +3,43 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import type { ProjectExecutionData } from '../data/projectExecutions'
+import type { ProjectExecutionData, ExecutionSection, ImageRow } from '../data/projectExecutions'
 import type { Project } from '../data/projects'
 import { InstagramFeed } from './InstagramFeed'
 import { VideoWithSound } from './VideoWithSound'
+import imageRatios from '../data/imageRatios.json'
+
+const RATIOS = imageRatios as Record<string, number>
+
+/** Natural width/height of an image, or null if we never measured it. */
+function naturalRatio(src: string): number | null {
+  let key = src
+  try {
+    key = decodeURI(src)
+  } catch {
+    /* malformed escape — fall back to the raw string */
+  }
+  return RATIOS[key] ?? RATIOS[src] ?? null
+}
+
+/**
+ * Ratio the image is actually framed at. Very tall images (full-page screenshots
+ * and the like) would run thousands of pixels high at any sensible column width,
+ * so those get a portrait frame and are anchored to the top — the meaningful part
+ * of a page shot. Everything else is framed at its true ratio and never crops.
+ */
+// Deliberately low: posters and other upright artwork should show in full, even
+// when they run tall. Only full-page screen captures (roughly 1:4 and taller,
+// which would otherwise be thousands of pixels high) get the cropped frame.
+const TALL_CUTOFF = 0.3
+const TALL_FRAME = 0.75
+
+function frameRatio(src: string): { ratio: number; cropTop: boolean } {
+  const r = naturalRatio(src)
+  if (r === null) return { ratio: 4 / 3, cropTop: false }
+  if (r < TALL_CUTOFF) return { ratio: TALL_FRAME, cropTop: true }
+  return { ratio: r, cropTop: false }
+}
 
 function toYoutubeEmbedUrl(url: string): string | null {
   const short = url.match(/youtu\.be\/([^?&/]+)/)
@@ -101,6 +134,110 @@ export function ExecutionDetail({ data, project, navHidden }: Props) {
   const scrollTo = (id: string) => {
     const el = document.getElementById(`exec-${id}`)
     if (el) window.scrollTo({ top: el.offsetTop - 140, behavior: 'smooth' })
+  }
+
+  /**
+   * Same justified treatment for video. Vertical social clips are 9:16, so a
+   * fixed 16/9 frame would show only a narrow centre strip of them.
+   */
+  const renderMediaRow = (sources: string[]) => {
+    if (sources.length === 0) return null
+    const frames = sources.map((src) => frameRatio(src))
+    const narrowSingle = sources.length === 1 && frames[0].ratio < 1.2
+
+    return (
+      <div className={`flex flex-wrap gap-3 md:gap-4 ${narrowSingle ? 'justify-center' : ''}`}>
+        {sources.map((src, i) => {
+          const { ratio } = frames[i]
+          return (
+            <div
+              key={i}
+              className={narrowSingle ? 'w-full max-w-[420px]' : 'min-w-[140px]'}
+              style={narrowSingle ? undefined : { flexGrow: ratio, flexBasis: `${ratio * 110}px` }}
+            >
+              <div
+                className="w-full overflow-hidden bg-neutral-900"
+                style={{ aspectRatio: String(ratio) }}
+              >
+                <VideoWithSound
+                  src={src}
+                  videoClassName="w-full h-full object-cover"
+                  containerClassName="w-full h-full"
+                />
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
+  /**
+   * Justified rows: within a row, widths are proportional to each image's aspect
+   * ratio, so every frame matches its image exactly — equal heights across the
+   * row, nothing cropped and no letterbox bars.
+   */
+  const renderImageRows = (section: ExecutionSection) => {
+    const rows: ImageRow[] =
+      section.imageRows && section.imageRows.length > 0
+        ? section.imageRows
+        : section.images && section.images.length > 0
+          ? [{ images: section.images }]
+          : []
+    if (rows.length === 0) return null
+
+    const allImages = rows.flatMap((r) => r.images || [])
+
+    return (
+      <div className="space-y-3 md:space-y-4">
+        {rows.map((row, rowIdx) => {
+          const images = row.images || []
+          const flatIndex = rows
+            .slice(0, rowIdx)
+            .reduce((sum, r) => sum + (r.images?.length || 0), 0)
+          const frames = images.map((src) => frameRatio(src))
+          // A lone upright image would span the full column and tower over the
+          // page, so cap its width and centre it instead.
+          const narrowSingle = images.length === 1 && frames[0].ratio < 1.2
+
+          return (
+            <div
+              key={rowIdx}
+              className={`flex flex-wrap gap-3 md:gap-4 ${narrowSingle ? 'justify-center' : ''}`}
+            >
+              {images.map((src, imgIdx) => {
+                const { ratio, cropTop } = frames[imgIdx]
+                return (
+                  <div
+                    key={imgIdx}
+                    className={narrowSingle ? 'w-full max-w-[520px]' : 'min-w-[120px]'}
+                    style={
+                      narrowSingle
+                        ? undefined
+                        : { flexGrow: ratio, flexBasis: `${ratio * 110}px` }
+                    }
+                  >
+                    <div
+                      className="w-full overflow-hidden bg-neutral-100 cursor-pointer group"
+                      style={{ aspectRatio: String(ratio) }}
+                      onClick={() => setLightbox({ images: allImages, index: flatIndex + imgIdx })}
+                    >
+                      <img
+                        src={src}
+                        alt={`${section.title} ${flatIndex + imgIdx + 1}`}
+                        className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02] ${cropTop ? 'object-top' : ''}`}
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )
+        })}
+      </div>
+    )
   }
 
   return (
@@ -227,121 +364,22 @@ export function ExecutionDetail({ data, project, navHidden }: Props) {
                   </div>
                 )}
 
-                {!section.videosFirst && section.imageRows && section.imageRows.length > 0 && (
-                  <div className="space-y-3 md:space-y-4">
-                    {section.imageRows.map((row, rowIdx) => {
-                      const images = row.images || []
-                      const isSingleImage = images.length === 1
-                      const isFullWidth = row.fullWidth || isSingleImage
-                      const gridClass = isFullWidth ? 'grid-cols-1' : images.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'
-                      const aspectRatio = isSingleImage ? '16/9' : row.aspect ?? '4/3'
-
-                      return (
-                        <div
-                          key={rowIdx}
-                          className={`grid ${gridClass} gap-3 md:gap-4`}
-                        >
-                          {images.map((src, imgIdx) => (
-                            <div
-                              key={imgIdx}
-                              className="overflow-hidden bg-neutral-900 cursor-pointer group"
-                              style={{ aspectRatio }}
-                              onClick={() => {
-                                const allImages = section.imageRows?.flatMap(r => r.images || []) || []
-                                const flatIndex = section.imageRows?.slice(0, rowIdx).reduce((sum, r) => sum + (r.images?.length || 0), 0) || 0
-                                setLightbox({ images: allImages, index: flatIndex + imgIdx })
-                              }}
-                            >
-                              <img
-                                src={src}
-                                alt={`${section.title} ${rowIdx + 1}-${imgIdx + 1}`}
-                                className={`w-full h-full transition-transform duration-700 group-hover:scale-[1.02] ${(row.imageContain ? row.imageContain[imgIdx] : row.contain) ? 'object-contain' : 'object-cover'}`}
-                                referrerPolicy="no-referrer"
-                                loading="lazy"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      )
-                    })}
-                  </div>
-                )}
-
-                {section.images && section.images.length > 0 && (!section.imageRows || section.imageRows.length === 0) && (
-                  <div className={`grid gap-3 md:gap-4 ${section.images.length === 1 ? 'grid-cols-1' : section.images.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'}`}>
-                    {section.images.map((src, i) => (
-                      <div
-                        key={i}
-                        className={`overflow-hidden bg-neutral-900 cursor-pointer group ${section.images && section.images.length === 1 ? 'aspect-[16/9]' : 'aspect-[4/3]'}`}
-                        onClick={() => section.images && setLightbox({ images: section.images, index: i })}
-                      >
-                        <img
-                          src={src}
-                          alt={`${section.title} ${i + 1}`}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                          referrerPolicy="no-referrer"
-                          loading="lazy"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
+                {!section.videosFirst && renderImageRows(section)}
 
                 {section.videoRows && section.videoRows.length > 0 && (
                   <div className="space-y-3 md:space-y-4 mt-4">
                     {section.videoRows.map((row, rowIdx) => (
-                      <div key={rowIdx} className={`grid gap-3 md:gap-4 ${row.length === 1 ? 'grid-cols-1' : row.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
-                        {row.map((src, i) => (
-                          <div key={i} className={`overflow-hidden bg-neutral-900 ${row.length === 1 ? 'aspect-[16/9]' : row.length === 2 ? 'aspect-[16/9]' : 'aspect-[16/9]'}`}>
-                            <VideoWithSound src={src} videoClassName="w-full h-full object-cover" containerClassName="w-full h-full" />
-                          </div>
-                        ))}
-                      </div>
+                      <div key={rowIdx}>{renderMediaRow(row)}</div>
                     ))}
                   </div>
                 )}
 
                 {!section.videoRows && section.videos && section.videos.length > 0 && (
-                  <div className="grid gap-3 md:gap-4 mt-4 grid-cols-1">
-                    {section.videos.map((src, i) => (
-                      <div
-                        key={i}
-                        className={`overflow-hidden bg-neutral-900 ${section.videos?.length === 1 ? 'aspect-[16/9]' : 'aspect-[16/10]'}`}
-                      >
-                        <VideoWithSound src={src} videoClassName="w-full h-full object-cover" containerClassName="w-full h-full" />
-                      </div>
-                    ))}
-                  </div>
+                  <div className="mt-4">{renderMediaRow(section.videos)}</div>
                 )}
 
-                {section.videosFirst && section.imageRows && section.imageRows.length > 0 && (
-                  <div className="space-y-3 md:space-y-4 mt-3 md:mt-4">
-                    {section.imageRows.map((row, rowIdx) => {
-                      const images = row.images || []
-                      const isSingleImage = images.length === 1
-                      const isFullWidth = row.fullWidth || isSingleImage
-                      const gridClass = isFullWidth ? 'grid-cols-1' : images.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'
-                      const aspectRatio = isSingleImage ? '16/9' : row.aspect ?? '4/3'
-                      return (
-                        <div key={rowIdx} className={`grid ${gridClass} gap-3 md:gap-4`}>
-                          {images.map((src, imgIdx) => (
-                            <div
-                              key={imgIdx}
-                              className="overflow-hidden bg-neutral-900 cursor-pointer group"
-                              style={{ aspectRatio }}
-                              onClick={() => {
-                                const allImages = section.imageRows?.flatMap(r => r.images || []) || []
-                                const flatIndex = section.imageRows?.slice(0, rowIdx).reduce((sum, r) => sum + (r.images?.length || 0), 0) || 0
-                                setLightbox({ images: allImages, index: flatIndex + imgIdx })
-                              }}
-                            >
-                              <img src={src} alt={`${section.title} ${rowIdx + 1}-${imgIdx + 1}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]" referrerPolicy="no-referrer" loading="lazy" />
-                            </div>
-                          ))}
-                        </div>
-                      )
-                    })}
-                  </div>
+                {section.videosFirst && (
+                  <div className="mt-3 md:mt-4">{renderImageRows(section)}</div>
                 )}
 
                 {section.youtubeUrls && section.youtubeUrls.length > 0 && (

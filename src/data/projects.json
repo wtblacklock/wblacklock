@@ -93,51 +93,332 @@
     "content": "Multi-channel integrated campaign including print, packaging, social, landing pages, YouTube Shorts, and AI-animated content."
   },
   {
-    "id": "ecommerce-platform",
-    "title": "Modern E-commerce Platform",
+    "id": "lodestone",
+    "title": "Lodestone",
+    "category": "Product",
+    "clientName": "Lodestone",
+    "clientType": "Marketing Technology",
+    "tagline": "Social Engagement Platform & Lead Enrichment",
+    "description": "Brands needed more than one-off promotions. They wanted campaigns that engaged fans repeatedly, tied to retail sales, and built a richer profile than just “email capture.”",
+    "thumbnail": "/images/projects/lodestone/image-original.png",
+    "images": [
+      "/images/projects/lodestone/image-original.png",
+      "/images/projects/lodestone/lodestone-prodsheets.png",
+      "/images/projects/lodestone/lodestone-display-ads.png"
+    ],
+    "services": [
+      "Content Marketing",
+      "Visual Design",
+      "Logo Animation",
+      "Data Analytics",
+      "Financial Analysis",
+      "Program Management",
+      "White Paper Design",
+      "UI/UX",
+      "Brand Management",
+      "App Development",
+      "Logo Design",
+      "Creative Strategy",
+      "Marketing Strategy",
+      "CRM Management",
+      "Lead Enrichment",
+      "Social Strategy"
+    ],
+    "tools": [
+      "Adobe Illustrator",
+      "Adobe Photoshop",
+      "Bootstrap"
+    ],
+    "executions": true,
+    "content": "1000’s of activations. 1000’s of enriched profiles. 100s of $1000s in realized revenue for clients.",
+    "featured": true
+  },
+  {
+    "id": "jacksonville-jaguars",
+    "title": "Jacksonville Jaguars",
+    "category": "Campaign",
+    "clientName": "Jacksonville Jaguars",
+    "clientType": "Professional Sports",
+    "tagline": "Social Activation Campaign",
+    "description": "The Jacksonville Jaguars needed a fan engagement solution with both online and in-stadium activation.",
+    "thumbnail": "/images/projects/jacksonville-jaguars/jags-social-activation.png",
+    "images": [
+      "/images/projects/jacksonville-jaguars/jags-blod.png",
+      "/images/projects/jacksonville-jaguars/jags-trivia.webp",
+      "/images/projects/jacksonville-jaguars/jags-suit.webp"
+    ],
+    "services": [
+      "Visual Design",
+      "Brand Management",
+      "App Development",
+      "Jumbotron Integration",
+      "Advertising",
+      "Social Marketing",
+      "Campaign Management",
+      "Creative Strategy"
+    ],
+    "tools": [
+      "Adobe Illustrator",
+      "Adobe Photoshop",
+      "Bootstrap Backend",
+      "HTML",
+      "CSS"
+    ],
+    "executions": true,
+    "content": "Drove multi-season engagement, activated fans across all channels, scaled a reusable system, and built awareness through cohesive creative.",
+    "featured": true
+  },
+  {
+    "id": "allergy-asthma-waco",
+    "title": "Allergy & Asthma Care of Waco",
+    "category": "Campaign",
+    "clientName": "Allergy & Asthma Care of Waco",
+    "clientType": "Healthcare",
+    "tagline": "Patient Engagement Campaign",
+    "description": "Allergy & Asthma Clinic of Waco needed to stand apart from similarly named competitors while reinforcing 40 years of trusted care.",
+    "thumbnail": "/images/projects/allergy-asthma-waco/aacow-brand-awareness.webp",
+    "images": [
+      "/images/projects/allergy-asthma-waco/aacw-allergensposter-20241205-smallseasons.png",
+      "/images/projects/allergy-asthma-waco/aacw-allergensposter-20241205-smallsteps-in-asthma-management.png",
+      "/images/projects/allergy-asthma-waco/aacw-allergensposter-20241205-smallstages-of-asthma.png"
+    ],
+    "services": [
+      "AI Image Generation",
+      "Adobe Photoshop",
+      "Adobe Illustrator",
+      "Firefly",
+      "Bravo Email Design",
+      "Event Design",
+      "Social Activation"
+    ],
+    "tools": [
+      "Adobe Illustrator",
+      "Adobe Photoshop",
+      "After Effects",
+      "MidJourney",
+      "ChatGPT",
+      "Figma",
+      "Adobe InDesign",
+      "Bravo Studio (Email Templates)"
+    ],
+    "executions": true,
+    "content": "Increased recognition, strengthened patient trust, expanded community presence, and delivered a scalable system for seasonal messaging and education.",
+    "featured": true
+  },
+  {
+    "id": "beast-putty-horror",
+    "title": "Beast Putty: Corporate Horror",
+    "category": "Campaign",
+    "clientName": "Beast Putty",
+    "clientType": "CPG / Consumer Product",
+    "tagline": "Corporate Horror Videos",
+    "description": "Beast Putty needed more than quirky content — it needed a Halloween campaign that could drive sales, engagement, and repeat visits.",
+    "thumbnail": "/images/projects/beast-putty-horror/beast-cure.png",
+    "images": [],
+    "services": [
+      "Creative Direction",
+      "AI Design",
+      "Video Production",
+      "Social Media",
+      "Logo Animation"
+    ],
+    "tools": [
+      "Adobe Photoshop",
+      "Canva",
+      "CapCut",
+      "MidJourney",
+      "Veo 3",
+      "Kling.ai"
+    ],
+    "executions": true,
+    "content": "Launched October 22, 2025. Early engagement is strong, with full performance results to follow post-launch.",
+    "featured": true
+  },
+  {
+    "id": "twinb",
+    "title": "TwinB",
     "category": "Website",
-    "clientName": "Stride Fashion",
-    "clientType": "E-Commerce",
-    "tagline": "A headless shopping experience built around large imagery and seamless checkout flows.",
-    "description": "A headless commerce experience for a boutique fashion brand.",
-    "thumbnail": "https://picsum.photos/seed/ecomm/1200/800",
+    "clientName": "TwinB",
+    "clientType": "Creative & AI Studio",
+    "tagline": "Brand Identity + Website Launch",
+    "description": "TwinB needed a clear brand and digital presence to differentiate in the AI-driven marketing space.",
+    "thumbnail": "/images/projects/twinb/twinb-site.png",
     "images": [
-      "https://picsum.photos/seed/ecomm1/1200/800"
+      "/images/projects/twinb/image-original-2.png",
+      "/images/projects/twinb/mockuuups-clean-desk-with-dell-display-mockup.jpeg",
+      "/images/projects/twinb/mockuuups-free-ipad-pro-mockup-on-textured-fabric-and-wooden-surface.jpeg"
     ],
-    "services": ["UX/UI Design", "Frontend Architecture"],
-    "featured": false,
-    "content": "Built a lightning-fast shopping experience prioritizing large imagery and seamless checkout flows."
+    "services": [
+      "UI/UX",
+      "Visual Design",
+      "Brand Management",
+      "App Development",
+      "Logo Design",
+      "Creative Strategy",
+      "Animation",
+      "AI Design"
+    ],
+    "tools": [
+      "Adobe Illustrator",
+      "Adobe Photoshop",
+      "Figma",
+      "ChatGPT",
+      "Nano Banana",
+      "Veo 3"
+    ],
+    "executions": true,
+    "content": "Secured strong client interest ahead of launch, built early subscriber momentum, and positioned TwinB for imminent rollout with a cohesive, scalable identity.",
+    "featured": true
   },
   {
-    "id": "design-system-ops",
-    "title": "Enterprise Design System",
-    "category": "Systems",
-    "clientName": "TechScale Corp",
-    "clientType": "Enterprise Software",
-    "tagline": "A unified component library that cut design-to-development handoff time by sixty percent.",
-    "description": "Establishing design operations and a unified component library for a 500+ person engineering org.",
-    "thumbnail": "https://picsum.photos/seed/system/1200/800",
+    "id": "turn2live",
+    "title": "Turn2Live",
+    "category": "Product",
+    "clientName": "Turn2Live",
+    "clientType": "Entertainment Technology",
+    "tagline": "Brand & Product Suite",
+    "description": "Turn2Live is an innovative entertainment search engine designed to help users discover live experiences tailored to their mood. As the Creative Strategist and Lead Designer, I drove the creative direction from concept to execution, delivering a cohesive brand experience across digital and print platforms. My work spanned user interface design, marketing materials, and user engagement strategies, ensuring that Turn2Live stood out as a unique and immersive platform for entertainment enthusiasts.",
+    "thumbnail": "/images/projects/turn2live/t2l-full-brand-design.webp",
     "images": [
-      "https://picsum.photos/seed/system1/1200/800"
+      "/images/projects/turn2live/t2l-series-1-fin.jpg",
+      "/images/projects/turn2live/t2l-series-1-nice.jpg",
+      "/images/projects/turn2live/t2l-series-2-fin.jpg"
     ],
-    "services": ["Design Systems", "Design Operations", "Documentation"],
-    "featured": false,
-    "content": "Audited existing products to create a unified token system and React component library, reducing design-to-development handoff time by 60%."
+    "services": [
+      "Print Design",
+      "Activation Planning",
+      "Creative Strategy",
+      "Print Production",
+      "Flyer Design",
+      "Investor Presentation",
+      "Photography Direction",
+      "UI/UX and Site Design"
+    ],
+    "tools": [
+      "Adobe InDesign",
+      "Adobe Illustrator",
+      "Adobe Photoshop"
+    ],
+    "executions": true,
+    "featured": true
   },
   {
-    "id": "editorial-magazine",
-    "title": "Quarterly Editorial",
+    "id": "mainspring",
+    "title": "Mainspring Schools",
     "category": "Print",
-    "clientName": "Modern Arts Quarterly",
-    "clientType": "Publishing",
-    "tagline": "A flexible editorial grid built for expressive typography across long-form arts writing.",
-    "description": "Layout and typography for an independent arts and culture magazine.",
-    "thumbnail": "https://picsum.photos/seed/print/1200/800",
+    "clientName": "Mainspring Schools",
+    "clientType": "Nonprofit / Education",
+    "tagline": "Annual Reports",
+    "description": "Working with Mainspring was a deeply fulfilling experience. As a nonprofit organization, Mainspring Schools is on a mission to provide underserved children and their families with a community for high-quality early education and holistic support. I was tapped to complete three years of their annual reports, from design concept, layout and design, vendor management and print production.",
+    "thumbnail": "/images/projects/mainspring/mainspring-annual-reports.png",
     "images": [
-      "https://picsum.photos/seed/print1/1200/800"
+      "/images/projects/mainspring/mainspring-annualreport-5a-1.png",
+      "/images/projects/mainspring/mainspring-annualreport-5a-2.png",
+      "/images/projects/mainspring/mainspring-report.png"
     ],
-    "services": ["Editorial Design", "Typography", "Print Production"],
-    "featured": false,
-    "content": "Created a flexible grid system that allowed for expressive typography while maintaining readability across long-form articles."
+    "services": [
+      "Print Design",
+      "Fulfillment",
+      "Production Management",
+      "Infographics",
+      "Logo Design"
+    ],
+    "tools": [
+      "Adobe InDesign",
+      "Adobe Illustrator",
+      "Adobe Photoshop"
+    ],
+    "executions": true,
+    "featured": true
+  },
+  {
+    "id": "hill-country-ride",
+    "title": "Hill Country Ride for AIDS",
+    "category": "Print",
+    "clientName": "Hill Country Ride for AIDS",
+    "clientType": "Nonprofit",
+    "tagline": "Promotional Campaign",
+    "description": "Proud to work with HCRA in order to bring their mission to life. I worked with Scott Van Osdol, my local brilliant photographer, to capture the contributors and inspirational stories this program has inspired, helped and supported. This project won a special award for design with the ADDYs and was a labor of love.",
+    "thumbnail": "/images/projects/hill-country-ride/hcra-promotional-campaign.png",
+    "images": [
+      "/images/projects/hill-country-ride/3-hcra-jersey-full-1.png",
+      "/images/projects/hill-country-ride/3-hcra-poster-1.png",
+      "/images/projects/hill-country-ride/3-hcra-poster-2.png"
+    ],
+    "services": [
+      "Poster Design",
+      "Brochure",
+      "Guerrilla Marketing",
+      "Jersey (Apparel) Design"
+    ],
+    "tools": [
+      "Adobe InDesign",
+      "Adobe Illustrator",
+      "Adobe Photoshop"
+    ],
+    "executions": true,
+    "featured": true
+  },
+  {
+    "id": "austin-addys",
+    "title": "Austin ADDYs",
+    "category": "Print",
+    "clientName": "Austin Advertising Federation (AAF)",
+    "clientType": "Industry Association",
+    "tagline": "Event Brand & Marketing",
+    "description": "The American Advertising Awards, previously referred to as the ADDYs, is the advertising industry’s largest and most prestigious competition, with over 25,000 entries annually from local AAF Ad Club competitions across the nation. The purpose of the American Advertising Awards is to celebrate and reward creative excellence in the field of advertising. I created this year’s theme and execution.",
+    "thumbnail": "/images/projects/austin-addys/addys-event-brand2.png",
+    "images": [
+      "/images/projects/austin-addys/3-addy-ticket-1.png",
+      "/images/projects/austin-addys/3-addy-ticket-2.png",
+      "/images/projects/austin-addys/3-addy-book.jpg"
+    ],
+    "services": [
+      "Concept",
+      "Art Direction",
+      "Logo",
+      "Posters",
+      "Submission Packet",
+      "Website",
+      "Vendor Management",
+      "Fulfillment",
+      "Brochures"
+    ],
+    "tools": [
+      "Adobe InDesign",
+      "Adobe Illustrator",
+      "Adobe Photoshop"
+    ],
+    "executions": true,
+    "featured": true
+  },
+  {
+    "id": "mccombs-gala",
+    "title": "McCombs Hall of Fame Gala",
+    "category": "Print",
+    "clientName": "McCombs School of Business",
+    "clientType": "Higher Education",
+    "tagline": "Gala Invitation",
+    "description": "The University of Texas contracted with my design and application development firm, TwinB Creative, to provide an invitation to a Hall of Fame induction ceremony for fundraising and event organization.",
+    "thumbnail": "/images/projects/mccombs-gala/ut-hof.png",
+    "images": [
+      "/images/projects/mccombs-gala/hof-opttwo.jpg",
+      "/images/projects/mccombs-gala/hof-optone.png"
+    ],
+    "services": [
+      "Invitation",
+      "Sticker",
+      "Save the Date",
+      "Program Brochure",
+      "Envelope",
+      "Fulfillment Management"
+    ],
+    "tools": [
+      "Adobe InDesign",
+      "Adobe Illustrator",
+      "Adobe Photoshop"
+    ],
+    "executions": true,
+    "featured": true
   }
 ]

@@ -24,7 +24,7 @@ export default function JournalPost() {
     notFound()
   }
 
-  const paragraphs = post.content.split("\n\n").filter(Boolean)
+  const blocks = post.content.split("\n\n").filter(Boolean)
 
   return (
     <motion.div
@@ -62,11 +62,35 @@ export default function JournalPost() {
         </header>
 
         <div className="border-t border-black/10 pt-12 space-y-6">
-          {paragraphs.map((para, i) => (
-            <p key={i} className="text-lg md:text-xl font-light text-black/80 leading-relaxed">
-              {para}
-            </p>
-          ))}
+          {blocks.map((block, i) => {
+            if (block.startsWith("## ")) {
+              return (
+                <h2
+                  key={i}
+                  className="pt-6 text-[1.6rem] md:text-[2.2rem] font-sans font-bold tracking-tight leading-[1.15] text-black"
+                >
+                  {block.slice(3)}
+                </h2>
+              )
+            }
+
+            if (block.startsWith("- ")) {
+              return (
+                <p
+                  key={i}
+                  className="pl-6 -indent-6 text-lg md:text-xl font-light text-black/80 leading-relaxed before:content-['—'] before:mr-3 before:text-black/30"
+                >
+                  {block.slice(2)}
+                </p>
+              )
+            }
+
+            return (
+              <p key={i} className="text-lg md:text-xl font-light text-black/80 leading-relaxed">
+                {block}
+              </p>
+            )
+          })}
         </div>
       </article>
 

@@ -14,6 +14,7 @@ export interface Project {
   thumbnailVideo?: string;
   images: string[];
   services: string[];
+  tools?: string[];
   featured?: boolean;
   caseStudy?: boolean;
   executions?: boolean;

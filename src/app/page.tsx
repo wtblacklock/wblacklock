@@ -7,8 +7,12 @@ import { projects } from "../data/projects"
 import { motion, AnimatePresence } from "motion/react"
 import { PingPongVideo } from "../components/PingPongVideo"
 
+// How many projects the home page lists before the "View all" link takes over
+const HOME_PROJECT_LIMIT = 6
+
 export default function Home() {
-  const featuredProjects = projects.filter((p) => p.featured).slice(0, 4)
+  const featuredProjects = projects.filter((p) => p.featured).slice(0, HOME_PROJECT_LIMIT)
+  const hasMoreProjects = projects.length > featuredProjects.length
   const featuredCaseStudies = projects.filter((p) => p.caseStudy).slice(0, 2)
   const [cursor, setCursor] = useState({ x: 0, y: 0 })
   const [hoveredId, setHoveredId] = useState<string | null>(null)
@@ -264,6 +268,21 @@ export default function Home() {
               </Link>
             ))}
           </div>
+
+          {hasMoreProjects && (
+            <div className="mt-8">
+              <Link
+                href="/projects"
+                className="group inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-black/50 hover:text-black transition-colors"
+              >
+                View all projects
+                <ArrowUpRight
+                  className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                  strokeWidth={1.5}
+                />
+              </Link>
+            </div>
+          )}
         </section>
 
         {/* Featured Case Studies */}
