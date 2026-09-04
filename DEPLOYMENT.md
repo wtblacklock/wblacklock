@@ -1,130 +1,80 @@
-# Moving wblacklock.com from Elementor to Vercel
+# wblacklock.com — hosting
 
-A one-time cutover runbook. The order matters: the live site keeps serving from
-Elementor until the very last step, so there is no window where the domain is
-dark.
+The site is on **Vercel**, project `wblacklock` in the **TwinB** team, deployed
+from `wtblacklock/wblacklock`. Pushing to `main` deploys to production; pull
+requests get their own preview URL.
 
-## Before you start
+The move off Elementor Cloud was completed 2026-09-04. What follows is the
+record of that cutover and the one step still outstanding.
 
-This is what the domain looked like before the migration, captured
-2026-08-20. Keep it — it's your rollback reference.
+## Live configuration
 
-| Record | Value |
+| | |
 | --- | --- |
-| Nameservers | `ns71.domaincontrol.com`, `ns72.domaincontrol.com` (GoDaddy) |
-| `A` @ | `162.159.137.9` (Cloudflare, in front of Elementor) |
-| `CNAME` www | `snqggejn.elementor.cloud` |
-| `MX` | Zoho (`mx.zoho.com`, `mx2.zoho.com`, `mx3.zoho.com`) **and** Google (`aspmx.l.google.com`, `alt1`–`alt4`) |
-| `TXT` (SPF) | `v=spf1 include:dc-8e814c8572._spfm.wblacklock.com ~all` |
+| Canonical URL | `https://wblacklock.com` (apex) |
+| `www` | 307 redirect → apex |
+| DNS | GoDaddy (`ns71`/`ns72.domaincontrol.com`) |
+| TLS | Let's Encrypt, auto-renewed by Vercel |
 
-> ### Do not touch the MX or TXT records
->
-> Email for this domain runs through **both Zoho and Google Workspace**. Those
-> MX records, the SPF `TXT` record, and any DKIM `CNAME`s are completely
-> independent of where the website is hosted. Changing only the `A` and `CNAME`
-> records leaves mail untouched. Deleting or replacing the record set breaks
-> mail delivery, and the split Zoho/Google setup would be tedious to rebuild.
->
-> **Before editing anything, screenshot the full DNS table in GoDaddy.**
+DNS records changed at GoDaddy — **these two, and nothing else**:
 
-Also note: keep DNS **at GoDaddy**. Vercel offers a nameserver method that is
-simpler for a bare domain, but switching nameservers means every existing
-record — all the mail records above — has to be recreated inside Vercel. Not
-worth the risk here. Use the A/CNAME method below.
+| Type | Name | Was | Now | TTL |
+| --- | --- | --- | --- | --- |
+| A | `@` | `162.159.137.9` (Cloudflare → Elementor) | `216.198.79.1` | 1/2 hour |
+| CNAME | `www` | `snqggejn.elementor.cloud.` | `6eb6fc94b3cceddb.vercel-dns-017.com.` | 1/2 hour |
 
-## 1. Push the code
+> The `www` CNAME target is **specific to this Vercel project**. The older
+> shared `cname.vercel-dns.com` and the apex IP `76.76.21.21` still work but are
+> legacy. If you ever recreate the domain in Vercel, read the values off the
+> dashboard again rather than copying them from here.
 
-```bash
-git push -u origin main
-```
+The full pre-cutover DNS table is preserved in
+[`docs/dns-snapshot-pre-vercel.md`](docs/dns-snapshot-pre-vercel.md). That is the
+rollback reference: restoring those two values returns the domain to Elementor.
 
-## 2. Create the Vercel project
+## Still outstanding: cancel Elementor Cloud
 
-1. Sign in at [vercel.com](https://vercel.com) with the GitHub account that owns
-   `wtblacklock/wblacklock`.
-2. **Add New → Project**, then import that repository.
-3. Framework preset should auto-detect as **Next.js**. Leave build command,
-   output directory, and install command at their defaults.
-4. There are no environment variables to set — the site reads no secrets at
-   build or runtime.
-5. **Deploy.**
+**The Elementor Cloud subscription is still active and still being billed.** It
+was deliberately left running so the rollback above stays available. Before
+cancelling:
 
-## 3. Verify on the Vercel URL first
+1. Give the new site a few days at the domain.
+2. Download anything you still want from the WordPress media library. The
+   content in this repo came from its REST API, but the media library holds
+   more than what was ported — including the IBM Garage post's 27 images.
+3. Then cancel the subscription.
 
-You'll get a URL like `wblacklock.vercel.app`. Check it properly before any DNS
-changes, because this is the last easy moment to catch a problem:
+Once Elementor is cancelled, rollback is no longer possible.
 
-- [ ] Home page loads; the six featured projects are listed
-- [ ] **View all projects** reaches `/projects` with all 13
-- [ ] Open several project pages — images are not cropped, videos play
-- [ ] A journal article renders with headings and bullets
-- [ ] The favicon shows in the browser tab
+## Mail — do not touch these
 
-## 4. Add the domain in Vercel
+Four services send or receive mail on this domain, across 15 DNS records
+(MX, SPF, DKIM, DMARC):
 
-1. Project → **Settings** → **Domains** → **Add Domain**.
-2. Enter `wblacklock.com`. Accept the prompt to also add `www.wblacklock.com`.
-3. Vercel then shows the exact DNS records to create.
+- **Google Workspace** — receiving
+- **Zoho Mail** — receiving, DKIM, SPF
+- **Amazon SES** — sending, on the `send` subdomain
+- **Resend** — sending, DKIM
 
-   **Copy the values from that screen rather than from any guide, including
-   this one.** The apex `A` record is typically `76.76.21.21`, but the `www`
-   target is now *project-specific* — something like
-   `d1d4fc829fe7bc7c.vercel-dns-017.com`, not the old shared
-   `cname.vercel-dns.com`. Using a stale value silently fails to verify.
+None of them have anything to do with where the website is hosted. All 15 were
+verified unchanged after the cutover. If you ever change hosting again, edit
+only the `A` and `CNAME` records, and never switch to a host's own nameservers
+without recreating every mail record first.
 
-## 5. Change the two records at GoDaddy
-
-In GoDaddy → **My Products** → domain → **DNS** → **Manage Zones**:
-
-1. **Edit** the existing `A` record on `@` → replace the value with the IP
-   Vercel showed. Leave type and name alone.
-2. **Edit** the existing `CNAME` on `www` → replace `snqggejn.elementor.cloud`
-   with the Vercel target.
-3. Set TTL to the shortest option (600 seconds) so a mistake is quick to undo.
-4. Save. **Change nothing else.**
-
-Then watch the Domains page in Vercel — both entries flip to *Valid
-Configuration*, usually within minutes, and Vercel issues the TLS certificate
-automatically.
-
-## 6. Confirm the cutover
+## Verifying
 
 ```bash
-dig +short wblacklock.com A
-dig +short www.wblacklock.com
-dig +short wblacklock.com MX     # must be unchanged — Zoho + Google
+dig +short wblacklock.com A          # 216.198.79.1
+dig +short www.wblacklock.com CNAME  # 6eb6fc94b3cceddb.vercel-dns-017.com.
+dig +short wblacklock.com MX         # 8 records: Google + Zoho
+curl -sI https://wblacklock.com | head -1
 ```
 
-Then in a browser:
-
-- [ ] `https://wblacklock.com` serves the new site, with a valid certificate
-- [ ] `https://www.wblacklock.com` resolves too
-- [ ] **Send yourself a test email and reply to it.** Do not skip this.
-
-## 7. Only now, cancel Elementor
-
-Once the domain has served the new site correctly for a day or so:
-
-1. Export or download anything you still want from the WordPress install.
-   The content in this repo came from its REST API, but the original media
-   library holds more than what was ported.
-2. Cancel the Elementor Cloud subscription.
-
-## Rollback
-
-If something is wrong, revert the two records at GoDaddy to the values in the
-table at the top. Because Elementor stays running until step 7, the old site
-comes straight back — subject to DNS TTL, which is why step 5 sets it low.
-
-## After the move
-
-Pushing to `main` deploys to production automatically. Pull requests get their
-own preview URL.
-
-Two loose ends worth closing at some point:
+## Loose ends
 
 - `public/images/case-study/beast-putty/Kill-It.mov` is deleted in the working
   tree but still referenced from `src/data/caseStudies.ts`, so it 404s. Either
   restore the file (`git checkout -- <path>`) or drop the reference.
-- The old WordPress site's IBM Garage post had 27 images that were not ported,
-  since that project already has its own case study here.
+- The `www` redirect is a 307 (temporary). Once you're confident the setup is
+  permanent, switching it to 308 in Vercel → Settings → Domains is better for
+  SEO. It was left temporary so it wouldn't get cached hard during the cutover.
