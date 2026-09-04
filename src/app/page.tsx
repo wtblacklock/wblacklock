@@ -214,23 +214,26 @@ export default function Home() {
         className="space-y-32 md:space-y-40"
       >
         {/* Hero Section — full-bleed, breaks out of main padding, sits behind nav */}
-        <section className="relative h-screen -mt-32 -mx-[49px] flex flex-col overflow-hidden">
-          {/* Centered ping-pong video — height-contained, 120% size, shifted left 80px */}
+        <section className="relative h-screen -mt-32 -mx-6 md:-mx-[49px] flex flex-col overflow-hidden">
+          {/* Centered ping-pong video. The nudge left/up is desktop framing —
+              on a phone the clip is narrower than the viewport, so it stays centred. */}
           <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-            <div style={{ height: '110%', transform: 'translateX(-40px) translateY(-20px)' }}>
+            <div className="h-full md:h-[110%] translate-y-0 md:-translate-y-5 md:-translate-x-10">
               <PingPongVideo src="/images/wtb_spin.mp4" className="h-full" fit="contain-height" />
             </div>
           </div>
 
-          {/* Name — absolutely centered in the full section */}
-          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none px-[49px]" style={{ marginTop: '-60px' }}>
-            <h1 className="w-full max-w-full text-center text-[clamp(1.2rem,4.6vw,5.3rem)] font-extralight leading-[0.92] text-black uppercase whitespace-nowrap" style={{ letterSpacing: '0.04em' }}>
+          {/* Name — absolutely centered in the full section. Wraps to two lines on
+              phones so it can stay large enough to read as a title. */}
+          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none px-6 md:px-[49px] -mt-10 md:-mt-[60px]">
+            <h1 className="w-full max-w-full text-center text-[clamp(1.75rem,4.6vw,5.3rem)] font-extralight leading-[1.05] md:leading-[0.92] uppercase whitespace-normal md:whitespace-nowrap text-white mix-blend-difference md:text-black md:mix-blend-normal" style={{ letterSpacing: '0.04em' }}>
               William Thames Blacklock
             </h1>
           </div>
 
-          {/* Bottom bar */}
-          <div className="absolute bottom-0 left-0 right-0 z-10 flex justify-between items-end px-[49px] pb-8 md:pb-10">
+          {/* Bottom bar — three columns side by side collide below ~640px, so they
+              stack into a centred list on phones. */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 flex flex-col items-center gap-1.5 text-center sm:flex-row sm:justify-between sm:items-end sm:text-left sm:gap-0 px-6 md:px-[49px] pb-8 md:pb-10">
             <span className="text-[0.6rem] md:text-[0.7rem] tracking-[0.25em] uppercase text-black/50 font-medium">Based in Austin, TX</span>
             <span className="text-[0.6rem] md:text-[0.7rem] tracking-[0.25em] uppercase text-black/50 font-medium">Design • AI • Systems</span>
             <span className="text-[0.6rem] md:text-[0.7rem] tracking-[0.25em] uppercase text-black/50 font-medium">15+ Years Experience</span>
@@ -273,7 +276,7 @@ export default function Home() {
             <div className="mt-8">
               <Link
                 href="/projects"
-                className="group inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-black/50 hover:text-black transition-colors"
+                className="group inline-flex items-center gap-2 py-2 -my-2 text-xs font-bold tracking-widest uppercase text-black/50 hover:text-black transition-colors"
               >
                 View all projects
                 <ArrowUpRight
@@ -334,7 +337,7 @@ export default function Home() {
             {whatIDoSections.map((section) => (
               <div key={section.id}>
                 <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-[34vh] min-h-[220px] max-h-[420px] bg-neutral-100 border-y border-black/10 mb-10 md:mb-14">
-                  <div className="h-full w-full px-[49px] flex items-end pb-8 md:pb-10">
+                  <div className="h-full w-full px-6 md:px-[49px] flex items-end pb-8 md:pb-10">
                     <h3 className="text-[2.2rem] md:text-[4.4rem] lg:text-[5.5rem] font-serif font-extralight tracking-tighter leading-[0.9] text-black">
                       {section.title}
                     </h3>

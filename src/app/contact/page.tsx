@@ -42,7 +42,7 @@ export default function Contact() {
           <h2 className="text-xs font-bold tracking-widest uppercase text-black/50 mb-4">Email</h2>
           <a
             href="mailto:hello@williamblacklock.com"
-            className="text-2xl md:text-3xl font-light text-black hover:text-black/50 transition-colors tracking-tight"
+            className="inline-block py-1 text-2xl md:text-3xl font-light text-black hover:text-black/50 transition-colors tracking-tight break-all sm:break-normal"
           >
             hello@williamblacklock.com
           </a>

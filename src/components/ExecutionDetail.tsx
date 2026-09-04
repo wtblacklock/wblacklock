@@ -255,7 +255,7 @@ export function ExecutionDetail({ data, project, navHidden }: Props) {
             exit={{ y: '-100%', opacity: 0 }}
             transition={{ duration: 0.45, ease: [0.65, 0, 0.35, 1] }}
           >
-            <div className="max-w-[1850px] mx-auto px-[49px]">
+            <div className="max-w-[1850px] mx-auto px-6 md:px-[49px]">
               <div className="flex items-center gap-6 md:gap-8 py-3 overflow-x-auto no-scrollbar">
                 <span className="text-[0.65rem] font-bold tracking-widest uppercase text-black/40 shrink-0">
                   {data.campaignName}
@@ -317,7 +317,7 @@ export function ExecutionDetail({ data, project, navHidden }: Props) {
       )}
 
       {/* Execution sections — dark design section styling */}
-      <div className="-mx-[49px] px-[49px] bg-[#0a0a0a] pb-24 md:pb-32 mt-12 md:mt-16">
+      <div className="-mx-6 md:-mx-[49px] px-6 md:px-[49px] bg-[#0a0a0a] pb-24 md:pb-32 mt-12 md:mt-16">
         {/* Section intro header */}
         <div className="border-t border-white/10 pt-12 md:pt-16 mb-20 md:mb-28">
           <p className="text-[0.65rem] font-bold tracking-widest uppercase text-white mb-6">

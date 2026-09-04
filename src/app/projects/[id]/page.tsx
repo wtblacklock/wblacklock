@@ -113,7 +113,7 @@ export default function ProjectDetail() {
             exit={{ y: '-100%', opacity: 0 }}
             transition={{ duration: 0.55, ease: [0.65, 0, 0.35, 1] }}
           >
-            <div className="max-w-[1850px] mx-auto px-[49px]">
+            <div className="max-w-[1850px] mx-auto px-6 md:px-[49px]">
               <p className="text-[0.65rem] font-bold tracking-widest uppercase text-black/35 mb-3">Sections</p>
               <div className="flex items-center gap-4">
                 <div className="flex-1">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 
 type FitMode =
   | 'cover'          // fill container, crop to fit (default)
@@ -13,16 +13,33 @@ interface PingPongVideoProps {
   fit?: FitMode
 }
 
+/**
+ * Plays a clip forwards then backwards by seeking a hidden video and painting
+ * each frame to a canvas.
+ *
+ * Two things this has to work around on iOS Safari:
+ *
+ *  1. A `display: none` video is never decoded, so `drawImage` silently paints
+ *     nothing. The source video is therefore kept in the layout and hidden with
+ *     opacity/clip instead.
+ *  2. A video that has never played may have no frame to hand to the canvas, so
+ *     playback is nudged once on load to prime the decoder.
+ *
+ * If the canvas is still blank shortly after load, the component gives up on the
+ * effect and plays the video natively — a plain looping clip is far better than
+ * an empty rectangle.
+ */
 export function PingPongVideo({ src, className, fit = 'cover' }: PingPongVideoProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [fellBack, setFellBack] = useState(false)
 
   useEffect(() => {
     const video = videoRef.current
     const canvas = canvasRef.current
     if (!video || !canvas) return
 
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
     if (!ctx) return
 
     const FPS = 24
@@ -30,6 +47,7 @@ export function PingPongVideo({ src, className, fit = 'cover' }: PingPongVideoPr
     let direction = 1
     let active = true
     let timer: ReturnType<typeof setTimeout> | null = null
+    let painted = false
 
     const syncCanvasSize = () => {
       const vw = video.videoWidth
@@ -54,7 +72,6 @@ export function PingPongVideo({ src, className, fit = 'cover' }: PingPongVideoPr
           canvas.style.width = `${w}px`
         }
       } else {
-        // cover
         const w = canvas.offsetWidth
         const h = canvas.offsetHeight
         if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
@@ -73,10 +90,8 @@ export function PingPongVideo({ src, className, fit = 'cover' }: PingPongVideoPr
       if (!cw || !ch || !vw || !vh) return
 
       if (fit === 'contain-width' || fit === 'contain-height') {
-        // Draw full frame — no cropping
         ctx.drawImage(video, 0, 0, vw, vh, 0, 0, cw, ch)
       } else {
-        // Cover — crop to fill canvas
         const canvasAspect = cw / ch
         const videoAspect = vw / vh
         let sx = 0, sy = 0, sw = vw, sh = vh
@@ -89,6 +104,7 @@ export function PingPongVideo({ src, className, fit = 'cover' }: PingPongVideoPr
         }
         ctx.drawImage(video, sx, sy, sw, sh, 0, 0, cw, ch)
       }
+      painted = true
     }
 
     const step = () => {
@@ -104,7 +120,37 @@ export function PingPongVideo({ src, className, fit = 'cover' }: PingPongVideoPr
       if (active) timer = setTimeout(step, 1000 / FPS)
     }
 
-    const start = () => { syncCanvasSize(); draw(); step() }
+    const start = () => {
+      // Nudge playback so the decoder produces a frame; iOS will not hand a
+      // never-played video to drawImage. Both outcomes are fine.
+      video.play().then(() => video.pause()).catch(() => {})
+      syncCanvasSize()
+      draw()
+      step()
+    }
+
+    // If nothing has reached the canvas by now, the effect is not going to work
+    // on this device — play the clip natively instead of showing an empty box.
+    const fallbackTimer = setTimeout(() => {
+      if (!active) return
+      let blank = !painted
+      if (!blank && canvas.width && canvas.height) {
+        try {
+          const d = ctx.getImageData(0, 0, canvas.width, canvas.height).data
+          blank = true
+          for (let i = 3; i < d.length; i += 4 * 211) {
+            if (d[i] > 0) { blank = false; break }
+          }
+        } catch {
+          blank = false // tainted canvas: assume it drew
+        }
+      }
+      if (blank) {
+        active = false
+        if (timer) clearTimeout(timer)
+        setFellBack(true)
+      }
+    }, 1800)
 
     video.addEventListener('seeked', onSeeked)
     if (video.readyState >= 2) start()
@@ -113,7 +159,9 @@ export function PingPongVideo({ src, className, fit = 'cover' }: PingPongVideoPr
     return () => {
       active = false
       video.removeEventListener('seeked', onSeeked)
+      video.removeEventListener('loadeddata', start)
       if (timer) clearTimeout(timer)
+      clearTimeout(fallbackTimer)
     }
   }, [fit])
 
@@ -122,10 +170,43 @@ export function PingPongVideo({ src, className, fit = 'cover' }: PingPongVideoPr
   else if (fit === 'contain-width') { canvasStyle.width = '100%' }
   else if (fit === 'contain-height') { canvasStyle.height = '100%' }
 
+  // Hidden, but still laid out and painted — `display: none` would stop iOS
+  // decoding the video altogether.
+  const sourceVideoStyle: React.CSSProperties = fellBack
+    ? fit === 'contain-height'
+      ? { display: 'block', height: '100%', width: 'auto' }
+      : fit === 'contain-width'
+        ? { display: 'block', width: '100%', height: 'auto' }
+        : { display: 'block', width: '100%', height: '100%', objectFit: 'cover' }
+    : {
+        position: 'absolute',
+        width: 1,
+        height: 1,
+        opacity: 0,
+        pointerEvents: 'none',
+      }
+
   return (
-    <div className={className} style={fit === 'contain-height' ? { display: 'flex', alignItems: 'center', justifyContent: 'center' } : undefined}>
-      <video ref={videoRef} src={src} muted playsInline preload="auto" style={{ display: 'none' }} />
-      <canvas ref={canvasRef} style={canvasStyle} />
+    <div
+      className={className}
+      style={
+        fit === 'contain-height'
+          ? { display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }
+          : { position: 'relative' }
+      }
+    >
+      <video
+        ref={videoRef}
+        src={src}
+        muted
+        loop={fellBack}
+        autoPlay={fellBack}
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        style={sourceVideoStyle}
+      />
+      {!fellBack && <canvas ref={canvasRef} style={canvasStyle} />}
     </div>
   )
 }

@@ -300,7 +300,7 @@ export function WorkShowcase() {
       </div>
 
       {/* Dark showcase section — mt-[-2px] closes the 1px seam from the clip above */}
-      <div className="-mx-[49px] px-[49px] bg-[#0a0a0a] pb-24 md:pb-32 mt-[-2px]">
+      <div className="-mx-6 md:-mx-[49px] px-6 md:px-[49px] bg-[#0a0a0a] pb-24 md:pb-32 mt-[-2px]">
         {/* Intro */}
         <div className="border-t border-white/10 pt-12 md:pt-16">
           <p className="text-[0.65rem] font-bold tracking-widest uppercase text-white mb-6">

@@ -17,6 +17,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
   const [navHidden, setNavHidden] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const [brandPhase, setBrandPhase] = useState<'full' | 'initials-fade' | 'condensed'>(isHome ? 'full' : 'condensed')
   const [showBackToTop, setShowBackToTop] = useState(false)
   const [navWidth, setNavWidth] = useState(420)
@@ -55,13 +56,24 @@ export function ClientLayout({ children }: { children: ReactNode }) {
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
+  // Matches Tailwind's `md` breakpoint. The brand name animation is skipped on
+  // phones: at this size it plays over the hero and the full name overflows the
+  // viewport before it condenses.
   useEffect(() => {
-    if (!isHome || prefersReducedMotion) { setBrandPhase('condensed'); return }
+    const mediaQuery = window.matchMedia('(max-width: 767px)')
+    setIsMobile(mediaQuery.matches)
+    const handleChange = () => setIsMobile(mediaQuery.matches)
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
+
+  useEffect(() => {
+    if (!isHome || prefersReducedMotion || isMobile) { setBrandPhase('condensed'); return }
     setBrandPhase('full')
     const timer1 = setTimeout(() => setBrandPhase('initials-fade'), 800)
     const timer2 = setTimeout(() => setBrandPhase('condensed'), 1400)
     return () => { clearTimeout(timer1); clearTimeout(timer2) }
-  }, [isHome, prefersReducedMotion, pathname])
+  }, [isHome, prefersReducedMotion, isMobile, pathname])
 
   useEffect(() => {
     setMenuOpen(false)
@@ -141,14 +153,23 @@ export function ClientLayout({ children }: { children: ReactNode }) {
             navHidden && "-translate-y-full",
             showHeaderBg && "bg-white"
           )}>
-            <div className="max-w-[1850px] mx-auto px-[49px] flex items-center justify-between pointer-events-auto">
-              <TransitionLink href="/" className="hover:opacity-70 transition-opacity relative inline-flex items-start w-[88px]" style={{ minHeight: "2.835rem" }}>
+            <div className="max-w-[1850px] mx-auto px-6 md:px-[49px] flex items-center justify-between pointer-events-auto">
+              <TransitionLink href="/" className="hover:opacity-70 transition-opacity relative inline-flex items-start w-[70px] md:w-[88px] min-h-[2.2rem] md:min-h-[2.835rem]">
+                {/* Phones get the static mark. The name animation is desktop-only:
+                    at this width the full name is wider than the viewport, and
+                    driving it from state would flash it before the effect ran. */}
+                <span
+                  className="md:hidden"
+                  style={{ fontFamily: "'Inter', sans-serif", fontWeight: 100, fontSize: "2.2rem", letterSpacing: "0.02em", lineHeight: 1 }}
+                >
+                  WTB
+                </span>
                 <motion.span
                   initial={false}
                   animate={{ opacity: brandPhase === 'condensed' ? 0 : 1, y: brandPhase === 'condensed' ? -6 : 0 }}
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   style={{ fontFamily: "'Inter', sans-serif", fontWeight: 100, fontSize: "2.835rem", letterSpacing: "0.02em", lineHeight: 1, pointerEvents: 'none' }}
-                  className="absolute left-0 top-0 whitespace-nowrap"
+                  className="hidden md:block absolute left-0 top-0 whitespace-nowrap"
                   aria-hidden={brandPhase === 'condensed'}
                 >
                   <motion.span initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>W</motion.span>
@@ -165,6 +186,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
                   animate={{ opacity: brandPhase === 'condensed' ? 1 : 0, y: brandPhase === 'condensed' ? 0 : 6, scale: brandPhase === 'condensed' ? 1 : 0.985 }}
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   style={{ fontFamily: "'Inter', sans-serif", fontWeight: 100, fontSize: "2.835rem", letterSpacing: "0.02em", lineHeight: 1 }}
+                  className="hidden md:block"
                   aria-hidden={brandPhase !== 'condensed'}
                 >
                   WTB
@@ -194,12 +216,12 @@ export function ClientLayout({ children }: { children: ReactNode }) {
             </div>
           </header>
 
-          <main className="flex-1 w-full max-w-[1850px] mx-auto px-[49px] pt-32 pb-16 md:pb-32">
+          <main className="flex-1 w-full max-w-[1850px] mx-auto px-6 md:px-[49px] pt-32 pb-16 md:pb-32">
             {children}
           </main>
 
           <footer id="footer" className="mt-auto bg-white text-black">
-            <div className="max-w-[1850px] mx-auto px-[49px] py-12 md:py-16">
+            <div className="max-w-[1850px] mx-auto px-6 md:px-[49px] py-12 md:py-16">
               <div className="grid grid-cols-1 md:grid-cols-3 border-y border-black/20">
                 <p className="text-[1.75rem] md:text-[2.1rem] font-semibold tracking-tight py-8 md:py-10">Connect</p>
                 <div className="md:col-span-2 py-8 md:py-10 md:pl-10 space-y-6">

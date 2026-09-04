@@ -140,7 +140,7 @@ export default function Projects() {
             <div className="mb-10">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-black/40 hover:text-black transition-colors focus:outline-none"
+                className="flex items-center gap-2 py-2 -my-2 text-xs font-bold tracking-widest uppercase text-black/40 hover:text-black transition-colors focus:outline-none"
               >
                 {showFilters ? "Hide filters" : "Show filters"}
                 <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
@@ -173,7 +173,7 @@ export default function Projects() {
           <div className="mb-10">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-black/40 hover:text-black transition-colors focus:outline-none"
+              className="flex items-center gap-2 py-2 -my-2 text-xs font-bold tracking-widest uppercase text-black/40 hover:text-black transition-colors focus:outline-none"
             >
               {showFilters ? "Hide filters" : "Show filters"}
               <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${showFilters ? 'rotate-180' : ''}`} />
