@@ -226,7 +226,7 @@ export default function Home() {
           {/* Name — absolutely centered in the full section. Wraps to two lines on
               phones so it can stay large enough to read as a title. */}
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none px-6 md:px-[49px] -mt-10 md:-mt-[60px]">
-            <h1 className="w-full max-w-full text-center text-[clamp(1.75rem,4.6vw,5.3rem)] font-extralight leading-[1.05] md:leading-[0.92] uppercase whitespace-normal md:whitespace-nowrap text-white mix-blend-difference md:text-black md:mix-blend-normal" style={{ letterSpacing: '0.04em' }}>
+            <h1 className="w-full max-w-full text-center text-[clamp(1.75rem,4.6vw,5.3rem)] font-extralight leading-[1.05] md:leading-[0.92] uppercase whitespace-normal md:whitespace-nowrap text-black [text-shadow:0_0_20px_rgba(255,255,255,0.9),0_0_40px_rgba(255,255,255,0.7)] md:[text-shadow:none]" style={{ letterSpacing: '0.04em' }}>
               William Thames Blacklock
             </h1>
           </div>
